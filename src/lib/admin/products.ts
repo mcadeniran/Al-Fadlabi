@@ -8,46 +8,57 @@ type ProductFilters = {
   tag?: string;
 };
 
+const PRODUCT_SELECT = `
+  id,
+  slug,
+  gender,
+  featured,
+  new_arrival,
+  bestseller,
+  is_active,
+  created_at,
+  product_translations (
+    locale,
+    name,
+    brand,
+    description,
+    badge,
+    longevity,
+    details_size,
+    concentration
+  ),
+  product_sizes (
+    id,
+    ml,
+    price,
+    compare_at_price,
+    stock_quantity
+  ),
+  product_images (
+    id,
+    image_url,
+    sort_order
+  ),
+  product_notes (
+    id,
+    note_type,
+    sort_order,
+    product_note_translations (
+      locale,
+      name
+    )
+  )
+`;
+
 export async function getAdminProducts(filters: ProductFilters = {}) {
   const supabase = await createClient();
 
   let query = supabase
     .from('products')
-    .select(
-      `
-      id,
-      slug,
-      gender,
-      featured,
-      new_arrival,
-      bestseller,
-      is_active,
-      created_at,
-      product_translations (
-        locale,
-        name,
-        brand,
-        description,
-        badge,
-        longevity,
-        details_size,
-        concentration
-      ),
-      product_sizes (
-        id,
-        ml,
-        price,
-        compare_at_price,
-        stock_quantity
-      ),
-      product_images (
-        id,
-        image_url,
-        sort_order
-      )
-    `,
-    )
-    .order('created_at', { ascending: false });
+    .select(PRODUCT_SELECT)
+    .order('created_at', {
+      ascending: false,
+    });
 
   if (filters.gender && filters.gender !== 'all') {
     query = query.eq('gender', filters.gender);
@@ -79,8 +90,6 @@ export async function getAdminProducts(filters: ProductFilters = {}) {
     throw new Error('Failed to load products.');
   }
 
-  // let products = data ?? [];
-
   let products = (data ?? []).map(mapProduct);
 
   if (filters.search?.trim()) {
@@ -103,48 +112,7 @@ export async function getAdminProduct(productId: string) {
 
   const { data, error } = await supabase
     .from('products')
-    .select(
-      `
-      id,
-      slug,
-      gender,
-      featured,
-      new_arrival,
-      bestseller,
-      is_active,
-      product_translations (
-        locale,
-        name,
-        brand,
-        description,
-        badge,
-        longevity,
-        details_size,
-        concentration
-      ),
-      product_sizes (
-        id,
-        ml,
-        price,
-        compare_at_price,
-        stock_quantity
-      ),
-      product_images (
-        id,
-        image_url,
-        sort_order
-      ),
-      product_notes (
-        id,
-        note_type,
-        sort_order,
-        product_note_translations (
-          locale,
-          name
-        )
-      )
-    `,
-    )
+    .select(PRODUCT_SELECT)
     .eq('id', productId)
     .single();
 

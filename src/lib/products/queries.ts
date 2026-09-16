@@ -11,6 +11,7 @@ const PRODUCT_SELECT = `
   featured,
   new_arrival,
   bestseller,
+  created_at,
   product_translations (
     locale,
     name,

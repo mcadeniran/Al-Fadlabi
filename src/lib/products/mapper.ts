@@ -8,7 +8,7 @@ type ProductRow = {
   featured: boolean;
   new_arrival: boolean;
   bestseller: boolean;
-  createdAt: string;
+  created_at: string;
 
   product_translations?: Array<{
     locale: 'en' | 'ar';
@@ -51,14 +51,11 @@ export function mapProduct(row: ProductRow): Product {
     id: row.id,
     slug: row.slug,
     gender: row.gender,
-
     isActive: row.is_active,
     featured: row.featured,
     newArrival: row.new_arrival,
     bestseller: row.bestseller,
-
-    createdAt: row.createdAt,
-
+    createdAt: row.created_at,
     category: null,
 
     translations: (row.product_translations ?? []).map((translation) => ({
