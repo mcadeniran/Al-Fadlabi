@@ -1,0 +1,540 @@
+{
+  "Auth": {
+    "register": {
+      "eyebrow": "Your Account",
+      "title": "Create an Account",
+      "description": "Create your account to manage your orders and enjoy a more personal shopping experience.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "email": "Email address",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "passwordHint": "Use at least 8 characters.",
+      "submit": "Create account",
+      "creating": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in",
+      "successEyebrow": "Almost There",
+      "successTitle": "Check Your Email",
+      "successDescription": "We've sent you a confirmation link. Please check your email to complete your registration.",
+      "goToLogin": "Go to sign in",
+      "errors": {
+        "required": "Please complete all fields.",
+        "passwordLength": "Your password must be at least 8 characters.",
+        "passwordMatch": "Your passwords do not match.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "login": {
+      "eyebrow": "Welcome Back",
+      "title": "Sign In",
+      "description": "Sign in to manage your orders and enjoy a more personal shopping experience.",
+      "email": "Email address",
+      "password": "Password",
+      "submit": "Sign in",
+      "signingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "register": "Create an account",
+      "errors": {
+        "required": "Please enter your email and password.",
+        "invalidCredentials": "The email or password you entered is incorrect.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "account": {
+      "eyebrow": "Your Account",
+      "welcome": "Welcome, {name}",
+      "description": "Manage your account and keep track of your orders from one place.",
+      "email": "Email address",
+      "status": "Account status",
+      "active": "Active",
+      "account": "Account",
+      "customer": "Customer"
+    },
+    "logout": {
+      "button": "Sign out",
+      "signingOut": "Signing out..."
+    },
+    "profile": {
+      "eyebrow": "Personal Information",
+      "title": "Your Profile",
+      "description": "Keep your personal information up to date.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "phone": "Phone",
+      "email": "Email address",
+      "emailHint": "Your email address is managed through your account security settings.",
+      "save": "Save changes",
+      "saving": "Saving changes...",
+      "saved": "Your profile has been updated.",
+      "missingEyebrow": "Profile",
+      "missingTitle": "Profile Unavailable",
+      "missingDescription": "We couldn't find your customer profile. Please sign out and sign in again.",
+      "errors": {
+        "required": "Please complete all required fields.",
+        "unauthenticated": "Your session has expired. Please sign in again.",
+        "updateFailed": "We couldn't update your profile. Please try again."
+      }
+    },
+    "orders": {
+      "eyebrow": "Order history",
+      "title": "My orders",
+      "description": "View your recent purchases and follow the progress of every order.",
+      "orderNumber": "Order",
+      "items": "Items",
+      "delivery": "Delivery",
+      "total": "Total",
+      "viewOrder": "View order",
+      "emptyEyebrow": "No orders yet",
+      "emptyTitle": "Your order history is empty",
+      "emptyDescription": "When you place an order, it will appear here so you can easily follow its progress.",
+      "shopNow": "Explore the collection",
+      "itemCount": {
+        "one": "1 item",
+        "other": "{count} items"
+      },
+      "deliveryMethods": {
+        "standard": "Standard delivery",
+        "express": "Express delivery"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "outForDelivery": "Out for delivery",
+        "delivered": "Delivered",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "details": {
+        "backToOrders": "Back to orders",
+        "eyebrow": "Order details",
+        "status": "Status",
+        "itemsEyebrow": "Your purchase",
+        "itemsTitle": "Order items",
+        "quantity": "Quantity",
+        "unitPrice": "Unit price",
+        "deliveryEyebrow": "Delivery information",
+        "deliveryTitle": "Where we're delivering",
+        "customer": "Customer",
+        "phone": "Phone",
+        "address": "Address",
+        "city": "City",
+        "deliveryMethod": "Delivery method",
+        "notes": "Delivery notes",
+        "summaryEyebrow": "Order summary",
+        "summaryTitle": "Summary",
+        "items": "Items",
+        "subtotal": "Subtotal",
+        "delivery": "Delivery",
+        "total": "Total",
+        "payment": "Payment",
+        "payOnDelivery": "Pay on delivery",
+        "paymentStatus": "Payment status",
+        "paid": "Paid",
+        "paymentPending": "Pending"
+      },
+      "progress": {
+        "eyebrow": "Order progress",
+        "title": "Track your order",
+        "description": "Follow your order from confirmation through delivery.",
+        "currentStatus": "Current status",
+        "current": "Your order is currently at this stage.",
+        "rejectedDescription": "This order was rejected and will not continue through the delivery process.",
+        "cancelledDescription": "This order has been cancelled and will not continue through the delivery process.",
+        "steps": {
+          "pending": "Order placed",
+          "confirmed": "Confirmed",
+          "processing": "Processing",
+          "outForDelivery": "Out for delivery",
+          "delivered": "Delivered"
+        }
+      }
+    }
+  },
+  "Navbar": {
+    "home": "Home",
+    "shop": "Shop",
+    "collections": "Collections",
+    "ourStory": "Our Story",
+    "wishlist": "Wishlist",
+    "shoppingBag": "Shopping bag",
+    "language": "العربية"
+  },
+  "Hero": {
+    "eyebrow": "Crafted With Intention",
+    "title": "The Art\nof Fragrance",
+    "description": "Scents created to evoke emotion, leave a memory, and define who you are.",
+    "cta": "Discover Collection",
+    "scroll": "Scroll to discover",
+    "imageAlt": "Luxury perfume bottle"
+  },
+  "FeaturedCollection": {
+    "eyebrow": "The Collection",
+    "title": "Signature Scents",
+    "viewAll": "View Collection",
+
+    "one": {
+      "name": "Granados",
+      "description": "A deep and captivating composition shaped by warm woods and precious amber."
+    },
+
+    "two": {
+      "name": "Noir Élan",
+      "description": "An elegant expression of dark florals, soft spice, and refined woods."
+    },
+
+    "three": {
+      "name": "Sahara",
+      "description": "A warm interpretation of golden sands, sensual musk, and desert rose."
+    }
+  },
+  "BrandStory": {
+    "eyebrow": "The House",
+    "title": "A scent is a story waiting to be remembered.",
+    "description": "We believe fragrance is an intimate expression of identity. Each composition is created with intention — balancing character, atmosphere, and emotion to leave an impression long after the moment has passed.",
+    "cta": "Discover Our Story",
+    "monogram": "Fragrance House",
+    "verticalLabel": "The Art of Fragrance"
+  },
+  "Collections": {
+    "eyebrow": "Explore",
+    "title": "Our Collections",
+    "description": "Discover fragrances shaped around different moods, personalities, and moments.",
+
+    "signature": {
+      "title": "Signature",
+      "description": "Distinctive compositions created to become part of your personal identity."
+    },
+
+    "oud": {
+      "title": "Oud & Woods",
+      "description": "Rich woods, warm amber, and deeper notes with unmistakable character."
+    },
+
+    "floral": {
+      "title": "Floral & Musk",
+      "description": "Soft florals and sensual musk brought together in elegant compositions."
+    }
+  },
+  "FinalCta": {
+    "eyebrow": "Your Signature",
+    "title": "Leave an impression.",
+    "description": "Discover fragrances created to become part of your story — memorable, distinctive, and entirely your own.",
+    "cta": "Explore the Collection"
+  },
+  "Footer": {
+    "description": "A fragrance house devoted to the art of scent, expression, and lasting impressions.",
+
+    "explore": {
+      "title": "Explore",
+      "home": "Home",
+      "shop": "Shop",
+      "collections": "Collections",
+      "story": "Our Story"
+    },
+
+    "client": {
+      "title": "Client Services",
+      "account": "My Account",
+      "orders": "Orders",
+      "contact": "Contact",
+      "faq": "FAQ"
+    },
+
+    "contact": {
+      "title": "Contact",
+      "location": "Omdurman Market, near Al-Sabbagh Street",
+      "branchOne": "First Branch — Al Bank Al Awal Street",
+      "branchTwo": "Second Branch — Al Bank Al Thani Street",
+      "email": "mohamedaltayeb064@gmail.com",
+      "phone": "+249 912 412 592"
+    },
+
+    "brandName": "Al-Fadlabi Perfumes & Cosmetics",
+
+    "rights": "All rights reserved.",
+    "madeWith": "Made with intention"
+  },
+  "Navigation": {
+    "home": "Home",
+    "shop": "Shop",
+    "collections": "Collections",
+    "story": "Our Story",
+    "account": "Account",
+    "cart": "Cart",
+    "language": "العربية",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mobileMenu": {
+      "title": "Menu"
+    }
+  },
+  "Shop": {
+    "eyebrow": "The Collection",
+    "title": "Discover Your Signature",
+    "description": "Explore our collection of refined fragrances, created for those who appreciate the art of scent.",
+    "all": "All",
+    "women": "Women",
+    "men": "Men",
+    "unisex": "Unisex",
+    "newArrivals": "New Arrivals",
+    "bestsellers": "Bestsellers",
+    "viewProduct": "View fragrance",
+    "from": "From",
+    "outOfStock": "Out of stock",
+    "products": "Products",
+    "noProducts": "No fragrances found.",
+    "sortFeatured": "Featured",
+    "sortNewest": "Newest",
+    "sortPriceLow": "Price: Low",
+    "sortPriceHigh": "Price: High",
+    "sortBy": "Sort by",
+    "filter": "Filter"
+  },
+  "Admin": {
+    "brand": "Perfume Store",
+    "panel": "Admin Panel",
+    "dashboard": "Dashboard",
+    "products": "Products",
+    "orders": "Orders",
+    "customers": "Customers",
+    "inventory": "Inventory",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "AdminDashboard": {
+    "title": "Dashboard",
+    "overview": "Here's an overview of your store.",
+    "totalProducts": "Total Products",
+    "totalOrders": "Total Orders",
+    "customers": "Customers",
+    "revenue": "Revenue",
+    "pendingOrders": "Pending Orders",
+    "activeProducts": "Active Products",
+    "recentOrders": "Recent Orders",
+    "recentOrdersDescription": "The latest orders placed in your store.",
+    "viewAllOrders": "View All Orders",
+    "noRecentOrders": "No orders yet.",
+    "customer": "Customer",
+    "date": "Date",
+    "status": "Status",
+    "total": "Total",
+    "lowStock": "Low Stock",
+    "lowStockDescription": "Products that need your attention.",
+    "viewInventory": "View Inventory",
+    "noLowStock": "No low-stock items.",
+    "units": "units",
+    "size": "Size",
+    "quickActions": "Quick Actions",
+    "quickActionsDescription": "Manage the most common store tasks.",
+    "addProduct": "Add Product",
+    "manageOrders": "Manage Orders",
+    "manageInventory": "Manage Inventory",
+    "manageCustomers": "Manage Customers",
+    "inventoryUnits": "Inventory units",
+    "outOfStock": "Out of stock"
+  },
+  "AdminProducts": {
+    "title": "Products",
+    "description": "Manage the products in your store.",
+    "product": "Product",
+    "gender": "Gender",
+    "price": "Starting price",
+    "stock": "Stock",
+    "status": "Status",
+    "action": "Action",
+    "active": "Active",
+    "inactive": "Inactive",
+    "view": "View",
+    "untitled": "Untitled product",
+    "noProducts": "No products yet.",
+    "addProduct": "Add product",
+    "searchPlaceholder": "Search products...",
+    "allGenders": "All genders",
+    "women": "Women",
+    "men": "Men",
+    "unisex": "Unisex",
+    "allStatuses": "All statuses",
+    "allTags": "All tags",
+    "featured": "Featured",
+    "newArrival": "New arrival",
+    "bestseller": "Bestseller",
+    "clearFilters": "Clear filters",
+    "addProductDescription": "Create a new product for your store.",
+    "basicInformation": "Basic information",
+    "basicInformationDescription": "Enter the core details for this product.",
+    "nameEn": "Product name (English)",
+    "nameAr": "Product name (Arabic)",
+    "nameEnPlaceholder": "e.g. Oud Royale",
+    "nameArPlaceholder": "مثال: عود رويال",
+    "brandEn": "Brand (English)",
+    "brandAr": "Brand (Arabic)",
+    "brandEnPlaceholder": "e.g. Maison Example",
+    "brandArPlaceholder": "مثال: دار إكزامبل",
+    "slug": "Slug",
+    "slugPlaceholder": "oud-royale",
+    "slugDescription": "Use lowercase letters, numbers, and hyphens only.",
+    "descriptions": "Descriptions",
+    "descriptionsDescription": "Provide a description in both languages.",
+    "descriptionEn": "Description (English)",
+    "descriptionAr": "Description (Arabic)",
+    "descriptionEnPlaceholder": "Describe the fragrance...",
+    "descriptionArPlaceholder": "اكتب وصف العطر...",
+    "storeSettings": "Store settings",
+    "storeSettingsDescription": "Control how this product appears in your store.",
+    "isActive": "Active",
+    "saveProduct": "Save product",
+    "sizesPricing": "Sizes, pricing & stock",
+    "sizesPricingDescription": "Add the available sizes and their pricing and inventory.",
+    "addSize": "Add size",
+    "size": "Size",
+    "sizeMl": "Size (ml)",
+    "compareAtPrice": "Compare-at price",
+    "stockQuantity": "Stock quantity",
+    "remove": "Remove",
+    "fragranceDetails": "Fragrance details",
+    "fragranceDetailsDescription": "Add the technical and performance details of the fragrance.",
+    "concentration": "Concentration",
+    "concentrationPlaceholder": "e.g. Eau de Parfum",
+    "detailsSize": "Display size",
+    "detailsSizePlaceholder": "e.g. 50ml",
+    "longevityEn": "Longevity (English)",
+    "longevityAr": "Longevity (Arabic)",
+    "longevityEnPlaceholder": "e.g. 8–10 hours",
+    "longevityArPlaceholder": "مثال: ٨–١٠ ساعات",
+    "badge": "Product badge",
+    "badgeDescription": "Add an optional badge shown on the product.",
+    "badgeEn": "Badge (English)",
+    "badgeAr": "Badge (Arabic)",
+    "badgeEnPlaceholder": "e.g. Limited Edition",
+    "badgeArPlaceholder": "مثال: إصدار محدود",
+    "fragranceNotes": "Fragrance notes",
+    "fragranceNotesDescription": "Organize the top, heart, and base notes of the fragrance.",
+    "topNotes": "Top notes",
+    "heartNotes": "Heart notes",
+    "baseNotes": "Base notes",
+    "addNote": "Add note",
+    "note": "Note",
+    "noteEnPlaceholder": "e.g. Bergamot",
+    "noteArPlaceholder": "مثال: البرغموت",
+    "productImages": "Product images",
+    "productImagesDescription": "Upload the images that will appear on the product page.",
+    "uploadImages": "Upload product images",
+    "uploadImagesHint": "PNG, JPG or WEBP images are supported.",
+    "primaryImage": "Primary",
+    "setPrimary": "Set primary",
+    "removeImage": "Remove image",
+    "editProduct": "Edit product",
+    "editProductDescription": "Update the details, pricing, inventory, and presentation of this product.",
+    "isActiveDescription": "When inactive, this product will not be shown in the storefront.",
+    "activate": "Activate",
+    "deactivate": "Deactivate",
+    "updating": "Updating...",
+    "flags": "Flags",
+    "sizeManagement": "Size management",
+    "sizeManagementDescription": "Manage the available sizes, pricing, and stock for this product.",
+    "editSize": "Edit size",
+    "removeSize": "Remove size",
+    "saveSize": "Save size",
+    "cancel": "Cancel",
+    "confirmRemoveSize": "Remove this size?",
+    "noSizes": "No sizes added yet.",
+    "duplicateSize": "This size already exists.",
+    "saving": "Saving..."
+  },
+  "AdminInventory": {
+    "title": "Inventory",
+    "description": "Monitor product sizes, stock levels, and inventory status.",
+    "product": "Product",
+    "size": "Size",
+    "price": "Price",
+    "stock": "Stock",
+    "status": "Status",
+    "in_stock": "In stock",
+    "low_stock": "Low stock",
+    "out_of_stock": "Out of stock",
+    "noInventory": "No inventory yet.",
+    "noInventoryDescription": "Product sizes and stock levels will appear here.",
+    "searchPlaceholder": "Search products...",
+    "allStockStatuses": "All stock statuses",
+    "allGenders": "All genders",
+    "women": "Women",
+    "men": "Men",
+    "unisex": "Unisex",
+    "allProductStatuses": "All product statuses",
+    "active": "Active",
+    "inactive": "Inactive",
+    "clearFilters": "Clear filters",
+    "saveStock": "Save stock",
+    "cancel": "Cancel"
+  },
+  "OurStory": {
+    "hero": {
+      "eyebrow": "Our Story",
+      "title": "More Than Three Decades.",
+      "description": "Al-Fadlabi Perfumes & Cosmetics is a Sudanese company specializing in perfumes, cosmetics, and personal care products, with more than three decades of experience in the industry.",
+      "years": "Of experience in perfumes, cosmetics & personal care"
+    },
+    "story": {
+      "eyebrow": "Who We Are",
+      "title": "A trusted name, built over time.",
+      "paragraph1": "Since our establishment, we have been committed to building a trusted name in the market by providing a diverse range of products that meet the needs of consumers, while focusing on quality, variety, competitive pricing, and customer service.",
+      "paragraph2": "Over the years, the company has grown from a traditional trading business into an integrated organization involved in the sourcing, marketing, and distribution of a wide range of personal care and beauty products.",
+      "paragraph3": "As the market continues to evolve, we remain attentive to changing consumer preferences and committed to providing products that meet the needs of the people we serve."
+    },
+    "offerings": {
+      "eyebrow": "What We Offer",
+      "title": "A broad world of care.",
+      "introduction": "From fragrance and beauty to sourcing, importing, and distribution, our work connects products with the people and markets that need them.",
+      "perfumes": {
+        "title": "Perfumes",
+        "description": "We offer a diverse range of perfumes and fragrance products designed to suit different preferences and occasions, with a strong focus on quality, lasting performance, and variety."
+      },
+      "cosmetics": {
+        "title": "Cosmetics & Personal Care",
+        "description": "We provide a wide selection of cosmetics and personal care products, including skin care, hair care, body care, hygiene, and everyday personal care products."
+      },
+      "soap": {
+        "title": "Soaps & Skin Care",
+        "description": "We offer a variety of soaps and skin care products in different formulations and sizes, designed to meet the needs of different segments of the market."
+      },
+      "sourcing": {
+        "title": "Sourcing & Distribution",
+        "description": "We source and supply products through a network of trusted suppliers and business partners, with a strong focus on reliable supply, product availability, and meeting market demand."
+      },
+      "trading": {
+        "title": "Trading & Import",
+        "description": "Our experience extends to working with international markets and suppliers. We carefully select products and brands that meet the needs of the local market while managing purchasing, shipping, and supply operations."
+      },
+      "service": {
+        "title": "Distribution & Customer Service",
+        "description": "We believe in building long-term relationships with our customers and business partners by ensuring product availability, understanding market needs, and providing professional service focused on customer satisfaction."
+      }
+    },
+    "growth": {
+      "eyebrow": "Our Evolution",
+      "title": "From a trading business to an integrated organization.",
+      "paragraph": "Over more than three decades, our work has expanded across sourcing, marketing, importing, and distribution. That growth has allowed us to build a broader understanding of the market while continuing to adapt to changing needs and preferences.",
+      "caption": "Experience · Adaptability · Continuity"
+    },
+    "commitment": {
+      "eyebrow": "What Matters To Us",
+      "title": "The principles behind our work.",
+      "description": "Our approach is grounded in the things that have mattered throughout our journey: providing the right products, maintaining reliable supply, and building lasting relationships.",
+      "quality": "Quality",
+      "variety": "Variety",
+      "pricing": "Competitive Pricing",
+      "availability": "Product Availability",
+      "service": "Professional Service",
+      "relationships": "Long-Term Relationships"
+    },
+    "closing": {
+      "eyebrow": "Discover Al-Fadlabi",
+      "title": "A story built around products, people, and trust.",
+      "description": "Explore our collection and discover the fragrances and products we bring to our customers.",
+      "cta": "Explore the Collection"
+    }
+  }
+}

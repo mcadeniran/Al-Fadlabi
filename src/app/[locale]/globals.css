@@ -1,0 +1,655 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+   /* ============================================================
+     TYPOGRAPHY
+     ============================================================ */
+
+   --font-sans: var(--font-manrope);
+   --font-heading: var(--font-cormorant);
+   --font-arabic: var(--font-arabic-sans);
+   --font-arabic-heading: var(--font-naskh);
+
+   /* ============================================================
+     SEMANTIC COLORS
+     ============================================================ */
+
+   --color-background: var(--background);
+   --color-foreground: var(--foreground);
+
+   --color-card: var(--card);
+   --color-card-foreground: var(--card-foreground);
+
+   --color-popover: var(--popover);
+   --color-popover-foreground: var(--popover-foreground);
+
+   --color-primary: var(--primary);
+   --color-primary-foreground: var(--primary-foreground);
+
+   --color-secondary: var(--secondary);
+   --color-secondary-foreground: var(--secondary-foreground);
+
+   --color-muted: var(--muted);
+   --color-muted-foreground: var(--muted-foreground);
+
+   --color-accent: var(--accent);
+   --color-accent-foreground: var(--accent-foreground);
+
+   --color-destructive: var(--destructive);
+   --color-destructive-foreground: var(--destructive-foreground);
+
+   --color-border: var(--border);
+   --color-input: var(--input);
+   --color-ring: var(--ring);
+
+   /* ============================================================
+     BRAND COLORS
+     ============================================================ */
+
+   --color-plum: var(--plum);
+   --color-plum-deep: var(--plum-deep);
+   --color-plum-soft: var(--plum-soft);
+
+   --color-ink: var(--ink);
+   --color-ink-soft: var(--ink-soft);
+
+   --color-coral: var(--coral);
+   --color-coral-soft: var(--coral-soft);
+
+   --color-snow: var(--snow);
+   --color-white: var(--white);
+
+   /* ============================================================
+     DESIGN SYSTEM SURFACES
+     ============================================================ */
+
+   --color-surface: var(--surface);
+   --color-surface-raised: var(--surface-raised);
+   --color-surface-subtle: var(--surface-subtle);
+
+   --color-brand-plum: var(--brand-plum);
+   --color-brand-plum-deep: var(--brand-plum-deep);
+   --color-brand-ink: var(--brand-ink);
+   --color-brand-coral: var(--brand-coral);
+
+   /* ============================================================
+     RADIUS
+     ============================================================ */
+
+   --radius-sm: 2px;
+   --radius-md: 3px;
+   --radius-lg: 4px;
+   --radius-xl: 6px;
+   --radius-2xl: 8px;
+   --radius-3xl: 10px;
+   --radius-full: 9999px;
+}
+
+/* ==============================================================
+   ROOT / LIGHT THEME
+   ============================================================== */
+
+:root {
+   /* ============================================================
+     BRAND PALETTE
+     ============================================================ */
+
+   --plum: #721363;
+   --plum-deep: #54104a;
+   --plum-soft: #8b327b;
+
+   --ink: #191919;
+   --ink-soft: #292626;
+
+   --coral: #cf5e65;
+   --coral-soft: #e08a8f;
+
+   --snow: #f7f6f5;
+   --white: #ffffff;
+
+   /* ============================================================
+     BRAND ALIASES
+     ============================================================ */
+
+   --brand-plum: var(--plum);
+   --brand-plum-deep: var(--plum-deep);
+   --brand-ink: var(--ink);
+   --brand-coral: var(--coral);
+
+   /* ============================================================
+     SURFACES
+     ============================================================ */
+
+   --surface: var(--white);
+   --surface-raised: #ffffff;
+   --surface-subtle: #f1efee;
+
+   /* ============================================================
+     SHADCN SEMANTIC COLORS
+     ============================================================ */
+
+   --background: var(--snow);
+   --foreground: var(--ink);
+
+   --card: var(--white);
+   --card-foreground: var(--ink);
+
+   --popover: var(--white);
+   --popover-foreground: var(--ink);
+
+   --primary: var(--plum);
+   --primary-foreground: var(--white);
+
+   --secondary: #eee8ed;
+   --secondary-foreground: var(--plum);
+
+   --muted: #eceae9;
+   --muted-foreground: #6f696b;
+
+   --accent: var(--coral);
+   --accent-foreground: var(--white);
+
+   --destructive: #a63d45;
+   --destructive-foreground: var(--white);
+
+   --border: #e2dedf;
+   --input: #d9d4d6;
+   --ring: var(--plum);
+
+   --radius: 0.25rem;
+
+   /* ============================================================
+     CHARTS
+     ============================================================ */
+
+   --chart-1: var(--plum);
+   --chart-2: var(--coral);
+   --chart-3: var(--ink);
+   --chart-4: var(--plum-soft);
+   --chart-5: var(--coral-soft);
+
+   /* ============================================================
+     SIDEBAR
+     ============================================================ */
+
+   --sidebar: var(--white);
+   --sidebar-foreground: var(--ink);
+
+   --sidebar-primary: var(--plum);
+   --sidebar-primary-foreground: var(--white);
+
+   --sidebar-accent: #eee8ed;
+   --sidebar-accent-foreground: var(--plum);
+
+   --sidebar-border: var(--border);
+   --sidebar-ring: var(--plum);
+}
+
+/* ==============================================================
+   DARK THEME
+   ============================================================== */
+
+.dark {
+   --background: #191919;
+   --foreground: var(--snow);
+
+   --card: #242122;
+   --card-foreground: var(--snow);
+
+   --popover: #242122;
+   --popover-foreground: var(--snow);
+
+   --primary: var(--plum-soft);
+   --primary-foreground: var(--white);
+
+   --secondary: #332b31;
+   --secondary-foreground: var(--snow);
+
+   --muted: #2c292a;
+   --muted-foreground: #b8b2b4;
+
+   --accent: var(--coral);
+   --accent-foreground: var(--white);
+
+   --destructive: #d56a72;
+   --destructive-foreground: var(--white);
+
+   --border: #403a3d;
+   --input: #403a3d;
+   --ring: var(--plum-soft);
+
+   --surface: #242122;
+   --surface-raised: #2b2829;
+   --surface-subtle: #211f20;
+
+   --sidebar: #211f20;
+   --sidebar-foreground: var(--snow);
+
+   --sidebar-primary: var(--plum-soft);
+   --sidebar-primary-foreground: var(--white);
+
+   --sidebar-accent: #332b31;
+   --sidebar-accent-foreground: var(--snow);
+
+   --sidebar-border: #403a3d;
+   --sidebar-ring: var(--plum-soft);
+}
+
+/* ==============================================================
+   BASE STYLES
+   ============================================================== */
+
+@layer base {
+   * {
+      @apply border-border outline-ring/50;
+   }
+
+   html {
+      @apply font-sans;
+      background: var(--background);
+      color: var(--foreground);
+
+      scroll-behavior: smooth;
+   }
+
+   body {
+      @apply bg-background text-foreground font-sans;
+
+      min-height: 100vh;
+      margin: 0;
+
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+   }
+
+   ::selection {
+      background: var(--plum);
+      color: var(--white);
+   }
+
+   button,
+   a,
+   input,
+   textarea,
+   select {
+      -webkit-tap-highlight-color: transparent;
+   }
+
+   button,
+   [role="button"] {
+      cursor: pointer;
+   }
+
+   img {
+      display: block;
+      max-width: 100%;
+   }
+
+   a {
+      color: inherit;
+      text-decoration: none;
+   }
+
+   h1,
+   h2,
+   h3,
+   h4,
+   h5,
+   h6 {
+      text-wrap: balance;
+   }
+
+   p {
+      text-wrap: pretty;
+   }
+}
+
+/* ==============================================================
+   TYPOGRAPHY SYSTEM
+   ============================================================== */
+
+@layer base {
+
+   h1,
+   h2,
+   h3 {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+   }
+
+   h4,
+   h5,
+   h6 {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      letter-spacing: -0.015em;
+   }
+
+   /*
+   * Editorial display typography.
+   *
+   * Use these for major campaign / homepage statements.
+   */
+   .font-editorial {
+      font-family: var(--font-heading);
+      font-weight: 500;
+      letter-spacing: -0.035em;
+   }
+
+   /*
+   * UI labels should remain clean and restrained.
+   */
+   .font-ui {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+   }
+}
+
+/* ==============================================================
+   LUXURY UI UTILITIES
+   ============================================================== */
+
+@layer utilities {
+
+   /*
+   * Very subtle editorial divider.
+   */
+   .divider-editorial {
+      height: 1px;
+      width: 100%;
+      background: var(--border);
+   }
+
+   /*
+   * Brand plum surface.
+   */
+   .surface-plum {
+      background: var(--plum);
+      color: var(--white);
+   }
+
+   /*
+   * Dark editorial surface.
+   */
+   .surface-ink {
+      background: var(--ink);
+      color: var(--snow);
+   }
+
+   /*
+   * Clean white surface.
+   */
+   .surface-white {
+      background: var(--white);
+      color: var(--ink);
+   }
+
+   /*
+   * Soft canvas.
+   */
+   .surface-snow {
+      background: var(--snow);
+      color: var(--ink);
+   }
+
+   /*
+   * Subtle uppercase luxury label.
+   */
+   .eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      line-height: 1.4;
+      text-transform: uppercase;
+   }
+
+   /*
+   * Large editorial heading.
+   */
+   .display-heading {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 7vw, 7rem);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 0.92;
+   }
+
+   /*
+   * Elegant body copy.
+   */
+   .body-editorial {
+      max-width: 42rem;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--muted-foreground);
+   }
+
+   /*
+   * Minimal luxury button foundation.
+   */
+   .button-editorial {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.875rem;
+      padding-inline: 1.5rem;
+
+      border: 1px solid transparent;
+      border-radius: 2px;
+
+      font-family: var(--font-sans);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      line-height: 1;
+      text-transform: uppercase;
+
+      transition:
+         background-color 180ms ease,
+         border-color 180ms ease,
+         color 180ms ease,
+         transform 180ms ease;
+   }
+
+   .button-editorial:hover {
+      transform: translateY(-1px);
+   }
+
+   .button-editorial:active {
+      transform: translateY(0);
+   }
+
+   /*
+   * Primary editorial CTA.
+   */
+   .button-editorial-primary {
+      background: var(--plum);
+      color: var(--white);
+   }
+
+   .button-editorial-primary:hover {
+      background: var(--plum-deep);
+   }
+
+   /*
+   * Quiet secondary CTA.
+   */
+   .button-editorial-secondary {
+      background: transparent;
+      border-color: var(--ink);
+      color: var(--ink);
+   }
+
+   .button-editorial-secondary:hover {
+      background: var(--ink);
+      color: var(--white);
+   }
+
+   /*
+   * Light CTA for dark / plum sections.
+   */
+   .button-editorial-light {
+      background: var(--white);
+      color: var(--ink);
+   }
+
+   .button-editorial-light:hover {
+      background: var(--snow);
+   }
+
+   /*
+   * Text-only editorial link.
+   */
+   .link-editorial {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+   }
+
+   .link-editorial::after {
+      content: "";
+
+      position: absolute;
+      right: 0;
+      bottom: -0.3rem;
+      left: 0;
+
+      height: 1px;
+
+      background: currentColor;
+
+      transform: scaleX(0);
+      transform-origin: right;
+
+      transition: transform 220ms ease;
+   }
+
+   .link-editorial:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+   }
+}
+
+/* ==============================================================
+   FORM CONTROLS
+   ============================================================== */
+
+@layer base {
+
+   input,
+   textarea,
+   select {
+      font-family: var(--font-sans);
+   }
+
+   input::placeholder,
+   textarea::placeholder {
+      color: var(--muted-foreground);
+      opacity: 0.8;
+   }
+}
+
+/* ==============================================================
+   FOCUS STATES
+   ============================================================== */
+
+@layer base {
+   :focus-visible {
+      outline: 2px solid var(--plum);
+      outline-offset: 3px;
+   }
+}
+
+/* ==============================================================
+   SCROLLBAR
+   ============================================================== */
+
+@layer base {
+   * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+   }
+
+   *::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+   }
+
+   *::-webkit-scrollbar-track {
+      background: transparent;
+   }
+
+   *::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 999px;
+   }
+
+   *::-webkit-scrollbar-thumb:hover {
+      background: var(--muted-foreground);
+   }
+}
+
+/* ==============================================================
+   REDUCED MOTION
+   ============================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+   html {
+      scroll-behavior: auto;
+   }
+
+   *,
+   *::before,
+   *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+   }
+}
+
+/* ==============================================================
+   ARABIC / RTL TYPOGRAPHY
+   ============================================================== */
+
+[dir="rtl"] {
+   font-family: var(--font-arabic-sans);
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+   font-family: var(--font-naskh);
+}
+
+[dir="rtl"] .font-editorial,
+[dir="rtl"] .display-heading {
+   font-family: var(--font-naskh);
+}
+
+[dir="rtl"] .font-ui,
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .button-editorial,
+[dir="rtl"] .link-editorial {
+   font-family: var(--font-arabic-sans);
+   letter-spacing: normal;
+   text-transform: none;
+}
