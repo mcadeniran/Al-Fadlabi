@@ -51,13 +51,14 @@ export default async function proxy(request: NextRequest) {
      *
      * Login and registration remain public.
      */
-    if (customerRoute.isAccountPage && !user) {
-      const loginPath =
-        customerRoute.locale === routing.defaultLocale
-          ? '/account/login'
-          : `/${customerRoute.locale}/account/login`;
-
-      return NextResponse.redirect(new URL(loginPath, request.url));
+    if (customerRoute) {
+      if (customerRoute.isAccountPage && !user) {
+        const loginPath =
+          customerRoute.locale === routing.defaultLocale
+            ? '/account/login'
+            : `/${customerRoute.locale}/account/login`;
+        return NextResponse.redirect(new URL(loginPath, request.url));
+      }
     }
   }
 

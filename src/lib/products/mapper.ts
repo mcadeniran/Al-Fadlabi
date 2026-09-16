@@ -8,6 +8,7 @@ type ProductRow = {
   featured: boolean;
   new_arrival: boolean;
   bestseller: boolean;
+  createdAt: string;
 
   product_translations?: Array<{
     locale: 'en' | 'ar';
@@ -55,6 +56,8 @@ export function mapProduct(row: ProductRow): Product {
     featured: row.featured,
     newArrival: row.new_arrival,
     bestseller: row.bestseller,
+
+    createdAt: row.createdAt,
 
     category: null,
 
