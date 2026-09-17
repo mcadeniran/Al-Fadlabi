@@ -7,11 +7,22 @@ import {useLocale} from "next-intl";
 import {Container} from "@/components/ui/container";
 import {useCart} from "@/components/cart/cart-provider";
 import {CartItem} from "@/components/cart/cart-item";
+import {useMemo} from "react";
 
 export default function CartPage() {
   const locale = useLocale();
   const {items, itemCount, subtotal, clearCart, isHydrated} = useCart();
   const isArabic = locale === "ar";
+
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(isArabic ? "ar" : "en", {
+        style: "currency",
+        currency: "SDG",
+        maximumFractionDigits: 0,
+      }),
+    [isArabic],
+  );
 
   const hasUnavailableItems = items.some((item) => item.size.stockQuantity <= 0 || item.quantity > item.size.stockQuantity);
 
@@ -103,8 +114,9 @@ export default function CartPage() {
                     <div className="flex items-baseline justify-between gap-6">
                       <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
                       <div className="text-end">
-                        <span className="font-editorial text-3xl leading-none text-ink">{subtotal.toLocaleString(locale === "ar" ? "ar" : "en")}</span>
-                        <span className="ms-2 text-[8px] font-semibold uppercase tracking-[0.18em] text-ink/35">SDG</span>
+                        <span className="font-editorial text-3xl leading-none text-ink">
+                          {currencyFormatter.format(subtotal)}
+                        </span>
                       </div>
                     </div>
 

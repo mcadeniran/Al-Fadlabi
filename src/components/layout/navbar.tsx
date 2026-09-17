@@ -83,14 +83,6 @@ export function Navbar() {
     ? "bg-transparent"
     : "bg-snow/92 backdrop-blur-xl";
 
-  // const logoText = isHomePage
-  //   ? "text-white"
-  //   : "text-ink";
-
-  // const logoSubtext = isHomePage
-  //   ? "text-white/65"
-  //   : "text-plum";
-
   return (
     <>
       {/* =========================================================
@@ -98,29 +90,8 @@ export function Navbar() {
           ========================================================= */}
 
       <header
-        className={`
-          absolute inset-x-0 top-0 z-50
-          border-b
-          transition-colors duration-500
-          ${navBorder}
-          ${navBackground}
-        `}
-      >
-        <div
-          className="
-            mx-auto
-            flex
-            h-28
-            w-full
-            max-w-360
-            items-center
-            justify-between
-            px-6
-            sm:px-8
-            lg:px-12
-            xl:px-16
-          "
-        >
+        className={`absolute inset-x-0 top-0 z-50 border-b transition-colors duration-500 ${navBorder} ${navBackground}`}>
+        <div className="mx-auto flex h-20 w-full max-w-360 items-center justify-between px-6 sm:px-8 lg:px-12 xl:px-16">
           {/* =====================================================
               MOBILE MENU BUTTON
               ===================================================== */}
@@ -129,16 +100,7 @@ export function Navbar() {
             type="button"
             onClick={() => setIsOpen(true)}
             aria-label={t("openMenu")}
-            className={`
-              flex
-              items-center
-              justify-center
-              transition-opacity
-              hover:opacity-60
-              lg:hidden
-              ${navText}
-            `}
-          >
+            className={`flex items-center justify-center transition-opacity hover:opacity-60 lg:hidden ${navText}`}>
             <Menu
               size={25}
               strokeWidth={1.25}
@@ -148,64 +110,19 @@ export function Navbar() {
           {/* =====================================================
               LOGO
               ===================================================== */}
-
-          {/* <Link
-            href="/"
-            aria-label={t("home")}
-            className="group shrink-0"
-            onClick={closeMenu}
-          >
-            <div className="text-center">
-              <span
-                className={`
-                  block
-                  font-heading
-                  text-[1.7rem]
-                  leading-none
-                  tracking-[0.2em]
-                  transition-opacity
-                  duration-300
-                  group-hover:opacity-70
-                  sm:text-[1.9rem]
-                  lg:text-[2rem]
-                  ${logoText}
-                `}
-              >
-                PERFUME
-              </span>
-
-              <span
-                className={`
-                  mt-2
-                  block
-                  text-[8px]
-                  font-medium
-                  uppercase
-                  tracking-[0.5em]
-                  transition-colors
-                  duration-300
-                  ${logoSubtext}
-                `}
-              >
-                Fragrance House
-              </span>
-            </div>
-          </Link> */}
-
           <Link
             href="/"
             aria-label={t("home")}
-            className="group relative block shrink-0
-  "
+            className="group relative block shrink-0"
             onClick={closeMenu}
           >
             <Image
               src="/images/brand/al-fadlabi-logo.png"
               alt="Al-Fadlabi Perfumes & Cosmetics"
-              width={75}
-              height={64}
+              width={60}
+              height={60}
               priority
-              className="h-auto w-18.75 object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:w-14 lg:w-18.75"
+              className="h-auto w-10 object-contain transition-transform duration-300 group-hover:scale-[1.03] sm:w-10 lg:w-15"
             />
           </Link>
 
@@ -215,123 +132,34 @@ export function Navbar() {
 
           <nav
             aria-label={t("home")}
-            className="
-              hidden
-              items-center
-              gap-10
-              lg:flex
-              xl:gap-12
-            "
-          >
+            className={`hidden items-center gap-10 lg:flex xl:gap-12 ${locale === 'ar' ? "text-xl" : "text-xs"}`}>
             {/* SHOP */}
 
             <Link
-              href="/shop"
-              className={`
-                group
-                relative
-                py-3
-                text-[11px]
-                font-medium
-                uppercase
-                tracking-[0.18em]
-                transition-colors
-                ${isActive("/shop")
-                  ? navText
-                  : `${navMutedText} ${navHoverText}`}
-              `}
-            >
-              {t("shop")}
-
+              href="/"
+              className={`group relative py-1 font-medium uppercase tracking-[0.18em] transition-colors ${isActive("/") ? navText : `${navMutedText} ${navHoverText}`}`}>
+              {t("home")}
               <span
-                className={`
-                  absolute
-                  -bottom-1
-                  left-0
-                  h-px
-                  bg-plum
-                  transition-all
-                  duration-300
-                  ${isActive("/shop")
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
-                  }
-                `}
-              />
+                className={`absolute -bottom-1 left-0 h-px bg-plum transition-all duration-300 ${isActive("/") ? "w-full" : "w-0 group-hover:w-full"}`} />
             </Link>
 
-            {/* COLLECTIONS */}
-
             <Link
-              href="/collections"
-              className={`
-                group
-                relative
-                py-3
-                text-[11px]
-                font-medium
-                uppercase
-                tracking-[0.18em]
-                transition-colors
-                ${isActive("/collections")
-                  ? navText
-                  : `${navMutedText} ${navHoverText}`}
-              `}
-            >
-              {t("collections")}
-
+              href="/shop"
+              className={`group relative py-1 font-medium uppercase tracking-[0.18em] transition-colors ${isActive("/shop") ? navText : `${navMutedText} ${navHoverText}`}`}>
+              {t("shop")}
               <span
-                className={`
-                  absolute
-                  -bottom-1
-                  left-0
-                  h-px
-                  bg-plum
-                  transition-all
-                  duration-300
-                  ${isActive("/collections")
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
-                  }
-                `}
-              />
+                className={`absolute -bottom-1 left-0 h-px bg-plum transition-all duration-300 ${isActive("/shop") ? "w-full" : "w-0 group-hover:w-full"}`} />
             </Link>
 
             {/* OUR STORY */}
 
             <Link
               href="/our-story"
-              className={`
-                group
-                relative
-                py-3
-                text-[11px]
-                font-medium
-                uppercase
-                tracking-[0.18em]
-                transition-colors
-                ${isActive("/our-story")
-                  ? navText
-                  : `${navMutedText} ${navHoverText}`}
-              `}
-            >
+              className={`group relative py-1  font-medium uppercase tracking-[0.18em] transition-colors ${isActive("/our-story") ? navText : `${navMutedText} ${navHoverText}`}`}>
               {t("story")}
 
               <span
-                className={`
-                  absolute
-                  -bottom-1
-                  left-0
-                  h-px
-                  bg-plum
-                  transition-all
-                  duration-300
-                  ${isActive("/our-story")
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
-                  }
-                `}
-              />
+                className={`absolute -bottom-1 left-0 h-px bg-plum transition-all duration-300 ${isActive("/our-story") ? "w-full" : "w-0 group-hover:w-full"}`} />
             </Link>
           </nav>
 
@@ -345,14 +173,7 @@ export function Navbar() {
             <Link
               href="/account"
               aria-label={t("account")}
-              className={`
-                hidden
-                transition-colors
-                hover:text-plum
-                sm:block
-                ${navMutedText}
-              `}
-            >
+              className={`hidden transition-colors hover:text-plum sm:block ${navMutedText}`}>
               <UserRound
                 size={21}
                 strokeWidth={1.25}
@@ -364,42 +185,13 @@ export function Navbar() {
             <Link
               href="/cart"
               aria-label={t("cart")}
-              className={`
-                relative
-                transition-colors
-                hover:text-plum
-                ${navMutedText}
-              `}
-            >
+              className={`relative transition-colors hover:text-plum ${navMutedText}`}>
               <ShoppingBag
                 size={22}
                 strokeWidth={1.25}
               />
 
-              <span
-                className={`
-                  absolute
-                  -right-2.5
-                  -top-2.5
-                  flex
-                  h-4
-                  min-w-4
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-plum
-                  px-1
-                  text-[8px]
-                  font-semibold
-                  text-white
-                  transition-all
-                  duration-300
-                  ${displayItemCount > 0
-                    ? "scale-100 opacity-100"
-                    : "scale-90 opacity-70"
-                  }
-                `}
-              >
+              <span className={`absolute -right-2.5 -top-2.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-plum px-1 text-[8px] font-semibold text-white transition-all duration-300 ${displayItemCount > 0 ? "scale-100 opacity-100" : "scale-90 opacity-70"}`}>
                 {displayItemCount}
               </span>
             </Link>
@@ -410,24 +202,7 @@ export function Navbar() {
               type="button"
               onClick={handleLocaleChange}
               aria-label={t("language")}
-              className={`
-                hidden
-                border-s
-                ps-5
-                text-[10px]
-                font-medium
-                uppercase
-                tracking-[0.2em]
-                transition-colors
-                hover:text-plum
-                sm:block
-                ${isHomePage
-                  ? "border-white/20"
-                  : "border-ink/10"
-                }
-                ${navMutedText}
-              `}
-            >
+              className={`hidden border-s ps-5 ${locale === 'en' ? "text-lg" : "text-sm"} font-medium uppercase tracking-[0.2em] transition-colors hover:text-plum sm:block ${isHomePage ? "border-white/20" : "border-ink/10"} ${navMutedText}`}>
               {nextLocale === "ar"
                 ? "العربية"
                 : "English"}
@@ -441,61 +216,13 @@ export function Navbar() {
           ========================================================= */}
 
       <div
-        className={`
-          fixed
-          inset-0
-          z-60
-          bg-ink
-          transition-all
-          duration-500
-          lg:hidden
-          ${isOpen
-            ? "visible opacity-100"
-            : "invisible opacity-0"
-          }
-        `}
-        aria-hidden={!isOpen}
-      >
+        className={`fixed inset-0 z-60 bg-ink transition-all duration-500 lg:hidden ${isOpen ? "visible opacity-100" : "invisible opacity-0"}`} aria-hidden={!isOpen}>
         <div className="flex min-h-full flex-col px-7 py-8 sm:px-10">
           {/* =====================================================
               MOBILE MENU HEADER
               ===================================================== */}
 
           <div className="flex items-start justify-between">
-            {/* <Link
-              href="/"
-              onClick={closeMenu}
-              className="group"
-            >
-              <span
-                className="
-                  block
-                  font-heading
-                  text-[1.8rem]
-                  leading-none
-                  tracking-[0.2em]
-                  text-white
-                  transition-opacity
-                  group-hover:opacity-70
-                "
-              >
-                PERFUME
-              </span>
-
-              <span
-                className="
-                  mt-2
-                  block
-                  text-[8px]
-                  font-medium
-                  uppercase
-                  tracking-[0.5em]
-                  text-coral
-                "
-              >
-                Fragrance House
-              </span>
-            </Link> */}
 
             <Link
               href="/"
@@ -505,9 +232,9 @@ export function Navbar() {
               <Image
                 src="/images/brand/al-fadlabi-logo.png"
                 alt="Al-Fadlabi Perfumes & Cosmetics"
-                width={150}
-                height={128}
-                className="h-auto w-24 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
+                width={60}
+                height={60}
+                className="h-auto w-12 object-contain transition-transform duration-300 group-hover:scale-[1.03]"
               />
             </Link>
 
@@ -515,12 +242,7 @@ export function Navbar() {
               type="button"
               onClick={closeMenu}
               aria-label={t("closeMenu")}
-              className="
-                text-white
-                transition-opacity
-                hover:opacity-60
-              "
-            >
+              className="text-white transition-opacity hover:opacity-60">
               <X
                 size={27}
                 strokeWidth={1.25}
@@ -534,33 +256,14 @@ export function Navbar() {
 
           <nav
             aria-label={t("mobileMenu.title")}
-            className="
-              flex
-              flex-1
-              flex-col
-              justify-center
-            "
-          >
+            className="flex flex-1 flex-col justify-center">
             <div className="space-y-6">
               {/* SHOP */}
 
               <Link
                 href="/shop"
                 onClick={closeMenu}
-                className={`
-                  block
-                  font-heading
-                  text-[3rem]
-                  leading-none
-                  tracking-tight
-                  transition-colors
-                  sm:text-[3.5rem]
-                  ${isActive("/shop")
-                    ? "text-coral"
-                    : "text-white hover:text-coral"
-                  }
-                `}
-              >
+                className={`block font-heading text-[3rem] leading-none tracking-tight transition-colors sm:text-[3.5rem] ${isActive("/shop") ? "text-coral" : "text-white hover:text-coral"}`}>
                 {t("shop")}
               </Link>
 
@@ -569,20 +272,7 @@ export function Navbar() {
               <Link
                 href="/collections"
                 onClick={closeMenu}
-                className={`
-                  block
-                  font-heading
-                  text-[3rem]
-                  leading-none
-                  tracking-tight
-                  transition-colors
-                  sm:text-[3.5rem]
-                  ${isActive("/collections")
-                    ? "text-coral"
-                    : "text-white hover:text-coral"
-                  }
-                `}
-              >
+                className={`block font-heading text-[3rem] leading-none tracking-tight transition-colors sm:text-[3.5rem] ${isActive("/collections") ? "text-coral" : "text-white hover:text-coral"}`}>
                 {t("collections")}
               </Link>
 
@@ -591,20 +281,7 @@ export function Navbar() {
               <Link
                 href="/our-story"
                 onClick={closeMenu}
-                className={`
-                  block
-                  font-heading
-                  text-[3rem]
-                  leading-none
-                  tracking-tight
-                  transition-colors
-                  sm:text-[3.5rem]
-                  ${isActive("/our-story")
-                    ? "text-coral"
-                    : "text-white hover:text-coral"
-                  }
-                `}
-              >
+                className={`block font-heading text-[3rem] leading-none tracking-tight transition-colors sm:text-[3.5rem] ${isActive("/our-story") ? "text-coral" : "text-white hover:text-coral"}`}>
                 {t("story")}
               </Link>
             </div>
@@ -621,24 +298,11 @@ export function Navbar() {
               <Link
                 href="/account"
                 onClick={closeMenu}
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  text-[11px]
-                  font-medium
-                  uppercase
-                  tracking-[0.22em]
-                  text-white/65
-                  transition-colors
-                  hover:text-white
-                "
-              >
+                className="flex items-center gap-3  font-medium uppercase tracking-[0.22em] text-white/65 transition-colors hover:text-white">
                 <UserRound
                   size={17}
                   strokeWidth={1.25}
                 />
-
                 {t("account")}
               </Link>
 
@@ -647,19 +311,7 @@ export function Navbar() {
               <Link
                 href="/cart"
                 onClick={closeMenu}
-                className="
-                  flex
-                  items-center
-                  gap-3
-                  text-[11px]
-                  font-medium
-                  uppercase
-                  tracking-[0.22em]
-                  text-white/65
-                  transition-colors
-                  hover:text-white
-                "
-              >
+                className="flex items-center gap-3  font-medium uppercase tracking-[0.22em] text-white/65 transition-colors hover:text-white">
                 <ShoppingBag
                   size={17}
                   strokeWidth={1.25}
@@ -668,21 +320,7 @@ export function Navbar() {
                 {t("cart")}
 
                 {displayItemCount > 0 && (
-                  <span
-                    className="
-                      flex
-                      h-5
-                      min-w-5
-                      items-center
-                      justify-center
-                      rounded-full
-                      bg-coral
-                      px-1.5
-                      text-[8px]
-                      font-semibold
-                      text-white
-                    "
-                  >
+                  <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-coral px-1.5 text-[8px] font-semibold text-white">
                     {displayItemCount}
                   </span>
                 )}
@@ -693,17 +331,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={handleLocaleChange}
-                className="
-                  pt-2
-                  text-[11px]
-                  font-medium
-                  uppercase
-                  tracking-[0.22em]
-                  text-coral
-                  transition-opacity
-                  hover:opacity-70
-                "
-              >
+                className="pt-2  font-medium uppercase tracking-[0.22em] text-coral transition-opacity hover:opacity-70">
                 {nextLocale === "ar"
                   ? "العربية"
                   : "English"}
@@ -715,15 +343,7 @@ export function Navbar() {
               MOBILE MENU FOOTER
               ===================================================== */}
 
-          <div
-            className="
-              text-[8px]
-              font-medium
-              uppercase
-              tracking-[0.4em]
-              text-white/25
-            "
-          >
+          <div className="text-[8px] font-medium uppercase tracking-[0.4em] text-white/25">
             Fragrance House
           </div>
         </div>

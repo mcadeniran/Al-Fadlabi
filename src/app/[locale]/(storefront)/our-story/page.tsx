@@ -68,7 +68,7 @@ export default async function OurStoryPage({
 
         <div className="relative mx-auto grid max-w-360 items-end gap-16 px-6 pb-20 pt-24 sm:px-8 sm:pb-24 sm:pt-32 lg:grid-cols-[1.15fr_0.85fr] lg:px-12 lg:pb-28 lg:pt-36">
           <div className="max-w-4xl">
-            <p className="eyebrow mb-7 text-coral">{t("hero.eyebrow")}</p>
+            <p className={`eyebrow mb-7 text-coral ${locale === 'ar' && "mb-18"}`}>{t("hero.eyebrow")}</p>
 
             <h1 className="font-serif text-[clamp(3.75rem,8vw,8rem)] leading-[0.88] tracking-[-0.04em] text-snow">
               {t("hero.title")}

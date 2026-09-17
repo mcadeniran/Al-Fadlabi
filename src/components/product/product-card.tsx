@@ -3,6 +3,7 @@ import Link from "next/link";
 import {ArrowUpRight} from "lucide-react";
 import {Locale, useLocale, useTranslations} from "next-intl";
 import type {Product} from "@/types/product";
+import {useMemo} from "react";
 
 type ProductCardProps = {
   product: Product;
@@ -11,6 +12,18 @@ type ProductCardProps = {
 export function ProductCard({product}: ProductCardProps) {
   const t = useTranslations("Shop");
   const locale = useLocale() as Locale;
+
+  const isArabic = locale === 'ar';
+
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(isArabic ? "ar" : "en", {
+        style: "currency",
+        currency: "SDG",
+        maximumFractionDigits: 0,
+      }),
+    [isArabic],
+  );
 
   const translation = product.translations.find((item) => item.locale === locale) ?? product.translations.find((item) => item.locale === "en");
 
@@ -24,13 +37,12 @@ export function ProductCard({product}: ProductCardProps) {
 
   const isOutOfStock = product.sizes.length === 0 || product.sizes.every((size) => size.stockQuantity <= 0);
 
-  const currencyLocale = locale === "ar" ? "ar-SD" : "en-SD";
   const productHref = `/shop/${product.slug}`;
 
   return (
     <article className="group">
       {/* Product visual */}
-      <Link href={productHref} className="relative block overflow-hidden bg-snow">
+      <Link href={productHref} className="relative block overflow-hidden bg-snow rounded-2xl">
         <div className="relative aspect-4/5 overflow-hidden">
           {primaryImage ? (
             <Image src={primaryImage.imageUrl} alt={name} fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 33vw, 50vw" className="object-cover transition-transform duration-900 ease-out group-hover:scale-[1.035]" />
@@ -78,36 +90,37 @@ export function ProductCard({product}: ProductCardProps) {
             <p className="truncate text-[8px] font-semibold uppercase tracking-[0.28em] text-plum">{brand}</p>
 
             <Link href={productHref} className="mt-2 block">
-              <h3 className="font-editorial text-[1.65rem] leading-[0.95] tracking-tight text-ink transition-colors duration-300 group-hover:text-plum sm:text-[1.8rem]">
+              <h3 className={`font-editorial ${isArabic ? "text-lg sm:text-xl" : "text-base sm:text-lg"}  leading-[0.95] tracking-tight text-ink transition-colors duration-300 group-hover:text-plum `}>
                 {name}
               </h3>
             </Link>
           </div>
 
           {smallestSize !== null && (
-            <span className="shrink-0 pt-1 text-[8px] font-medium uppercase tracking-[0.18em] text-ink/35">
+            <span className="shrink-0 pt-1 text-[8px] font-medium uppercase tracking-[0.18em] text-ink/55">
               {smallestSize}ml+
             </span>
           )}
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-4 border-t border-ink/8 pt-3">
-          <p className="text-xs text-ink/55">
+          <p className={`${isArabic ? "text-lg" : "text-xs"} text-ink/55`}>
             {startingPrice !== null ? (
               <>
                 {t("from")}{" "}
-                <span className="font-medium text-ink">
-                  {startingPrice.toLocaleString(currencyLocale)}
+                <span className="font-medium text-lg text-ink">
+                  {currencyFormatter.format(startingPrice)}
                 </span>
-                <span className="ms-1 text-[8px] uppercase tracking-[0.08em] text-ink/35">SDG</span>
               </>
             ) : (
               <span className="text-ink/35">{t("priceUnavailable")}</span>
             )}
           </p>
 
-          <span className="text-[8px] font-medium uppercase tracking-[0.18em] text-ink/30 transition-colors duration-300 group-hover:text-plum">
-            Discover
+          <span className={`${isArabic ? "text-base" : "text-sm"}  font-medium uppercase tracking-[0.18em] text-ink/30 transition-colors duration-300 group-hover:text-plum`}>
+            {
+              isArabic ? "عَرْض" : "View"
+            }
           </span>
         </div>
       </div>

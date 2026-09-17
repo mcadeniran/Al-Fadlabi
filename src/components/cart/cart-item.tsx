@@ -7,6 +7,7 @@ import {useLocale} from "next-intl";
 
 import {useCart} from "@/components/cart/cart-provider";
 import type {CartItem as CartItemType} from "@/components/cart/cart-provider";
+import {useMemo} from "react";
 
 type CartItemProps = {
   item: CartItemType;
@@ -16,6 +17,16 @@ export function CartItem({item}: CartItemProps) {
   const {updateQuantity, removeFromCart} = useCart();
   const locale = useLocale();
   const isArabic = locale === "ar";
+
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(isArabic ? "ar" : "en", {
+        style: "currency",
+        currency: "SDG",
+        maximumFractionDigits: 0,
+      }),
+    [isArabic],
+  );
 
   const translation = item.product.translations.find((entry) => entry.locale === locale) ?? item.product.translations.find((entry) => entry.locale === "en");
 
@@ -84,8 +95,10 @@ export function CartItem({item}: CartItemProps) {
       </div>
 
       <div className={`shrink-0 text-end ${isArabic ? "text-left" : ""}`}>
-        <p className="font-editorial text-xl leading-none text-ink sm:text-2xl">{lineTotal.toLocaleString(locale === "ar" ? "ar" : "en")}</p>
-        <p className="mt-2 text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/30">SDG</p>
+        <p className="font-editorial text-xl leading-none text-ink sm:text-2xl">
+          {currencyFormatter.format(lineTotal)}
+        </p>
+        {/* <p className="mt-2 text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/30">SDG</p> */}
       </div>
 
       <button type="button" onClick={handleRemove} aria-label={isArabic ? "إزالة المنتج" : "Remove product"} className="absolute inset-e-0 top-7 text-ink/25 transition-colors hover:text-coral sm:hidden">

@@ -1,13 +1,16 @@
-import {useTranslations} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 
 import {Link} from "@/i18n/navigation";
 import Image from "next/image";
 
 export function Footer() {
   const t = useTranslations("Footer");
+  const locale = useLocale();
+
+  const isAr = locale === 'ar';
 
   return (
-    <footer className="bg-ink px-6 pb-8 pt-20 text-snow sm:px-8 md:px-10 lg:px-16 lg:pt-24">
+    <footer className="bg-snow px-6 pb-8 pt-20 text-ink sm:px-8 md:px-10 lg:px-16 lg:pt-24">
       <div className="mx-auto max-w-360">
         {/* =======================================================
             MAIN FOOTER
@@ -32,11 +35,11 @@ export function Footer() {
               />
             </Link>
 
-            <p className="mt-6 max-w-sm font-heading text-lg leading-relaxed text-snow/90">
+            <p className="mt-6 max-w-sm font-heading text-lg leading-relaxed text-ink/90">
               {t('brandName')}
             </p>
 
-            <p className="mt-2 max-w-sm text-sm leading-7 text-snow/45">
+            <p className="mt-2 max-w-sm text-sm leading-7 text-ink/45">
               {/* {t("description")} */}
             </p>
           </div>
@@ -46,32 +49,32 @@ export function Footer() {
               ===================================================== */}
 
           <div>
-            <h3 className="mb-7 text-[10px] font-semibold uppercase tracking-[0.22em] text-coral">
+            <h3 className={`mb-7 ${isAr ? "text-xl" : "text-base"} font-semibold uppercase tracking-[0.22em] text-coral`}>
               {t("explore.title")}
             </h3>
 
-            <nav className="flex flex-col gap-4 text-[0.9rem] text-snow/55">
+            <nav className={`flex flex-col gap-4 ${isAr ? "text-lg" : "text-sm"}  text-ink/55`}>
               <Link
                 href="/"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("explore.home")}
               </Link>
 
               <Link
                 href="/shop"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("explore.shop")}
               </Link>
 
               <Link
                 href="/collections"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("explore.collections")}
               </Link>
 
               <Link
                 href="/our-story"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("explore.story")}
               </Link>
             </nav>
@@ -82,32 +85,32 @@ export function Footer() {
               ===================================================== */}
 
           <div>
-            <h3 className="mb-7 text-[10px] font-semibold uppercase tracking-[0.22em] text-coral">
+            <h3 className={`mb-7 ${isAr ? "text-xl" : "text-base"} font-semibold uppercase tracking-[0.22em] text-coral`}>
               {t("client.title")}
             </h3>
 
-            <nav className="flex flex-col gap-4 text-[0.9rem] text-snow/55">
+            <nav className={`flex flex-col gap-4 ${isAr ? "text-lg" : "text-sm"}  text-ink/55`}>
               <Link
                 href="/account"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("client.account")}
               </Link>
 
               <Link
                 href="/account/orders"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("client.orders")}
               </Link>
 
               <Link
                 href="/contact"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("client.contact")}
               </Link>
 
               <Link
                 href="/faq"
-                className="transition-colors hover:text-white">
+                className="transition-colors hover:text-plum">
                 {t("client.faq")}
               </Link>
             </nav>
@@ -119,25 +122,25 @@ export function Footer() {
 
           <div>
             <h3
-              className="mb-7 text-[10px] font-semibold uppercase tracking-[0.22em] text-coral">
+              className={`mb-7 ${isAr ? "text-xl" : "text-base"} font-semibold uppercase tracking-[0.22em] text-coral`}>
               {t("contact.title")}
             </h3>
 
-            <div className="flex flex-col gap-4 text-[0.9rem] leading-6 text-snow/55">
+            <div className="flex flex-col gap-4 text-[0.9rem] leading-6 text-ink/55">
               <p>{t("contact.location")}</p>
               <p>{t("contact.branchOne")}</p>
               <p>{t("contact.branchTwo")}</p>
 
               <a
                 href="mailto:mohamedaltayeb064@gmail.com"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-plum"
               >
                 {t("contact.email")}
               </a>
 
               <a
                 href="tel:+249912412592"
-                className="transition-colors hover:text-white"
+                className="transition-colors hover:text-plum"
               >
                 {t("contact.phone")}
               </a>
@@ -149,14 +152,14 @@ export function Footer() {
             LARGE EDITORIAL DIVIDER
             ======================================================= */}
 
-        <div className="mt-20 h-px w-full bg-white/10 lg:mt-24" />
+        <div className="mt-4 h-px w-full bg-white/10 lg:mt-4" />
 
         {/* =======================================================
             BOTTOM
             ======================================================= */}
 
         <div
-          className="flex flex-col gap-5 pt-7 text-[9px] font-medium uppercase tracking-[0.14em] text-snow/30 md:flex-row md:items-center md:justify-between">
+          className="flex flex-col gap-5 pt-7 text-[11px] font-medium uppercase tracking-[0.14em] text-ink/30 md:flex-row md:items-center md:justify-between">
           <p>
             © {new Date().getFullYear()} PERFUME.{" "}
             {t("rights")}

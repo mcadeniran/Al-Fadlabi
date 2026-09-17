@@ -1,4 +1,4 @@
-import {getTranslations} from "next-intl/server";
+import {getLocale, getTranslations} from "next-intl/server";
 
 import {ProductCard} from "@/components/product";
 import {ShopToolbar} from "@/components/shop/shop-toolbar";
@@ -21,7 +21,9 @@ type GenderFilter = (typeof validGenders)[number];
 
 export default async function ShopPage({searchParams}: ShopPageProps) {
   const products = await getProducts();
+  const locale = await getLocale();
   const t = await getTranslations("Shop");
+  const c = await getTranslations("OurStory");
   const params = await searchParams;
 
   const gender = validGenders.includes(params.gender as GenderFilter) ? (params.gender as GenderFilter) : undefined;
@@ -50,30 +52,33 @@ export default async function ShopPage({searchParams}: ShopPageProps) {
   return (
     <main className="bg-snow text-ink">
       {/* Shop introduction */}
-      <section className="relative overflow-hidden bg-snow px-6 pb-20 pt-32 sm:px-8 md:pb-28 lg:px-12 lg:pt-40 xl:px-16">
-        <div aria-hidden="true" className="absolute -right-32 top-10 h-80 w-80 rounded-full bg-plum/5 blur-3xl" />
+      <section className="relative overflow-hidden bg-ink text-snow">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_30%,rgba(114,19,99,0.48),transparent_42%)]" />
+        <div className="absolute -right-24 top-16 h-72 w-72 rounded-full bg-plum/20 blur-3xl" />
+        <div className="absolute bottom-0 left-0 h-48 w-48 rounded-full bg-coral/10 blur-3xl" />
 
-        <div className="relative mx-auto max-w-360">
-          <div className="grid items-end gap-10 lg:grid-cols-[1fr_0.65fr]">
-            <div>
-              <p className="eyebrow mb-6 text-plum">{t("eyebrow")}</p>
+        <div className="relative mx-auto grid max-w-360 items-end gap-16 px-6 pb-20 pt-24 sm:px-8 sm:pb-24 sm:pt-32 lg:grid-cols-[1.15fr_0.85fr] lg:px-12 lg:pb-28 lg:pt-36">
+          <div className="max-w-4xl">
+            <p className={`eyebrow mb-7 text-coral ${locale === 'ar' && "mb-18"}`}>{c("hero.eyebrow")}</p>
 
-              <h1 className="max-w-4xl font-editorial text-[4rem] leading-[0.84] tracking-[-0.045em] sm:text-6xl md:text-7xl lg:text-[7rem]">
-                {t("title")}
-              </h1>
-            </div>
+            <h1 className="font-serif text-[clamp(3.75rem,8vw,8rem)] leading-[0.88] tracking-[-0.04em] text-snow">
+              {c("hero.title")}
+            </h1>
 
-            <div className="max-w-md lg:justify-self-end">
-              <p className="text-[1rem] leading-8 text-ink/55 md:text-[1.05rem]">{t("description")}</p>
-            </div>
+            <p className="mt-10 max-w-2xl text-lg leading-8 text-snow/70 sm:text-xl">
+              {c("hero.description")}
+            </p>
           </div>
 
-          <div className="mt-14 h-px w-full bg-ink/10 md:mt-20" />
-
-          <div className="mt-5 flex items-center justify-between gap-6">
-            <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-ink/35">Perfume House</span>
-
-            <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-plum">Collection / 01</span>
+          <div className="flex justify-start lg:justify-end">
+            <div className="border-l border-coral/50 pl-6 sm:pl-8">
+              <p className="font-serif text-[clamp(5rem,10vw,9rem)] leading-none text-coral">
+                30+
+              </p>
+              <p className="mt-3 max-w-55 text-sm uppercase tracking-[0.18em] text-snow/60">
+                {c("hero.years")}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -84,7 +89,7 @@ export default async function ShopPage({searchParams}: ShopPageProps) {
           <ShopToolbar gender={gender ?? "all"} sort={sort} productCount={sortedProducts.length} />
 
           {sortedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 gap-x-4 gap-y-14 sm:gap-x-6 md:grid-cols-3 md:gap-y-20 lg:gap-x-8">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-14 sm:gap-x-6 md:grid-cols-4 md:gap-y-20 lg:gap-x-8">
               {sortedProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
