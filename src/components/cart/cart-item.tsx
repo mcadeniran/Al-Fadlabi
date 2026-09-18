@@ -55,25 +55,25 @@ export function CartItem({item}: CartItemProps) {
           <Image src={item.product.images[0].imageUrl} alt={productName} fill className="object-cover transition-transform duration-700 hover:scale-[1.025]" sizes="(max-width: 640px) 96px, 128px" />
         ) : (
           <div className="flex h-full w-full items-center justify-center bg-snow" aria-hidden="true">
-            <span className="text-[7px] font-semibold uppercase tracking-[0.2em] text-ink/25">{isArabic ? "لا توجد صورة" : "No image"}</span>
+            <span className={`${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.2em] text-ink/25`}>{isArabic ? "لا توجد صورة" : "No image"}</span>
           </div>
         )}
       </Link>
 
       <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div>
-          <p className="text-[8px] font-semibold uppercase tracking-[0.3em] text-plum">{brand}</p>
+          <p className={`${isArabic ? "text-sm" : "text-xs"} eyebrow  font-semibold uppercase tracking-[0.3em] text-plum`}>{brand}</p>
 
           <Link href={`/shop/${item.product.slug}`} className="group/name block">
-            <h2 className="mt-2 font-editorial text-2xl leading-[0.95] tracking-[-0.02em] text-ink transition-colors group-hover/name:text-plum sm:text-3xl">{productName}</h2>
+            <h2 className={`mt-2 font-editorial ${isArabic ? "text-lg sm:text-xl" : "text-base sm:text-lg"} leading-[0.95] tracking-[-0.02em] text-ink transition-colors group-hover/name:text-plum`}>{productName}</h2>
           </Link>
 
-          <p className="mt-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-ink/35">{item.size.ml}ml</p>
+          <p className="mt-3 text-[12px] font-semibold uppercase tracking-[0.2em] text-ink/35">{item.size.ml}ml</p>
         </div>
 
-        {isOutOfStock && <p className="mt-3 text-[8px] font-semibold uppercase tracking-[0.2em] text-coral">{isArabic ? "غير متوفر حاليًا" : "Currently unavailable"}</p>}
+        {isOutOfStock && <p className={`mt-3 ${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.2em] text-coral`}>{isArabic ? "غير متوفر حاليًا" : "Currently unavailable"}</p>}
 
-        {!isOutOfStock && isAtStockLimit && <p className="mt-3 text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/30">{isArabic ? "الحد الأقصى المتاح" : "Maximum available quantity"}</p>}
+        {!isOutOfStock && isAtStockLimit && <p className={`mt-3 ${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.2em] text-ink/30`}>{isArabic ? "الحد الأقصى المتاح" : "Maximum available quantity"}</p>}
 
         <div className="mt-5 flex flex-wrap items-center gap-5">
           <div className="flex h-9 items-center border border-ink/15">
@@ -81,24 +81,23 @@ export function CartItem({item}: CartItemProps) {
               <Minus size={12} strokeWidth={1.25} />
             </button>
 
-            <span className="w-7 text-center text-[10px] font-medium">{item.quantity}</span>
+            <span className="w-7 text-center text-[12px] font-medium">{item.quantity}</span>
 
             <button type="button" onClick={increaseQuantity} disabled={isOutOfStock || isAtStockLimit} aria-label={isArabic ? "زيادة الكمية" : "Increase quantity"} className="flex h-full w-9 items-center justify-center text-ink/40 transition-colors hover:text-plum disabled:cursor-not-allowed disabled:opacity-25">
               <Plus size={12} strokeWidth={1.25} />
             </button>
           </div>
 
-          <button type="button" onClick={handleRemove} className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30 transition-colors hover:text-coral">
+          <button type="button" onClick={handleRemove} className={`${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.25em] text-ink/30 transition-colors hover:text-coral`}>
             {isArabic ? "إزالة" : "Remove"}
           </button>
         </div>
       </div>
 
       <div className={`shrink-0 text-end ${isArabic ? "text-left" : ""}`}>
-        <p className="font-editorial text-xl leading-none text-ink sm:text-2xl">
+        <p className="font-editorial text-lg leading-none text-ink sm:text-xl">
           {currencyFormatter.format(lineTotal)}
         </p>
-        {/* <p className="mt-2 text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/30">SDG</p> */}
       </div>
 
       <button type="button" onClick={handleRemove} aria-label={isArabic ? "إزالة المنتج" : "Remove product"} className="absolute inset-e-0 top-7 text-ink/25 transition-colors hover:text-coral sm:hidden">

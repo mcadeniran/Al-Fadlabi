@@ -3,7 +3,7 @@
 import {useState} from "react";
 import type {FormEvent} from "react";
 import {Check, Loader2} from "lucide-react";
-import {useTranslations} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 
 import {updateCustomerProfile} from "@/app/[locale]/(storefront)/account/actions";
 import type {CustomerProfile} from "@/lib/customers/customer-profile";
@@ -14,6 +14,10 @@ type ProfileFormProps = {
 
 export function ProfileForm({customer}: ProfileFormProps) {
   const t = useTranslations("Auth");
+
+  const locale = useLocale();
+
+  const isAr = locale === 'ar';
 
   const [firstName, setFirstName] = useState(customer.firstName);
   const [lastName, setLastName] = useState(customer.lastName);
@@ -77,11 +81,11 @@ export function ProfileForm({customer}: ProfileFormProps) {
           {t("profile.eyebrow")}
         </p>
 
-        <h2 className="mt-4 font-editorial text-4xl leading-[0.9] tracking-[-0.035em] sm:text-5xl">
+        <h2 className={`mt-4 font-editorial leading-[0.9] tracking-[-0.035em] ${isAr ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"} `}>
           {t("profile.title")}
         </h2>
 
-        <p className="mt-5 max-w-xl text-sm leading-7 text-ink/50">
+        <p className={`mt-5 max-w-xl ${isAr ? "text-base" : "text-sm"} leading-7 text-ink/50`}>
           {t("profile.description")}
         </p>
       </div>
@@ -89,7 +93,7 @@ export function ProfileForm({customer}: ProfileFormProps) {
       <form onSubmit={handleSubmit} className="space-y-9">
         <div className="grid gap-9 sm:grid-cols-2">
           <div className="group">
-            <label htmlFor="profile-first-name" className="block text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+            <label htmlFor="profile-first-name" className={`block ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
               {t("profile.firstName")}
             </label>
 
@@ -109,7 +113,7 @@ export function ProfileForm({customer}: ProfileFormProps) {
           </div>
 
           <div className="group">
-            <label htmlFor="profile-last-name" className="block text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+            <label htmlFor="profile-last-name" className={`block ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
               {t("profile.lastName")}
             </label>
 
@@ -130,7 +134,7 @@ export function ProfileForm({customer}: ProfileFormProps) {
         </div>
 
         <div>
-          <label htmlFor="profile-phone" className="block text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+          <label htmlFor="profile-phone" className={`block ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
             {t("profile.phone")}
           </label>
 
@@ -150,7 +154,7 @@ export function ProfileForm({customer}: ProfileFormProps) {
         </div>
 
         <div>
-          <label htmlFor="profile-email" className="block text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+          <label htmlFor="profile-email" className={`block ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
             {t("profile.email")}
           </label>
 

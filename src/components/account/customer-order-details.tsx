@@ -1,12 +1,13 @@
 import {getTranslations} from "next-intl/server";
-import type {DeliveryMethod, Order, OrderStatus} from "@/types/order";
-import {ArrowLeft, ArrowRight, Package} from "lucide-react";
+import type {CustomerOrder, DeliveryMethod, OrderStatus} from "@/types/order";
+import {ArrowLeft, ArrowRight} from "lucide-react";
+import Image from "next/image";
 import {Link} from "@/i18n/navigation";
 
 import {CustomerOrderProgress} from "./customer-order-progress";
 
 type CustomerOrderDetailsProps = {
-  order: Order;
+  order: CustomerOrder;
   locale: string;
 };
 
@@ -20,14 +21,11 @@ function formatPrice(value: number, locale: string): string {
 }
 
 function formatDate(date: string, locale: string): string {
-  return new Intl.DateTimeFormat(
-    locale === "ar" ? "ar" : "en-GB",
-    {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    },
-  ).format(new Date(date));
+  return new Intl.DateTimeFormat(locale === "ar" ? "ar" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(date));
 }
 
 function getStatusKey(status: OrderStatus) {
@@ -45,9 +43,7 @@ function getStatusKey(status: OrderStatus) {
 }
 
 function getDeliveryKey(deliveryMethod: DeliveryMethod) {
-  return deliveryMethod === "express"
-    ? "express"
-    : "standard";
+  return deliveryMethod === "express" ? "express" : "standard";
 }
 
 function getStatusTone(status: OrderStatus) {
@@ -92,88 +88,81 @@ function getStatusTone(status: OrderStatus) {
   }
 }
 
-export async function CustomerOrderDetails({
-  order,
-  locale,
-}: CustomerOrderDetailsProps) {
+export async function CustomerOrderDetails({order, locale}: CustomerOrderDetailsProps) {
   const t = await getTranslations("Auth");
 
   const statusKey = getStatusKey(order.status);
   const deliveryKey = getDeliveryKey(order.deliveryMethod);
+  const isAr = locale === "ar";
 
-  const itemCount = order.items.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
+  const itemCount = order.items.reduce((total, item) => total + item.quantity, 0);
 
-  const customerName = [
-    order.customer.firstName,
-    order.customer.lastName,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const customerName = [order.customer.firstName, order.customer.lastName].filter(Boolean).join(" ");
 
   const statusTone = getStatusTone(order.status);
 
+  const BackArrow = isAr ? ArrowRight : ArrowLeft;
+  const ActionArrow = isAr ? ArrowLeft : ArrowRight;
+
+  const headingClass = isAr ? "font-sans font-semibold" : "font-editorial";
+  const smallLabelClass = isAr ? "text-xs font-medium leading-6" : "text-[9px] font-semibold uppercase tracking-[0.2em]";
+  const tinyLabelClass = isAr ? "text-xs font-medium leading-6" : "text-[9px] font-semibold uppercase tracking-[0.2em]";
+
+  console.log(order);
+
   return (
-    <section className="space-y-20">
+    <section className="space-y-16 sm:space-y-20">
       <header>
-        <Link href="/account" className="group inline-flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40 transition-colors hover:text-plum">
-          <ArrowLeft size={14} strokeWidth={1.25} className="transition-transform duration-300 group-hover:-translate-x-1" />
+        <Link href="/account" className={`group inline-flex items-center gap-3 text-ink/45 transition-colors hover:text-plum ${isAr ? "text-sm" : "text-[10px] font-semibold uppercase tracking-[0.2em]"}`}>
+          <BackArrow size={15} strokeWidth={1.25} className="shrink-0 transition-transform duration-300 group-hover:-translate-x-1 rtl:group-hover:translate-x-1" />
           <span>{t("orders.details.backToOrders")}</span>
         </Link>
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-16">
+        <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end lg:gap-12">
           <div>
-            <p className="eyebrow text-plum">
-              {t("orders.details.eyebrow")}
-            </p>
+            <p className={`text-plum ${smallLabelClass}`}>{t("orders.details.eyebrow")}</p>
 
-            <h1 className="mt-5 break-all font-editorial text-5xl leading-[0.86] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
+            <h1 className={`mt-4 wrap-break-word text-4xl leading-[0.95] tracking-tight text-ink sm:text-5xl lg:text-6xl ${headingClass}`}>
               {order.orderNumber}
             </h1>
 
-            <p className="mt-5 text-xs text-ink/40">
+            <p className={`mt-4 text-ink/45 ${isAr ? "text-sm leading-7" : "text-xs"}`}>
               {formatDate(order.createdAt, locale)}
             </p>
           </div>
 
           <div className="flex items-center gap-3 lg:pb-1">
-            <span className={`h-1.5 w-1.5 rounded-full ${statusTone.dot}`} />
+            <span className={`h-2 w-2 shrink-0 rounded-full ${statusTone.dot}`} />
 
             <div>
-              <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
-                {t("orders.details.status")}
-              </p>
+              <p className={`text-ink/35 ${tinyLabelClass}`}>{t("orders.details.status")}</p>
 
-              <p className={`mt-2 text-sm ${statusTone.text}`}>
+              <p className={`mt-1.5 text-ink/70 ${isAr ? "text-sm leading-7" : "text-sm"}`}>
                 {t(`orders.status.${statusKey}`)}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="mt-12 h-px bg-ink/10" />
+        <div className="mt-10 h-px bg-ink/10" />
       </header>
 
       <CustomerOrderProgress status={order.status} />
 
-      <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-24">
-        <div className="min-w-0 space-y-16">
+      <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-20">
+        <div className="min-w-0 space-y-14 sm:space-y-16">
           <section>
-            <div className="mb-8 flex items-end gap-5">
-              <span className="font-editorial text-3xl text-plum/70">
+            <div className="mb-7 flex items-end gap-4">
+              <span className={`text-plum/65 ${isAr ? "font-sans text-xl font-semibold" : "font-editorial text-2xl"}`}>
                 01
               </span>
 
               <div className="h-px flex-1 bg-ink/10" />
 
               <div>
-                <p className="eyebrow text-ink/35">
-                  {t("orders.details.itemsEyebrow")}
-                </p>
+                <p className={`text-ink/35 ${smallLabelClass}`}>{t("orders.details.itemsEyebrow")}</p>
 
-                <h2 className="mt-3 font-editorial text-3xl leading-[0.9] tracking-[-0.03em] sm:text-4xl">
+                <h2 className={`mt-1.5 text-2xl leading-tight tracking-[-0.02em] text-ink sm:text-3xl ${headingClass}`}>
                   {t("orders.details.itemsTitle")}
                 </h2>
               </div>
@@ -181,74 +170,100 @@ export async function CustomerOrderDetails({
 
             <div className="border-t border-ink/15">
               {order.items.map((item) => {
-                const englishTranslation =
-                  item.product.translations.find(
-                    (translation) => translation.locale === "en",
-                  );
+                const englishTranslation = item.productName['en'];
+                // const englishTranslation = item.product.translations.find((translation) => translation.locale === "en");
 
-                const arabicTranslation =
-                  item.product.translations.find(
-                    (translation) => translation.locale === "ar",
-                  );
+                const arabicTranslation = item.productName['ar'];
+                // const arabicTranslation = item.product.translations.find((translation) => translation.locale === "ar");
 
-                const productName =
-                  locale === "ar"
-                    ? arabicTranslation?.name ??
-                    englishTranslation?.name ??
-                    "Product"
-                    : englishTranslation?.name ??
-                    arabicTranslation?.name ??
-                    "Product";
+                // const productName = locale === "ar"
+                //   ? arabicTranslation?.name ?? englishTranslation?.name ?? "Product"
+                //   : englishTranslation?.name ?? arabicTranslation?.name ?? "Product";
+
+                const productName = locale === 'ar'
+                  ? arabicTranslation ?? englishTranslation ?? "Product"
+                  : englishTranslation ?? arabicTranslation ?? "Product";
 
                 return (
-                  <article
-                    key={item.product.id + item.size.id}
-                    className="group flex gap-5 border-b border-ink/10 py-7 sm:gap-7 sm:py-9"
-                  >
-                    <div className="flex h-28 w-24 shrink-0 items-center justify-center bg-white sm:h-36 sm:w-28">
-                      <Package
-                        className="absolute h-5 w-5 text-ink/10"
-                        strokeWidth={1.25}
-                      />
+                  <article key={item.productId + item.sizeMl} className="group flex gap-4 border-b border-ink/10 py-6 sm:gap-6 sm:py-7">
+                    {(() => {
+                      // const productData = item.product as typeof item.product & {
+                      //   slug?: string;
+                      //   imageUrl?: string | null;
+                      //   images?: Array<string | {url?: string | null;}>;
+                      // };
 
-                      <span className="relative z-10 font-editorial text-2xl text-ink/60">
-                        {item.size.ml}
-                        <span className="ml-1 text-xs font-sans tracking-normal text-ink/30">
-                          ml
-                        </span>
-                      </span>
-                    </div>
+                      const productImage =
+                        item.productImageUrl ??
+                        "/images/products/product-placeholder.jpg";
 
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-8">
-                        <div>
-                          <h3 className="font-editorial text-2xl leading-[0.95] tracking-tight sm:text-3xl">
-                            {productName}
-                          </h3>
+                      // const productHref = productData.slug
+                      //   ? `/products/${productData.slug}`
+                      //   : "/shop";
 
-                          <p className="mt-3 text-[8px] font-semibold uppercase tracking-[0.24em] text-ink/35">
-                            {item.size.ml} ml
-                          </p>
-                        </div>
+                      const productHref = `/shop/${item.productSlug}`;
 
-                        <p className="shrink-0 font-editorial text-2xl leading-none sm:text-3xl">
-                          {formatPrice(item.lineTotal, locale)}
-                        </p>
-                      </div>
+                      return (
+                        <>
+                          <Link href={productHref} className="group/image block shrink-0" aria-label={productName}>
+                            <div className="relative h-24 w-20 overflow-hidden bg-white sm:h-28 sm:w-24">
+                              <Image
+                                src={productImage}
+                                alt={productName}
+                                fill
+                                sizes="(min-width: 640px) 96px, 80px"
+                                className="object-contain p-3 transition-transform duration-500 group-hover/image:scale-105"
+                              />
 
-                      <div className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-[8px] font-semibold uppercase tracking-[0.22em] text-ink/35">
-                        <span>
-                          {t("orders.details.quantity")} {item.quantity}
-                        </span>
+                              <div className="pointer-events-none absolute inset-0 border border-ink/5 transition-colors duration-300 group-hover/image:border-plum/20" />
+                            </div>
+                          </Link>
 
-                        <span className="h-1 w-1 self-center rounded-full bg-plum/40" />
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+                              <div className="min-w-0">
+                                <Link href={productHref} className="group/name inline-block max-w-full">
+                                  <h3 className={`wrap-break-word text-xl leading-snug tracking-[-0.015em] text-ink transition-colors duration-300 group-hover/name:text-plum sm:text-2xl ${headingClass}`}>
+                                    {productName}
+                                  </h3>
+                                </Link>
 
-                        <span>
-                          {t("orders.details.unitPrice")}{" "}
-                          {formatPrice(item.unitPrice, locale)}
-                        </span>
-                      </div>
-                    </div>
+                                <p className={`mt-2 text-ink/35 ${isAr ? "text-xs leading-6" : "text-[9px] font-semibold uppercase tracking-[0.18em]"}`}>
+                                  {item.sizeMl} ml
+                                </p>
+                              </div>
+
+                              <p className={`shrink-0 leading-none text-ink ${isAr ? "text-base font-semibold" : "font-editorial text-xl sm:text-2xl"}`}>
+                                {formatPrice(item.subtotal, locale)}
+                              </p>
+                            </div>
+
+                            <div className={`mt-5 flex flex-wrap gap-x-5 gap-y-2 text-ink/40 ${isAr ? "text-xs leading-6" : "text-[9px] font-semibold uppercase tracking-[0.16em]"}`}>
+                              <span>
+                                {t("orders.details.quantity")} {item.quantity}
+                              </span>
+
+                              <span className="h-1 w-1 self-center rounded-full bg-plum/40" />
+
+                              <span>
+                                {t("orders.details.unitPrice")}{" "}
+                                {formatPrice(item.unitPrice, locale)}
+                              </span>
+                            </div>
+
+                            <Link href={productHref} className={`mt-4 inline-flex items-center gap-2 text-plum/60 transition-colors duration-300 hover:text-plum ${isAr ? "text-xs leading-6" : "text-[9px] font-semibold uppercase tracking-[0.16em]"}`}>
+                              <span>{isAr ? "عرض المنتج" : "View product"}</span>
+
+                              <ActionArrow
+                                size={13}
+                                strokeWidth={1.25}
+                                className="transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+                              />
+                            </Link>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </article>
                 );
               })}
@@ -256,136 +271,89 @@ export async function CustomerOrderDetails({
           </section>
 
           <section>
-            <div className="mb-8 flex items-end gap-5">
-              <span className="font-editorial text-3xl text-plum/70">
+            <div className="mb-7 flex items-end gap-4">
+              <span className={`text-plum/65 ${isAr ? "font-sans text-xl font-semibold" : "font-editorial text-2xl"}`}>
                 02
               </span>
 
               <div className="h-px flex-1 bg-ink/10" />
 
               <div>
-                <p className="eyebrow text-ink/35">
-                  {t("orders.details.deliveryEyebrow")}
-                </p>
+                <p className={`text-ink/35 ${smallLabelClass}`}>{t("orders.details.deliveryEyebrow")}</p>
 
-                <h2 className="mt-3 font-editorial text-3xl leading-[0.9] tracking-[-0.03em] sm:text-4xl">
+                <h2 className={`mt-1.5 text-2xl leading-tight tracking-[-0.02em] text-ink sm:text-3xl ${headingClass}`}>
                   {t("orders.details.deliveryTitle")}
                 </h2>
               </div>
             </div>
 
-            <div className="grid gap-x-10 gap-y-8 border-t border-ink/15 pt-7 sm:grid-cols-2">
-              <DetailBlock
-                label={t("orders.details.customer")}
-                value={customerName || "—"}
-              />
+            <div className="grid gap-x-10 gap-y-7 border-t border-ink/15 pt-7 sm:grid-cols-2">
+              <DetailBlock label={t("orders.details.customer")} value={customerName || "—"} isAr={isAr} />
 
-              <DetailBlock
-                label={t("orders.details.phone")}
-                value={order.customer.phone || "—"}
-              />
+              <DetailBlock label={t("orders.details.phone")} value={order.customer.phone || "—"} isAr={isAr} />
 
-              <DetailBlock
-                label={t("orders.details.address")}
-                value={order.deliveryAddress.address || "—"}
-              />
+              <DetailBlock label={t("orders.details.address")} value={order.deliveryAddress.address || "—"} isAr={isAr} />
 
-              <DetailBlock
-                label={t("orders.details.city")}
-                value={order.deliveryAddress.city || "—"}
-              />
+              <DetailBlock label={t("orders.details.city")} value={order.deliveryAddress.city || "—"} isAr={isAr} />
 
-              <DetailBlock
-                label={t("orders.details.deliveryMethod")}
-                value={t(`orders.deliveryMethods.${deliveryKey}`)}
-              />
+              <DetailBlock label={t("orders.details.deliveryMethod")} value={t(`orders.deliveryMethods.${deliveryKey}`)} isAr={isAr} />
 
               {order.deliveryAddress.notes ? (
-                <DetailBlock
-                  label={t("orders.details.notes")}
-                  value={order.deliveryAddress.notes}
-                  wide
-                />
+                <DetailBlock label={t("orders.details.notes")} value={order.deliveryAddress.notes} wide isAr={isAr} />
               ) : null}
             </div>
           </section>
         </div>
 
         <aside className="lg:sticky lg:top-32 lg:self-start">
-          <div className="border-t-2 border-ink bg-white px-7 py-8 sm:px-9 sm:py-10">
-            <p className="eyebrow text-plum">
-              {t("orders.details.summaryEyebrow")}
-            </p>
+          <div className="border-t-2 border-ink bg-white px-6 py-7 sm:px-7 sm:py-8">
+            <p className={`text-plum ${smallLabelClass}`}>{t("orders.details.summaryEyebrow")}</p>
 
-            <h2 className="mt-4 font-editorial text-3xl leading-[0.9] tracking-[-0.03em]">
+            <h2 className={`mt-3 text-2xl leading-tight tracking-[-0.02em] text-ink sm:text-3xl ${headingClass}`}>
               {t("orders.details.summaryTitle")}
             </h2>
 
-            <div className="mt-9 space-y-5">
-              <SummaryRow
-                label={t("orders.details.items")}
-                value={String(itemCount)}
-              />
+            <div className="mt-8 space-y-4">
+              <SummaryRow label={t("orders.details.items")} value={String(itemCount)} isAr={isAr} />
 
-              <SummaryRow
-                label={t("orders.details.subtotal")}
-                value={formatPrice(order.subtotal, locale)}
-              />
+              <SummaryRow label={t("orders.details.subtotal")} value={formatPrice(order.subtotal, locale)} isAr={isAr} />
 
-              <SummaryRow
-                label={t("orders.details.delivery")}
-                value={formatPrice(order.deliveryCost, locale)}
-              />
+              <SummaryRow label={t("orders.details.delivery")} value={formatPrice(order.deliveryCost, locale)} isAr={isAr} />
 
-              <div className="border-t border-ink/10 pt-6">
-                <div className="flex items-end justify-between gap-6">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">
-                    {t("orders.details.total")}
-                  </span>
+              <div className="border-t border-ink/10 pt-5">
+                <div className="flex items-end justify-between gap-5">
+                  <span className={`text-ink/40 ${tinyLabelClass}`}>{t("orders.details.total")}</span>
 
-                  <span className="font-editorial text-3xl leading-none">
+                  <span className={`text-ink ${isAr ? "text-lg font-semibold" : "font-editorial text-2xl"}`}>
                     {formatPrice(order.total, locale)}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-9 border-t border-ink/10 pt-7">
+            <div className="mt-8 border-t border-ink/10 pt-6">
               <div>
-                <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
-                  {t("orders.details.payment")}
-                </p>
+                <p className={`text-ink/30 ${tinyLabelClass}`}>{t("orders.details.payment")}</p>
 
-                <p className="mt-3 text-sm text-ink/70">
+                <p className={`mt-2 text-ink/70 ${isAr ? "text-sm leading-7" : "text-sm"}`}>
                   {t("orders.details.payOnDelivery")}
                 </p>
               </div>
 
-              <div className="mt-6">
-                <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
-                  {t("orders.details.paymentStatus")}
-                </p>
+              <div className="mt-5">
+                <p className={`text-ink/30 ${tinyLabelClass}`}>{t("orders.details.paymentStatus")}</p>
 
-                <p className="mt-3 text-sm text-ink/70">
-                  {order.paymentStatus === "paid"
-                    ? t("orders.details.paid")
-                    : t("orders.details.paymentPending")}
+                <p className={`mt-2 text-ink/70 ${isAr ? "text-sm leading-7" : "text-sm"}`}>
+                  {order.paymentStatus === "paid" ? t("orders.details.paid") : t("orders.details.paymentPending")}
                 </p>
               </div>
             </div>
           </div>
 
-          <Link
-            href="/shop"
-            className="group mt-7 inline-flex items-center gap-4 text-[9px] font-semibold uppercase tracking-[0.24em] text-ink/45 transition-colors hover:text-plum"
-          >
+          <Link href="/shop" className={`group mt-6 inline-flex items-center gap-4 text-ink/45 transition-colors hover:text-plum ${isAr ? "text-sm" : "text-[10px] font-semibold uppercase tracking-[0.18em]"}`}>
             <span>{t("orders.shopNow")}</span>
 
-            <ArrowRight
-              size={14}
-              strokeWidth={1.25}
-              className="transition-transform duration-300 group-hover:translate-x-1"
-            />
+            <ActionArrow size={15} strokeWidth={1.25} className="transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
           </Link>
         </aside>
       </div>
@@ -393,42 +361,28 @@ export async function CustomerOrderDetails({
   );
 }
 
-function SummaryRow({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
+function SummaryRow({label, value, isAr}: {label: string; value: string; isAr: boolean;}) {
   return (
-    <div className="flex items-center justify-between gap-6">
-      <span className="text-[9px] font-semibold uppercase tracking-[0.22em] text-ink/40">
+    <div className="flex items-center justify-between gap-5">
+      <span className={`text-ink/40 ${isAr ? "text-xs leading-6" : "text-[9px] font-semibold uppercase tracking-[0.16em]"}`}>
         {label}
       </span>
 
-      <span className="text-sm text-ink/70">
+      <span className={`text-ink/70 ${isAr ? "text-sm" : "text-sm"}`}>
         {value}
       </span>
     </div>
   );
 }
 
-function DetailBlock({
-  label,
-  value,
-  wide = false,
-}: {
-  label: string;
-  value: string;
-  wide?: boolean;
-}) {
+function DetailBlock({label, value, wide = false, isAr}: {label: string; value: string; wide?: boolean; isAr: boolean;}) {
   return (
     <div className={wide ? "sm:col-span-2" : ""}>
-      <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+      <p className={`text-ink/35 ${isAr ? "text-xs font-medium leading-6" : "text-[9px] font-semibold uppercase tracking-[0.18em]"}`}>
         {label}
       </p>
 
-      <p className="mt-3 text-sm leading-7 text-ink/70">
+      <p className={`mt-2.5 text-ink/70 ${isAr ? "text-sm leading-7" : "text-sm leading-6"}`}>
         {value}
       </p>
     </div>

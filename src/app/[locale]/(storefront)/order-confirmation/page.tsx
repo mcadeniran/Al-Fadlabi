@@ -174,7 +174,7 @@ export default function OrderConfirmationPage() {
               <div className="text-center">
                 <div className="mx-auto h-px w-10 bg-plum" />
                 <Loader2 className="mx-auto mt-7 h-5 w-5 animate-spin text-ink/35" />
-                <p className="mt-5 text-[9px] font-semibold uppercase tracking-[0.32em] text-ink/35">
+                <p className="mt-5 text-[12px] font-semibold uppercase tracking-[0.32em] text-ink/35">
                   {isArabic ? "جاري تحميل تفاصيل طلبك" : "Loading your order"}
                 </p>
               </div>
@@ -226,7 +226,7 @@ export default function OrderConfirmationPage() {
     <main className="min-h-screen bg-snow text-ink" dir={isArabic ? "rtl" : "ltr"}>
       <section className="px-6 pb-20 pt-36 sm:px-8 md:pb-24 lg:px-12 lg:pb-28 lg:pt-44 xl:px-16">
         <Container className="max-w-360 px-0">
-          <div className="grid overflow-hidden bg-plum lg:grid-cols-[0.72fr_1.28fr]">
+          <div className="grid  rounded-2xl  overflow-hidden bg-plum lg:grid-cols-[0.72fr_1.28fr]">
             <div className="relative flex min-h-80 flex-col justify-between overflow-hidden p-8 text-snow sm:p-10 lg:min-h-107.5 lg:p-14 xl:p-16">
               <div className="absolute -inset-e-20 -top-20 h-64 w-64 rounded-full border border-coral/20" />
               <div className="absolute -inset-e-10 -top-10 h-44 w-44 rounded-full border border-coral/20" />
@@ -236,11 +236,11 @@ export default function OrderConfirmationPage() {
                   <Check className="h-5 w-5 text-coral" strokeWidth={1.5} />
                 </div>
 
-                <p className="mt-8 text-[9px] font-semibold uppercase tracking-[0.32em] text-coral">
+                <p className={`mt-8 ${isArabic ? "text-lg" : "text-base"} font-semibold uppercase tracking-[0.32em] text-coral`}>
                   {isArabic ? "تم تأكيد الطلب" : "Order Confirmed"}
                 </p>
 
-                <h1 className="mt-5 max-w-xl font-editorial text-5xl leading-[0.86] tracking-[-0.04em] sm:text-6xl lg:text-[5.2rem]">
+                <h1 className={`mt-5 max-w-xl font-editorial ${isArabic ? "text-lg sm:text-2xl lg:text-4xl" : "text-base sm:text-xl lg:text-2xl"} leading-[0.86] tracking-[-0.04em]`}>
                   {isArabic ? "شكراً لطلبك" : "Thank You"}
                 </h1>
               </div>
@@ -256,7 +256,7 @@ export default function OrderConfirmationPage() {
 
             <div className="flex flex-col justify-between bg-ink p-8 text-snow sm:p-10 lg:p-14 xl:p-16">
               <div>
-                <p className="text-[9px] font-semibold uppercase tracking-[0.32em] text-snow/35">
+                <p className={`${isArabic ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.32em] text-snow/35`}>
                   {isArabic ? "رقم الطلب" : "Order Number"}
                 </p>
 
@@ -267,21 +267,21 @@ export default function OrderConfirmationPage() {
 
               <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:mt-20">
                 <div>
-                  <p className="text-[8px] font-semibold uppercase tracking-[0.28em] text-snow/30">
+                  <p className={`${isArabic ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.28em] text-snow/30`}>
                     {isArabic ? "الحالة" : "Status"}
                   </p>
 
-                  <p className="mt-3 text-sm text-snow/80">
+                  <p className={`${isArabic ? "text-lg" : "text-base"} mt-3 text-snow/80`}>
                     {getStatusLabel(order.status, isArabic)}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[8px] font-semibold uppercase tracking-[0.28em] text-snow/30">
+                  <p className={`${isArabic ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.28em] text-snow/30`}>
                     {isArabic ? "الدفع" : "Payment"}
                   </p>
 
-                  <p className="mt-3 text-sm text-snow/80">
+                  <p className={`mt-3 ${isArabic ? "text-lg" : "text-base"} text-snow/80`}>
                     {isArabic ? "الدفع عند الاستلام" : "Pay on Delivery"}
                   </p>
                 </div>
@@ -301,12 +301,12 @@ export default function OrderConfirmationPage() {
                     {isArabic ? "اختياراتك" : "Your Selection"}
                   </p>
 
-                  <h2 className="mt-4 font-editorial text-4xl leading-[0.9] tracking-[-0.035em] sm:text-5xl">
+                  <h2 className={`mt-4 font-editorial  leading-[0.9] tracking-[-0.035em] ${isArabic ? "text-xl sm:text-3xl" : "text-lg sm:text-2xl"}`}>
                     {isArabic ? "تفاصيل الطلب" : "Your Order"}
                   </h2>
                 </div>
 
-                <p className="pb-1 text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                <p className="pb-1 text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
                   {order.items.length}{" "}
                   {isArabic
                     ? order.items.length === 1
@@ -324,7 +324,7 @@ export default function OrderConfirmationPage() {
                     key={item.id}
                     className="flex gap-5 border-b border-ink/10 py-7 sm:gap-7 sm:py-8"
                   >
-                    <div className="relative h-28 w-24 shrink-0 overflow-hidden bg-white sm:h-36 sm:w-28">
+                    <div className="relative h-28 w-24 shrink-0 rounded-2xl overflow-hidden bg-white sm:h-36 sm:w-28">
                       {item.product_image_url ? (
                         <Image
                           src={item.product_image_url}
@@ -342,11 +342,11 @@ export default function OrderConfirmationPage() {
 
                     <div className="flex min-w-0 flex-1 flex-col justify-between">
                       <div>
-                        <h3 className="font-editorial text-2xl leading-[0.95] tracking-[-0.02em] sm:text-3xl">
+                        <h3 className={`font-editorial ${isArabic ? "text-lg sm:text-2xl" : "text-base sm:text-xl"} leading-[0.95] tracking-[-0.02em]`}>
                           {getProductName(item, locale)}
                         </h3>
 
-                        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[8px] font-semibold uppercase tracking-[0.22em] text-ink/35">
+                        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] font-semibold uppercase tracking-[0.22em] text-ink/35">
                           <span>{item.size_ml}ml</span>
                           <span className="h-1 w-1 rounded-full bg-plum/50" />
                           <span>
@@ -355,14 +355,14 @@ export default function OrderConfirmationPage() {
                         </div>
                       </div>
 
-                      <p className="mt-6 text-[9px] font-semibold uppercase tracking-[0.2em] text-ink/40">
+                      <p className="mt-6 text-[12px] font-semibold uppercase tracking-[0.2em] text-ink/40">
                         {currencyFormatter.format(item.unit_price)}{" "}
                         {isArabic ? "للوحدة" : "each"}
                       </p>
                     </div>
 
                     <div className="shrink-0 text-end">
-                      <p className="font-editorial text-2xl leading-none sm:text-3xl">
+                      <p className={`font-editorial ${isArabic ? "text-lg sm:text-xl" : "text-base sm:text-lg"} leading-none`}>
                         {currencyFormatter.format(item.subtotal)}
                       </p>
                     </div>
@@ -381,11 +381,13 @@ export default function OrderConfirmationPage() {
                   <SummaryRow
                     label={isArabic ? "المجموع الفرعي" : "Subtotal"}
                     value={currencyFormatter.format(order.subtotal)}
+                    isArabic
                   />
 
                   <SummaryRow
                     label={isArabic ? "التوصيل" : "Delivery"}
                     value={currencyFormatter.format(order.delivery_fee)}
+                    isArabic
                   />
 
                   <div className="border-t border-ink/10 pt-6">
@@ -393,13 +395,14 @@ export default function OrderConfirmationPage() {
                       label={isArabic ? "الإجمالي" : "Total"}
                       value={currencyFormatter.format(order.total)}
                       emphasized
+                      isArabic
                     />
                   </div>
                 </div>
 
                 <div className="mt-8 border-t border-ink/10 pt-7">
                   <div>
-                    <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
                       {isArabic ? "طريقة الدفع" : "Payment Method"}
                     </p>
 
@@ -409,7 +412,7 @@ export default function OrderConfirmationPage() {
                   </div>
 
                   <div className="mt-6">
-                    <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
                       {isArabic ? "طريقة التوصيل" : "Delivery Method"}
                     </p>
 
@@ -432,7 +435,7 @@ export default function OrderConfirmationPage() {
                 {isArabic ? "التوصيل" : "Delivery"}
               </p>
 
-              <h2 className="mt-5 font-editorial text-4xl leading-[0.9] tracking-[-0.035em] sm:text-5xl">
+              <h2 className="mt-5 font-editorial text-xl leading-[0.9] tracking-[-0.035em] sm:text-3xl">
                 {isArabic ? "إلى أين نتجه؟" : "Where We're Sending It"}
               </h2>
             </div>
@@ -442,18 +445,21 @@ export default function OrderConfirmationPage() {
                 label={isArabic ? "الاسم" : "Name"}
                 value={order.customer_name}
                 dark
+                isArabic
               />
 
               <DetailBlock
                 label={isArabic ? "الهاتف" : "Phone"}
                 value={order.customer_phone}
                 dark
+                isArabic
               />
 
               <DetailBlock
                 label={isArabic ? "العنوان" : "Address"}
                 value={`${order.delivery_address}, ${order.delivery_city}`}
                 dark
+                isArabic
               />
 
               {order.notes && (
@@ -461,6 +467,7 @@ export default function OrderConfirmationPage() {
                   label={isArabic ? "ملاحظات" : "Notes"}
                   value={order.notes}
                   dark
+                  isArabic
                 />
               )}
             </div>
@@ -477,7 +484,7 @@ export default function OrderConfirmationPage() {
               {isArabic ? "نراك قريباً" : "Until Next Time"}
             </p>
 
-            <h2 className="mt-5 max-w-2xl font-editorial text-5xl leading-[0.88] tracking-[-0.04em] sm:text-6xl lg:text-7xl">
+            <h2 className={`mt-5 font-editorial leading-[0.88] tracking-[-0.04em] max-w-2xl ${isArabic ? "text-lg  sm:text-xl lg:text-4xl" : "text-lg  sm:text-xl lg:text-2xl"} `}>
               {isArabic
                 ? "عطرك، قصتك."
                 : "Let your fragrance tell the story."}
@@ -489,10 +496,10 @@ export default function OrderConfirmationPage() {
                 : "Continue exploring the collection and discover what comes next."}
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row text-2xl">
               <Link
                 href="/shop"
-                className="button-editorial button-editorial-primary inline-flex items-center justify-center gap-4"
+                className="button-editorial  button-editorial-primary inline-flex items-center justify-center gap-4"
               >
                 <span>{isArabic ? "متابعة التسوق" : "Continue Shopping"}</span>
                 {isArabic ? (
@@ -520,18 +527,20 @@ function SummaryRow({
   label,
   value,
   emphasized = false,
+  isArabic
 }: {
   label: string;
   value: string;
   emphasized?: boolean;
+  isArabic: boolean;
 }) {
   return (
     <div className={emphasized ? "flex items-end justify-between gap-6" : "flex items-center justify-between gap-6"}>
-      <span className={emphasized ? "text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45" : "text-[9px] font-semibold uppercase tracking-[0.22em] text-ink/40"}>
+      <span className={emphasized ? `${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45` : `${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.22em] text-ink/40`}>
         {label}
       </span>
 
-      <span className={emphasized ? "font-editorial text-3xl leading-none text-ink" : "text-sm text-ink/75"}>
+      <span className={emphasized ? "font-editorial text-2xl leading-none text-ink" : "text-lg text-ink/75"}>
         {value}
       </span>
     </div>
@@ -542,18 +551,20 @@ function DetailBlock({
   label,
   value,
   dark = false,
+  isArabic
 }: {
   label: string;
   value: string;
   dark?: boolean;
+  isArabic: boolean;
 }) {
   return (
     <div className={dark ? "border-t border-snow/10 pt-5" : "border-t border-ink/10 pt-5"}>
-      <p className={dark ? "text-[8px] font-semibold uppercase tracking-[0.25em] text-snow/30" : "text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30"}>
+      <p className={dark ? `${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-snow/30` : `${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/30`}>
         {label}
       </p>
 
-      <p className={dark ? "mt-3 text-sm leading-7 text-snow/75" : "mt-3 text-sm leading-7 text-ink/75"}>
+      <p className={dark ? `mt-3 ${isArabic ? "text-base" : "text-sm"} leading-7 text-snow/75` : `mt-3 ${isArabic ? "text-base" : "text-sm"} leading-7 text-ink/75`}>
         {value}
       </p>
     </div>

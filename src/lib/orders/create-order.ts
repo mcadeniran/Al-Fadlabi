@@ -22,7 +22,6 @@ const generateOrderId = () => {
 
 const generateOrderNumber = () => {
   const timestamp = Date.now().toString().slice(-8);
-
   const random = Math.random().toString(36).slice(2, 6).toUpperCase();
 
   return `PF-${timestamp}-${random}`;
@@ -59,24 +58,17 @@ export function createOrder({
   return {
     id: generateOrderId(),
     orderNumber: generateOrderNumber(),
-
     customerId,
-
     customer,
     deliveryAddress,
     deliveryMethod,
     deliveryCost,
-
     paymentMethod: 'pay_on_delivery',
     paymentStatus: 'pending',
-
     items: orderItems,
-
     subtotal,
     total,
-
     status: 'pending',
-
     createdAt: new Date().toISOString(),
   };
 }

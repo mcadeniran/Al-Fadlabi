@@ -1,21 +1,23 @@
 import {useTranslations} from "next-intl";
 import {ArrowRight} from "lucide-react";
 
-import type {Order} from "@/types/order";
+import type {CustomerOrder} from "@/types/order";
 import {Link} from "@/i18n/navigation";
 
 type CustomerOrdersProps = {
-  orders: Order[];
+  orders: CustomerOrder[];
   locale: string;
 };
 
 export function CustomerOrders({orders, locale}: CustomerOrdersProps) {
   const t = useTranslations("Auth");
 
+  const isAr = locale === 'ar';
+
   return (
     <section>
       <div className="mb-10 max-w-2xl">
-        <h2 className="font-editorial text-4xl leading-[0.9] tracking-[-0.035em] sm:text-5xl">
+        <h2 className={`font-editorial leading-[0.9] tracking-[-0.035em]  ${isAr ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"} `}>
           {t("orders.title")}
         </h2>
 
@@ -44,7 +46,7 @@ export function CustomerOrders({orders, locale}: CustomerOrdersProps) {
 }
 
 type OrderRowProps = {
-  order: Order;
+  order: CustomerOrder;
   locale: string;
   t: ReturnType<typeof useTranslations<"Auth">>;
   index: number;
@@ -56,6 +58,8 @@ function OrderRow({
   t,
   index,
 }: OrderRowProps) {
+  const isAr = locale === 'ar';
+
   const itemCount = order.items.reduce(
     (total, item) => total + item.quantity,
     0,
@@ -83,7 +87,7 @@ function OrderRow({
         <div className="min-w-0">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between lg:justify-start lg:gap-12">
             <div>
-              <p className="text-[8px] font-semibold uppercase tracking-[0.28em] text-ink/30">
+              <p className={`${isAr ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.28em] text-ink/30`}>
                 {t("orders.orderNumber")}
               </p>
 
@@ -91,7 +95,7 @@ function OrderRow({
                 {order.orderNumber}
               </p>
 
-              <p className="mt-3 text-xs text-ink/40">
+              <p className={`mt-3 ${isAr ? "text-sm" : "text-xs"} text-ink/40`}>
                 {formattedDate}
               </p>
             </div>
@@ -99,6 +103,7 @@ function OrderRow({
             <OrderStatusBadge
               status={order.status}
               t={t}
+              isAr
             />
           </div>
 
@@ -106,6 +111,7 @@ function OrderRow({
             <OrderMeta
               label={t("orders.items")}
               value={formatItemCount(itemCount, t)}
+              isAr
             />
 
             <OrderMeta
@@ -114,11 +120,13 @@ function OrderRow({
                 order.deliveryMethod,
                 t,
               )}
+              isAr
             />
 
             <OrderMeta
               label={t("orders.total")}
               value={formattedTotal}
+              isAr
             />
           </div>
         </div>
@@ -126,7 +134,7 @@ function OrderRow({
         <div className="lg:justify-self-end">
           <Link
             href={`/account/orders/${encodeURIComponent(order.orderNumber)}`}
-            className="group/link inline-flex items-center gap-4 border-b border-ink/25 pb-2 text-[9px] font-semibold uppercase tracking-[0.24em] text-ink transition-colors hover:border-plum hover:text-plum"
+            className={`group/link inline-flex items-center gap-4 border-b border-ink/25 pb-2 ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.24em] text-ink transition-colors hover:border-plum hover:text-plum`}
           >
             <span>{t("orders.viewOrder")}</span>
 
@@ -145,19 +153,21 @@ function OrderRow({
 type OrderMetaProps = {
   label: string;
   value: string;
+  isAr: boolean;
 };
 
 function OrderMeta({
   label,
   value,
+  isAr
 }: OrderMetaProps) {
   return (
     <div className="space-y-2">
-      <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+      <p className={`${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/30`}>
         {label}
       </p>
 
-      <p className="text-sm text-ink/70">
+      <p className={`${isAr ? "text-base" : "text-sm"} text-ink/70`}>
         {value}
       </p>
     </div>
@@ -165,13 +175,15 @@ function OrderMeta({
 }
 
 type OrderStatusBadgeProps = {
-  status: Order["status"];
+  status: CustomerOrder["status"];
   t: ReturnType<typeof useTranslations<"Auth">>;
+  isAr: boolean;
 };
 
 function OrderStatusBadge({
   status,
   t,
+  isAr
 }: OrderStatusBadgeProps) {
   const tone = getStatusTone(status);
 
@@ -179,7 +191,7 @@ function OrderStatusBadge({
     <div className="inline-flex items-center gap-3 self-start">
       <span className={`h-1.5 w-1.5 rounded-full ${tone.dot}`} />
 
-      <span className={`text-[8px] font-semibold uppercase tracking-[0.25em] ${tone.text}`}>
+      <span className={`${isAr ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.25em] ${tone.text}`}>
         {getStatusLabel(status, t)}
       </span>
     </div>
@@ -220,7 +232,7 @@ function EmptyOrders() {
   );
 }
 
-function getStatusTone(status: Order["status"]) {
+function getStatusTone(status: CustomerOrder["status"]) {
   switch (status) {
     case "confirmed":
       return {
@@ -268,7 +280,7 @@ function getStatusTone(status: Order["status"]) {
 }
 
 function getStatusLabel(
-  status: Order["status"],
+  status: CustomerOrder["status"],
   t: ReturnType<typeof useTranslations<"Auth">>,
 ) {
   switch (status) {
@@ -292,7 +304,7 @@ function getStatusLabel(
 }
 
 function formatDeliveryMethod(
-  method: Order["deliveryMethod"],
+  method: CustomerOrder["deliveryMethod"],
   t: ReturnType<typeof useTranslations<"Auth">>,
 ) {
   switch (method) {

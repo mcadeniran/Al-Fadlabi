@@ -28,7 +28,7 @@ export function LogoutButton() {
         return;
       }
 
-      router.push(`/${locale}/account/login`);
+      router.push(`/account/login`);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
@@ -36,12 +36,14 @@ export function LogoutButton() {
     }
   }
 
+  const isAr = locale === 'ar';
+
   return (
-    <button type="button" onClick={handleLogout} disabled={loading} className="group inline-flex items-center gap-4 border-b border-ink/20 pb-2 text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/55 transition-colors hover:border-coral hover:text-coral disabled:cursor-not-allowed disabled:opacity-40">
+    <button type="button" onClick={handleLogout} disabled={loading} className="group inline-flex items-center gap-4 border-b border-ink/20 pb-2 font-semibold uppercase tracking-[0.25em] text-ink/55 transition-colors hover:border-coral hover:text-coral disabled:cursor-not-allowed disabled:opacity-40">
       {loading ? (
         <>
           <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={1.5} />
-          <span>{t("logout.signingOut")}</span>
+          <span className={`${isAr ? "text-sm" : "text-xs"}`}>{t("logout.signingOut")}</span>
         </>
       ) : (
         <>

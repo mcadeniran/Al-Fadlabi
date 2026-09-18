@@ -50,11 +50,13 @@ export default function CartPage() {
           <div className="grid items-end gap-8 lg:grid-cols-[1fr_auto]">
             <div>
               <p className="eyebrow text-plum">{isArabic ? "اختياراتك" : "Your Selection"}</p>
-              <h1 className="mt-5 max-w-4xl font-editorial text-[4rem] leading-[0.84] tracking-[-0.045em] sm:text-6xl lg:text-[7rem]">{isArabic ? "حقيبتك" : "Your Bag"}</h1>
+              <h1 className={`mt-5 max-w-4xl font-editorial ${isArabic ? "text-2xl sm:text-4xl lg:text-5xl" : "text-xl sm:text-3xl lg:text-5xl"}  leading-[0.84] tracking-[-0.045em]`}>
+                {isArabic ? "حقيبتك" : "Your Bag"}
+              </h1>
             </div>
 
             <div className="lg:pb-2">
-              <p className="text-[9px] font-semibold uppercase tracking-[0.28em] text-ink/35">{itemCount} {isArabic ? itemCount === 1 ? "منتج" : "منتجات" : itemCount === 1 ? "item" : "items"}</p>
+              <p className={`${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.28em] text-ink/35`}>{itemCount} {isArabic ? itemCount === 1 ? "منتج" : "منتجات" : itemCount === 1 ? "item" : "items"}</p>
             </div>
           </div>
 
@@ -85,9 +87,9 @@ export default function CartPage() {
             <div className="grid gap-16 lg:grid-cols-[1fr_380px] lg:gap-24">
               <div>
                 <div className="flex items-center justify-between border-b border-ink/10 pb-4">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-ink/35">{isArabic ? "المنتجات" : "Items"}</span>
+                  <span className={`${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.3em] text-ink/35`}>{isArabic ? "المنتجات" : "Items"}</span>
 
-                  <button type="button" onClick={clearCart} className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/35 transition-colors hover:text-plum">
+                  <button type="button" onClick={clearCart} className={`${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/35 transition-colors hover:text-plum`}>
                     {isArabic ? "إفراغ الحقيبة" : "Clear bag"}
                   </button>
                 </div>
@@ -99,7 +101,7 @@ export default function CartPage() {
                 </div>
 
                 <div className="mt-9">
-                  <Link href="/shop" className="group inline-flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-ink/45 transition-colors hover:text-plum">
+                  <Link href="/shop" className={`group inline-flex items-center gap-3 ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.28em] text-ink/45 transition-colors hover:text-plum`}>
                     {isArabic ? <ArrowRight size={14} strokeWidth={1.25} className="transition-transform group-hover:translate-x-1" /> : <ArrowLeft size={14} strokeWidth={1.25} className="transition-transform group-hover:-translate-x-1" />}
                     <span>{isArabic ? "متابعة التسوق" : "Continue Shopping"}</span>
                   </Link>
@@ -112,9 +114,9 @@ export default function CartPage() {
 
                   <div className="mt-8">
                     <div className="flex items-baseline justify-between gap-6">
-                      <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
+                      <span className={`${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.25em] text-ink/40`}>{isArabic ? "المجموع الفرعي" : "Subtotal"}</span>
                       <div className="text-end">
-                        <span className="font-editorial text-3xl leading-none text-ink">
+                        <span className={`font-editorial ${isArabic ? "text-xl" : "text-lg"}  leading-none text-ink`}>
                           {currencyFormatter.format(subtotal)}
                         </span>
                       </div>
@@ -122,26 +124,26 @@ export default function CartPage() {
 
                     <div className="mt-7 border-t border-ink/10 pt-6">
                       <div className="flex items-start justify-between gap-6">
-                        <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">{isArabic ? "التوصيل" : "Delivery"}</span>
-                        <span className="max-w-37.5 text-end text-[9px] leading-5 text-ink/40">{isArabic ? "يُحسب عند إتمام الطلب" : "Calculated at checkout"}</span>
+                        <span className={`${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.25em] text-ink/40`}>{isArabic ? "التوصيل" : "Delivery"}</span>
+                        <span className={`max-w-37.5 text-end ${isArabic ? "text-sm" : "text-xs"}  leading-5 text-ink/40`}>{isArabic ? "يُحسب عند إتمام الطلب" : "Calculated at checkout"}</span>
                       </div>
                     </div>
                   </div>
 
                   {hasUnavailableItems && (
                     <div className="mt-8 border border-coral/30 bg-snow p-4">
-                      <p className="text-[8px] font-semibold uppercase tracking-[0.18em] leading-5 text-coral">{isArabic ? "بعض المنتجات في حقيبتك لم تعد متوفرة بالكمية المطلوبة." : "Some items in your bag are no longer available in the requested quantity."}</p>
+                      <p className={`${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.18em] leading-5 text-coral`}>{isArabic ? "بعض المنتجات في حقيبتك لم تعد متوفرة بالكمية المطلوبة." : "Some items in your bag are no longer available in the requested quantity."}</p>
                     </div>
                   )}
 
                   {items.length > 0 && !hasUnavailableItems && (
-                    <Link href="/checkout" className="mt-9 flex h-14 w-full items-center justify-center gap-4 bg-ink px-7 text-[9px] font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum">
-                      <span>{isArabic ? "إتمام الطلب" : "Proceed to Checkout"}</span>
+                    <Link href="/checkout" className={`mt-9 flex h-14 w-full items-center justify-center gap-4 bg-ink px-7 ${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum`}>
+                      <span className={`${isArabic ? "text-sm" : "text-xs"} `}>{isArabic ? "إتمام الطلب" : "Proceed to Checkout"}</span>
                       {isArabic ? <ArrowLeft size={16} strokeWidth={1.25} /> : <ArrowRight size={16} strokeWidth={1.25} />}
                     </Link>
                   )}
 
-                  <p className="mt-5 text-center text-[8px] leading-5 text-ink/30">{isArabic ? "الدفع متاح عند إتمام الطلب." : "Payment details are confirmed at checkout."}</p>
+                  <p className={`mt-5 text-center ${isArabic ? "text-sm" : "text-xs"}  leading-5 text-ink/30`}>{isArabic ? "الدفع متاح عند إتمام الطلب." : "Payment details are confirmed at checkout."}</p>
                 </div>
               </aside>
             </div>

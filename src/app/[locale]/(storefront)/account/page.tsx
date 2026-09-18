@@ -25,10 +25,6 @@ export default async function AccountPage() {
 
   const customer = await getCustomerProfile();
 
-  /*
-   * A valid authenticated user should have a customer row
-   * because the database trigger creates it during registration.
-   */
   if (!customer) {
     return (
       <main className="min-h-screen bg-snow text-ink" dir={locale === "ar" ? "rtl" : "ltr"}>
@@ -55,14 +51,9 @@ export default async function AccountPage() {
     );
   }
 
-  /*
-   * Load the authenticated customer's orders.
-   *
-   * getCustomerOrders() resolves the customer from the
-   * authenticated Supabase user server-side, so we never
-   * trust a customer ID supplied by the browser.
-   */
   const orders = await getCustomerOrders();
+
+  console.log(orders[0]);
 
   const isArabic = locale === "ar";
 
@@ -76,7 +67,7 @@ export default async function AccountPage() {
                 {t("account.eyebrow")}
               </p>
 
-              <h1 className="mt-5 max-w-3xl font-editorial text-6xl leading-[0.84] tracking-tighter sm:text-7xl lg:text-[6.5rem]">
+              <h1 className={`mt-5 max-w-3xl font-editorial ${isArabic ? "text-lg sm:text-2xl lg:text-4xl" : "text-base sm:text-xl lg:text- 3xl"}  leading-[0.84] tracking-tighter`}>
                 {t("account.welcome", {
                   name: customer.firstName,
                 })}
@@ -101,7 +92,7 @@ export default async function AccountPage() {
 
             <div className="h-px flex-1 bg-ink/10" />
 
-            <p className="eyebrow text-ink/35">
+            <p className={`eyebrow text-ink/35`}>
               {t("account.account")}
             </p>
           </div>
@@ -117,7 +108,7 @@ export default async function AccountPage() {
 
                 <div className="mt-8 space-y-7">
                   <div>
-                    <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
                       {t("account.email")}
                     </p>
 
@@ -127,14 +118,14 @@ export default async function AccountPage() {
                   </div>
 
                   <div className="border-t border-ink/10 pt-6">
-                    <p className="text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                    <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
                       {t("account.status")}
                     </p>
 
                     <div className="mt-3 flex items-center gap-3">
                       <span className="h-1.5 w-1.5 rounded-full bg-plum" />
 
-                      <p className="text-sm text-ink/75">
+                      <p className={`${isArabic ? "text-base" : "text-sm"} text-ink/75`}>
                         {t("account.active")}
                       </p>
                     </div>

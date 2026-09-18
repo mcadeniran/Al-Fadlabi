@@ -2,14 +2,13 @@
 
 import {FormEvent, useState} from "react";
 import Link from "next/link";
-import {useLocale, useTranslations} from "next-intl";
+import {useTranslations} from "next-intl";
 
 import {createClient} from "@/lib/supabase/client";
 import {useRouter} from "@/i18n/navigation";
 
 export function LoginForm() {
   const t = useTranslations("Auth");
-  const locale = useLocale();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,7 +46,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push(`/${locale}/account`);
+      router.push(`/account`);
     } catch (error) {
       console.error("Login error:", error);
       setError(t("login.errors.generic"));
@@ -135,7 +134,7 @@ export function LoginForm() {
         <p className="text-sm text-muted-foreground">
           {t("login.noAccount")}{" "}
           <Link
-            href={`/${locale}/account/register`}
+            href={`/account/register`}
             className="text-foreground underline underline-offset-4"
           >
             {t("login.register")}

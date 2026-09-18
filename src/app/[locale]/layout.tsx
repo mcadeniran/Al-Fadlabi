@@ -55,7 +55,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={locale} dir={direction}>
+    <html lang={locale} dir={direction} data-scroll-behavior="smooth">
       <body
         className={`${cormorant.variable} ${manrope.variable} ${notoNaskh.variable} ${notoSansArabic.variable} antialiased`}
         suppressHydrationWarning={true}

@@ -3,7 +3,7 @@
 import {ArrowLeft, ArrowRight, Check} from "lucide-react";
 import {useLocale} from "next-intl";
 import {useRouter} from "next/navigation";
-import {useState} from "react";
+import {useMemo, useState} from "react";
 
 import type {DeliveryMethod} from "@/types/order";
 import {Container} from "@/components/ui/container";
@@ -31,6 +31,16 @@ export default function CheckoutPage() {
 
   const isArabic = locale === "ar";
 
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(isArabic ? "ar" : "en", {
+        style: "currency",
+        currency: "SDG",
+        maximumFractionDigits: 0,
+      }),
+    [isArabic],
+  );
+
   const [form, setForm] = useState<CheckoutForm>({
     firstName: "",
     lastName: "",
@@ -49,8 +59,7 @@ export default function CheckoutPage() {
   const deliveryCost = deliveryMethod === "standard" ? 5000 : 10000;
   const total = subtotal + deliveryCost;
 
-  const formatPrice = (value: number) =>
-    value.toLocaleString(isArabic ? "ar" : "en");
+  const formatPrice = (value: number) => currencyFormatter.format(value);
 
   const updateField = (
     field: keyof CheckoutForm,
@@ -199,7 +208,7 @@ export default function CheckoutPage() {
             <div className="flex min-h-[40vh] items-center justify-center">
               <div className="text-center">
                 <div className="mx-auto h-px w-10 bg-plum" />
-                <p className="mt-6 text-[9px] font-semibold uppercase tracking-[0.35em] text-ink/40">
+                <p className="mt-6 text-[12px] font-semibold uppercase tracking-[0.35em] text-ink/40">
                   {isArabic
                     ? "جارٍ تحميل الدفع"
                     : "Loading checkout"}
@@ -228,7 +237,7 @@ export default function CheckoutPage() {
                     : "Your Bag Is Empty"}
                 </p>
 
-                <h1 className="mt-6 max-w-3xl font-editorial text-[4rem] leading-[0.84] tracking-[-0.045em] sm:text-6xl lg:text-[7rem]">
+                <h1 className="mt-6 max-w-3xl font-editorial text-xl leading-[0.84] tracking-[-0.045em] sm:text-3xl lg:text-5xl">
                   {isArabic
                     ? "لا يمكن متابعة الدفع"
                     : "Nothing to Check Out"}
@@ -299,13 +308,13 @@ export default function CheckoutPage() {
                   : "The Final Step"}
               </p>
 
-              <h1 className="mt-5 max-w-5xl font-editorial text-[4rem] leading-[0.84] tracking-[-0.045em] sm:text-6xl lg:text-[7rem]">
+              <h1 className={`mt-5 max-w-5xl font-editorial  leading-[0.84] tracking-[-0.045em] ${isArabic ? "text-2xl sm:text-4xl lg:text-5xl" : "text-xl sm:text-3xl lg:text-5xl"}`}>
                 {isArabic
                   ? "إتمام الشراء"
                   : "Complete Your Order"}
               </h1>
 
-              <p className="mt-7 max-w-xl text-sm leading-7 text-ink/50">
+              <p className={`mt-7 max-w-xl ${isArabic ? "text-base" : "text-sm"} leading-7 text-ink/50`}>
                 {isArabic
                   ? "أدخل بياناتك وسنعتني بالباقي."
                   : "Enter your details and we'll take care of the rest."}
@@ -313,7 +322,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="lg:pb-2">
-              <div className="flex items-center gap-3 text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/35">
+              <div className={`flex items-center gap-3 ${isArabic ? "text-base" : "text-sm"} font-semibold uppercase tracking-[0.25em] text-ink/35`}>
                 <span className="flex h-7 w-7 items-center justify-center bg-plum text-snow">
                   1
                 </span>
@@ -342,14 +351,14 @@ export default function CheckoutPage() {
                       01
                     </p>
 
-                    <h2 className="mt-3 font-editorial text-4xl leading-none tracking-[-0.03em] sm:text-5xl">
+                    <h2 className={`mt-3 font-editorial ${isArabic ? "text-xl sm:text-3xl" : "text-xl sm:text-2xl"} leading-none tracking-[-0.03em]`}>
                       {isArabic
                         ? "معلوماتك"
                         : "Your Information"}
                     </h2>
                   </div>
 
-                  <p className="hidden pb-1 text-[8px] font-semibold uppercase tracking-[0.25em] text-ink/30 sm:block">
+                  <p className={`hidden pb-1 ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/30 sm:block`}>
                     {isArabic
                       ? "مطلوب"
                       : "Required"}
@@ -360,7 +369,7 @@ export default function CheckoutPage() {
                   <div>
                     <label
                       htmlFor="firstName"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "الاسم الأول"
@@ -386,14 +395,14 @@ export default function CheckoutPage() {
                           : "First name"
                       }
                       aria-invalid={Boolean(errors.firstName)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.firstName
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.firstName
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.firstName && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.firstName}
                       </p>
                     )}
@@ -402,7 +411,7 @@ export default function CheckoutPage() {
                   <div>
                     <label
                       htmlFor="lastName"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "اسم العائلة"
@@ -428,14 +437,14 @@ export default function CheckoutPage() {
                           : "Last name"
                       }
                       aria-invalid={Boolean(errors.lastName)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.lastName
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.lastName
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.lastName && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.lastName}
                       </p>
                     )}
@@ -444,7 +453,7 @@ export default function CheckoutPage() {
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="phone"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "رقم الهاتف"
@@ -470,14 +479,14 @@ export default function CheckoutPage() {
                           : "Phone number"
                       }
                       aria-invalid={Boolean(errors.phone)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.phone
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.phone
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.phone && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.phone}
                       </p>
                     )}
@@ -486,7 +495,7 @@ export default function CheckoutPage() {
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="email"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "البريد الإلكتروني"
@@ -512,14 +521,14 @@ export default function CheckoutPage() {
                           : "Email address"
                       }
                       aria-invalid={Boolean(errors.email)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.email
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.email
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.email && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.email}
                       </p>
                     )}
@@ -533,7 +542,7 @@ export default function CheckoutPage() {
                     02
                   </p>
 
-                  <h2 className="mt-3 font-editorial text-4xl leading-none tracking-[-0.03em] sm:text-5xl">
+                  <h2 className={`mt-3 font-editorial ${isArabic ? "text-xl sm:text-3xl" : "text-xl sm:text-2xl"} leading-none tracking-[-0.03em]`}>
                     {isArabic
                       ? "عنوان التوصيل"
                       : "Delivery Address"}
@@ -544,7 +553,7 @@ export default function CheckoutPage() {
                   <div>
                     <label
                       htmlFor="address"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "العنوان"
@@ -570,14 +579,14 @@ export default function CheckoutPage() {
                           : "Delivery address"
                       }
                       aria-invalid={Boolean(errors.address)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.address
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.address
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.address && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.address}
                       </p>
                     )}
@@ -586,7 +595,7 @@ export default function CheckoutPage() {
                   <div>
                     <label
                       htmlFor="city"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "المدينة"
@@ -612,14 +621,14 @@ export default function CheckoutPage() {
                           : "City"
                       }
                       aria-invalid={Boolean(errors.city)}
-                      className={`h-14 w-full border bg-transparent px-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.city
+                      className={`h-14 w-full border bg-transparent rounded-2xl px-4 ${isArabic ? "text-base" : "text-sm"} text-ink outline-none transition-colors placeholder:text-ink/25 disabled:cursor-not-allowed disabled:opacity-50 ${errors.city
                         ? "border-coral"
                         : "border-ink/15 focus:border-plum"
                         }`}
                     />
 
                     {errors.city && (
-                      <p className="mt-2 text-[9px] leading-5 text-coral">
+                      <p className={`mt-2 ${isArabic ? "text-sm" : "text-xs"} leading-5 text-coral`}>
                         {errors.city}
                       </p>
                     )}
@@ -628,7 +637,7 @@ export default function CheckoutPage() {
                   <div>
                     <label
                       htmlFor="notes"
-                      className="mb-2 block text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/45"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "ملاحظات الطلب"
@@ -652,7 +661,7 @@ export default function CheckoutPage() {
                           ? "أي ملاحظات إضافية؟"
                           : "Any additional notes?"
                       }
-                      className="w-full resize-none border border-ink/15 bg-transparent px-4 py-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 focus:border-plum disabled:cursor-not-allowed disabled:opacity-50"
+                      className="w-full resize-none border rounded-2xl border-ink/15 bg-transparent px-4 py-4 text-sm text-ink outline-none transition-colors placeholder:text-ink/25 focus:border-plum disabled:cursor-not-allowed disabled:opacity-50"
                     />
                   </div>
                 </div>
@@ -664,7 +673,7 @@ export default function CheckoutPage() {
                     03
                   </p>
 
-                  <h2 className="mt-3 font-editorial text-4xl leading-none tracking-[-0.03em] sm:text-5xl">
+                  <h2 className={`mt-3 font-editorial ${isArabic ? "text-xl sm:text-3xl" : "text-xl sm:text-2xl"} leading-none tracking-[-0.03em]`}>
                     {isArabic
                       ? "طريقة التوصيل"
                       : "Delivery Method"}
@@ -681,7 +690,7 @@ export default function CheckoutPage() {
                     aria-pressed={
                       deliveryMethod === "standard"
                     }
-                    className={`group flex w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "standard"
+                    className={`group flex rounded-2xl w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "standard"
                       ? "border-ink bg-ink text-snow"
                       : "border-ink/15 bg-transparent text-ink hover:border-plum"
                       }`}
@@ -700,14 +709,14 @@ export default function CheckoutPage() {
                       </span>
 
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+                        <p className={`${isArabic ? "text-lg" : "text-sm"} font-semibold uppercase tracking-[0.2em]`}>
                           {isArabic
                             ? "التوصيل العادي"
                             : "Standard Delivery"}
                         </p>
 
                         <p
-                          className={`mt-2 text-xs ${deliveryMethod ===
+                          className={`mt-2 ${isArabic ? "text-sm" : "text-sm"} ${deliveryMethod ===
                             "standard"
                             ? "text-snow/50"
                             : "text-ink/45"
@@ -734,7 +743,7 @@ export default function CheckoutPage() {
                     aria-pressed={
                       deliveryMethod === "express"
                     }
-                    className={`group flex w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "express"
+                    className={`group flex rounded-2xl w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "express"
                       ? "border-ink bg-ink text-snow"
                       : "border-ink/15 bg-transparent text-ink hover:border-plum"
                       }`}
@@ -753,14 +762,14 @@ export default function CheckoutPage() {
                       </span>
 
                       <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+                        <p className={`${isArabic ? "text-lg" : "text-sm"} font-semibold uppercase tracking-[0.2em]`}>
                           {isArabic
                             ? "التوصيل السريع"
                             : "Express Delivery"}
                         </p>
 
                         <p
-                          className={`mt-2 text-xs ${deliveryMethod ===
+                          className={`mt-2 ${isArabic ? "text-sm" : "text-sm"} ${deliveryMethod ===
                             "express"
                             ? "text-snow/50"
                             : "text-ink/45"
@@ -786,14 +795,14 @@ export default function CheckoutPage() {
                     04
                   </p>
 
-                  <h2 className="mt-3 font-editorial text-4xl leading-none tracking-[-0.03em] sm:text-5xl">
+                  <h2 className={`mt-3 font-editorial ${isArabic ? "text-xl sm:text-3xl" : "text-xl sm:text-2xl"} leading-none tracking-[-0.03em]`}>
                     {isArabic
                       ? "طريقة الدفع"
                       : "Payment Method"}
                   </h2>
                 </div>
 
-                <div className="mt-8 border border-ink bg-ink p-6 text-snow sm:p-7">
+                <div className="mt-8 border rounded-2xl border-ink bg-ink p-6 text-snow sm:p-7">
                   <div className="flex items-start gap-5">
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center border border-coral">
                       <Check
@@ -804,13 +813,13 @@ export default function CheckoutPage() {
                     </span>
 
                     <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+                      <p className={`${isArabic ? "text-lg" : "text-sm"} font-semibold uppercase tracking-[0.2em]`}>
                         {isArabic
                           ? "الدفع عند الاستلام"
                           : "Cash on Delivery"}
                       </p>
 
-                      <p className="mt-3 max-w-md text-xs leading-6 text-snow/50">
+                      <p className={`mt-3 max-w-md ${isArabic ? "text-base" : "text-sm"} leading-6 text-snow/50`}>
                         {isArabic
                           ? "ادفع عند استلام طلبك. لا حاجة للدفع مقدمًا."
                           : "Pay when your order is delivered. No payment is required in advance."}
@@ -831,7 +840,7 @@ export default function CheckoutPage() {
                         : "Your Selection"}
                     </p>
 
-                    <h2 className="mt-4 font-editorial text-3xl leading-none">
+                    <h2 className={`mt-4 font-editorial ${isArabic ? "text-2xl" : "text-xl"} leading-none`}>
                       {isArabic
                         ? "ملخص الطلب"
                         : "Order Summary"}
@@ -866,17 +875,17 @@ export default function CheckoutPage() {
                         className="flex items-start justify-between gap-5"
                       >
                         <div className="min-w-0">
-                          <p className="font-editorial text-xl leading-none text-ink">
+                          <p className={`font-editorial ${isArabic ? "text-xl" : "text-lg"} leading-none text-ink`}>
                             {name}
                           </p>
 
-                          <p className="mt-2 text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/35">
+                          <p className={`mt-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/35`}>
                             {item.size.ml}ml ×{" "}
                             {item.quantity}
                           </p>
                         </div>
 
-                        <p className="shrink-0 text-sm text-ink/65">
+                        <p className={`shrink-0 ${isArabic ? "text-lg" : "text-base"} text-ink/65`}>
                           {formatPrice(
                             item.size.price *
                             item.quantity,
@@ -890,7 +899,7 @@ export default function CheckoutPage() {
                 <div className="my-8 h-px bg-ink/10" />
 
                 <div className="flex items-baseline justify-between gap-6">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+                  <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
                     {isArabic
                       ? "المجموع الفرعي"
                       : "Subtotal"}
@@ -900,22 +909,18 @@ export default function CheckoutPage() {
                     <span className="font-editorial text-2xl leading-none">
                       {formatPrice(subtotal)}
                     </span>
-
-                    <span className="ms-2 text-[8px] font-semibold uppercase tracking-[0.18em] text-ink/30">
-                      SDG
-                    </span>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/40">
+                  <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
                     {isArabic
                       ? "التوصيل"
                       : "Delivery"}
                   </span>
 
                   <div className="text-end">
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-ink/55">
+                    <p className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.18em] text-ink/55`}>
                       {deliveryMethod ===
                         "standard"
                         ? isArabic
@@ -926,14 +931,14 @@ export default function CheckoutPage() {
                           : "Express"}
                     </p>
 
-                    <p className="mt-1 text-sm text-ink/65">
+                    <p className={`${isArabic ? "text-lg" : "text-base"} mt-1 text-ink/65`}>
                       {formatPrice(deliveryCost)}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-6 flex items-baseline justify-between gap-6 border-t border-ink pt-6">
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-ink/50">
+                  <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/50`}>
                     {isArabic
                       ? "الإجمالي"
                       : "Total"}
@@ -942,10 +947,6 @@ export default function CheckoutPage() {
                   <div className="text-end">
                     <span className="font-editorial text-3xl leading-none">
                       {formatPrice(total)}
-                    </span>
-
-                    <span className="ms-2 text-[8px] font-semibold uppercase tracking-[0.18em] text-ink/30">
-                      SDG
                     </span>
                   </div>
                 </div>
@@ -965,7 +966,7 @@ export default function CheckoutPage() {
                   type="button"
                   onClick={handleSubmit}
                   disabled={isSubmitting}
-                  className="mt-8 flex h-14 w-full items-center justify-center gap-4 bg-ink px-7 text-[9px] font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum disabled:cursor-not-allowed disabled:opacity-50"
+                  className={`mt-8 flex h-14 w-full items-center justify-center gap-4 bg-ink px-7 ${isArabic ? "text-base" : "text-sm"}  rounded-2xl font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum disabled:cursor-not-allowed disabled:opacity-50`}
                 >
                   <span>
                     {isSubmitting
@@ -994,7 +995,7 @@ export default function CheckoutPage() {
                 <div className="mt-5 flex items-center justify-center gap-2">
                   <span className="h-1.5 w-1.5 bg-coral" />
 
-                  <p className="text-[8px] font-semibold uppercase tracking-[0.2em] text-ink/30">
+                  <p className={`${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.2em] text-ink/30`}>
                     {isArabic
                       ? "الدفع عند الاستلام"
                       : "Cash on Delivery"}
@@ -1004,7 +1005,7 @@ export default function CheckoutPage() {
 
               <Link
                 href="/cart"
-                className="group mt-6 flex items-center justify-center gap-3 text-[9px] font-semibold uppercase tracking-[0.28em] text-ink/35 transition-colors hover:text-plum"
+                className={`group mt-6 flex items-center justify-center gap-3 ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.28em] text-ink/35 transition-colors hover:text-plum`}
               >
                 {isArabic ? (
                   <>
