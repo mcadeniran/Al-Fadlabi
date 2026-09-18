@@ -148,8 +148,12 @@
           "confirmed": "Confirmed",
           "processing": "Processing",
           "outForDelivery": "Out for delivery",
-          "delivered": "Delivered"
-        }
+          "delivered": "Delivered",
+          "rejected": "Rejected",
+          "cancelled": "Cancelled"
+        },
+        "timelineEyebrow": "ORDER HISTORY",
+        "timelineTitle": "Your order journey"
       }
     }
   },

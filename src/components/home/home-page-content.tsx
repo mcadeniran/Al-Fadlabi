@@ -3,6 +3,7 @@ import {ArrowRight} from "lucide-react";
 import {ProductCard} from "../product";
 import {Product} from "@/types/product";
 import Image from "next/image";
+import {BestsellerProductCard} from "../product/best-sellers-product-card";
 
 type HomePageContentProps = {
   products: Product[];
@@ -55,7 +56,7 @@ export function HomePageContent({
           />
 
           {/* Left-to-right readability overlay */}
-          <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/55 to-transparent" />
+          {/* <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/55 to-transparent" /> */}
 
           {/* Bottom readability overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-ink/65 via-transparent to-ink/20" />
@@ -201,9 +202,9 @@ export function HomePageContent({
             <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-12 sm:gap-x-6 lg:grid-cols-4 lg:gap-x-8">
               {bestsellerProducts.map(
                 (product) => (
-                  <ProductCard
+                  <BestsellerProductCard
                     key={product.id}
-                    product={product as never}
+                    product={product}
                   />
                 ),
               )}

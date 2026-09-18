@@ -108,8 +108,6 @@ export async function CustomerOrderDetails({order, locale}: CustomerOrderDetails
   const smallLabelClass = isAr ? "text-xs font-medium leading-6" : "text-[9px] font-semibold uppercase tracking-[0.2em]";
   const tinyLabelClass = isAr ? "text-xs font-medium leading-6" : "text-[9px] font-semibold uppercase tracking-[0.2em]";
 
-  console.log(order);
-
   return (
     <section className="space-y-16 sm:space-y-20">
       <header>
@@ -147,7 +145,7 @@ export async function CustomerOrderDetails({order, locale}: CustomerOrderDetails
         <div className="mt-10 h-px bg-ink/10" />
       </header>
 
-      <CustomerOrderProgress status={order.status} />
+      <CustomerOrderProgress order={order} />
 
       <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-20">
         <div className="min-w-0 space-y-14 sm:space-y-16">

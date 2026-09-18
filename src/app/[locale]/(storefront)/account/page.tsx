@@ -53,8 +53,6 @@ export default async function AccountPage() {
 
   const orders = await getCustomerOrders();
 
-  console.log(orders[0]);
-
   const isArabic = locale === "ar";
 
   return (

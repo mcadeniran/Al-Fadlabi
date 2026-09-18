@@ -148,8 +148,12 @@
           "confirmed": "تم التأكيد",
           "processing": "قيد التجهيز",
           "outForDelivery": "خرج للتوصيل",
-          "delivered": "تم التوصيل"
-        }
+          "delivered": "تم التوصيل",
+          "rejected": "مرفوض",
+          "cancelled": "ملغى"
+        },
+        "timelineEyebrow": "سجل الطلب",
+        "timelineTitle": "رحلة طلبك"
       }
     }
   },
