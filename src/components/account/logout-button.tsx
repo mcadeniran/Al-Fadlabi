@@ -28,7 +28,7 @@ export function LogoutButton() {
         return;
       }
 
-      router.push(`/account/login`);
+      router.replace("/account/login");
     } catch (error) {
       console.error("Logout error:", error);
     } finally {

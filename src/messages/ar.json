@@ -50,7 +50,15 @@
       "status": "حالة الحساب",
       "active": "نشط",
       "account": "الحساب",
-      "customer": "العميل"
+      "customer": "العميل",
+      "role": "الدور",
+      "adminAccess": "الإدارة",
+      "adminDashboard": "لوحة الإدارة",
+      "roles": {
+        "owner": "مالك",
+        "manager": "مدير",
+        "admin": "مسؤول"
+      }
     },
     "logout": {
       "button": "تسجيل الخروج",
@@ -306,7 +314,8 @@
     "customers": "العملاء",
     "inventory": "المخزون",
     "settings": "الإعدادات",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "users": "مستخدمون"
   },
   "AdminDashboard": {
     "title": "لوحة التحكم",
@@ -338,7 +347,44 @@
     "manageInventory": "إدارة المخزون",
     "manageCustomers": "إدارة العملاء",
     "inventoryUnits": "وحدات المخزون",
-    "outOfStock": "نفد المخزون"
+    "outOfStock": "نفد المخزون",
+    "quickActionDescriptions": {
+      "addProduct": "إنشاء قائمة منتجات جديدة",
+      "manageOrders": "مراجعة الطلبات ومعالجتها",
+      "manageInventory": "مراقبة مستويات المخزون",
+      "manageCustomers": "عرض حسابات العملاء"
+    },
+    "pendingOrdersDescription": "الطلبات التي تنتظر المعالجة",
+    "ordersAwaitingReview": "طلبات بانتظار المراجعة",
+    "needsAttention": "يحتاج إلى الانتباه",
+    "inventoryHealthy": "مخزونك في حالة جيدة",
+    "admin": "المشرف",
+    "shortcuts": "اختصارات",
+    "inventory": "المخزون",
+    "activity": "النشاط",
+    "critical": "حرج",
+    "low": "منخفض",
+    "watch": "تحت المراقبة",
+    "healthy": "جيد",
+    "salesOverview": {
+      "eyebrow": "الأداء",
+      "title": "نظرة عامة على المبيعات",
+      "description": "إيرادات ونشاط الطلبات خلال آخر {days} يومًا",
+      "period": "فترة المبيعات",
+      "periods": {
+        "7": "7 أيام",
+        "30": "30 يومًا",
+        "90": "90 يومًا"
+      },
+      "revenue": "الإيرادات",
+      "orders": "الطلبات",
+      "emptyTitle": "لا يوجد نشاط مبيعات حتى الآن",
+      "emptyDescription": "سيظهر نشاط المبيعات والطلبات هنا بمجرد بدء متجرك في استقبال الطلبات.",
+      "comparedWithPrevious": "مقارنة بالفترة السابقة",
+      "ordersInPeriod": "الطلبات في الفترة المحددة",
+      "averageOrderValue": "متوسط قيمة الطلب",
+      "averagePerOrder": "متوسط الإيراد لكل طلب"
+    }
   },
   "AdminProducts": {
     "title": "المنتجات",
@@ -540,5 +586,94 @@
       "description": "اكتشف مجموعتنا وتعرّف على العطور والمنتجات التي نوفرها لعملائنا.",
       "cta": "اكتشف المجموعة"
     }
+  },
+  "AdminOrders": {
+    "title": "الطلبات",
+    "description": "عرض وإدارة طلبات العملاء.",
+    "order": "الطلب",
+    "customer": "العميل",
+    "items": "العناصر",
+    "total": "الإجمالي",
+    "status": "الحالة",
+    "date": "التاريخ",
+    "express": "توصيل سريع",
+    "standard": "توصيل عادي",
+    "itemCount": "{count, plural, =1 {عنصر واحد} =2 {عنصران} few {# عناصر} many {# عنصرًا} other {# عنصر}}",
+    "searchPlaceholder": "البحث عن الطلبات أو العملاء أو المنتجات...",
+    "allStatuses": "جميع الحالات",
+    "clearFilters": "مسح عوامل التصفية",
+    "noOrders": "لم يتم العثور على طلبات",
+    "noOrdersDescription": "حاول تغيير البحث أو عامل تصفية الحالة.",
+    "showingCount": "عرض {count} طلبات",
+    "statuses": {
+      "pending": "قيد الانتظار",
+      "confirmed": "مؤكد",
+      "processing": "قيد المعالجة",
+      "out_for_delivery": "خرج للتوصيل",
+      "delivered": "تم التوصيل",
+      "rejected": "مرفوض",
+      "cancelled": "ملغى"
+    },
+    "backToOrders": "العودة إلى الطلبات",
+    "placedOn": "تم الطلب في {date}",
+    "orderItems": "منتجات الطلب",
+    "quantity": "الكمية",
+    "unitPrice": "سعر الوحدة",
+    "noOrderItems": "لم يتم العثور على منتجات لهذا الطلب",
+    "customerDetails": "بيانات العميل",
+    "name": "الاسم",
+    "phone": "الهاتف",
+    "email": "البريد الإلكتروني",
+    "deliveryDetails": "تفاصيل التوصيل",
+    "address": "العنوان",
+    "deliveryMethod": "طريقة التوصيل",
+    "deliveryNotes": "ملاحظات التوصيل",
+    "orderSummary": "ملخص الطلب",
+    "subtotal": "المجموع الفرعي",
+    "deliveryCost": "تكلفة التوصيل",
+    "paymentDetails": "تفاصيل الدفع",
+    "paymentMethod": "طريقة الدفع",
+    "payOnDelivery": "الدفع عند الاستلام",
+    "paymentStatus": "حالة الدفع",
+    "rejectionNote": "ملاحظة الرفض",
+    "orderTimeline": "سجل الطلب",
+    "paymentStatuses": {
+      "pending": "قيد الانتظار",
+      "paid": "مدفوع"
+    },
+    "timeline": {
+      "created": "تم إنشاء الطلب",
+      "confirmed": "تم تأكيد الطلب",
+      "processed": "تتم معالجة الطلب",
+      "dispatched": "خرج للتوصيل",
+      "delivered": "تم تسليم الطلب",
+      "rejected": "تم رفض الطلب",
+      "cancelled": "تم إلغاء الطلب"
+    },
+    "statusManagement": "إدارة حالة الطلب",
+    "noStatusActions": "وصل هذا الطلب إلى حالة نهائية ولا يمكن تغييرها.",
+    "statusUpdated": "تم تحديث حالة الطلب بنجاح.",
+    "confirmStatusChange": "هل تريد تغيير حالة الطلب إلى {status}؟",
+    "confirmAction": "تأكيد التغيير",
+    "cancelAction": "إلغاء",
+    "updatingStatus": "جارٍ التحديث...",
+    "rejectionNoteRequired": "ملاحظة الرفض مطلوبة.",
+    "rejectionNotePlaceholder": "أدخل سبب رفض هذا الطلب...",
+    "statusActions": {
+      "confirmed": "تأكيد الطلب",
+      "processing": "بدء المعالجة",
+      "out_for_delivery": "تحديد كمُرسل للتوصيل",
+      "delivered": "تحديد كمُسلّم",
+      "rejected": "رفض الطلب",
+      "cancelled": "إلغاء الطلب"
+    },
+    "paymentManagement": "إدارة الدفع",
+    "paymentPendingDescription": "هذا الطلب للدفع عند الاستلام ولم يتم تسجيله كمدفوع.",
+    "paymentMarkedAsPaid": "تم تسجيل الدفع كمدفوع بنجاح.",
+    "confirmPayment": "هل تريد تحديد هذا الطلب كمدفوع؟",
+    "confirmPaymentDescription": "أكد ذلك فقط بعد تحصيل المبلغ من العميل.",
+    "markAsPaid": "تحديد كمدفوع",
+    "markingAsPaid": "جارٍ تسجيل الدفع...",
+    "confirmPaymentAction": "تأكيد الدفع"
   }
 }

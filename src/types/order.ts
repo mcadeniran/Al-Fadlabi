@@ -174,3 +174,118 @@ export type CustomerOrder = {
 
   items: CustomerOrderItem[];
 };
+
+/* ============================================================
+ * ADMIN ORDER TYPES
+ * ============================================================
+ */
+
+/**
+ * Admin-facing order item read model.
+ *
+ * This is deliberately separate from both:
+ *
+ * - OrderItem
+ * - CustomerOrderItem
+ *
+ * It represents the information the admin application needs
+ * when managing an order.
+ */
+export type AdminOrderItem = {
+  id: string;
+
+  productId: string | null;
+  productSizeId: string | null;
+
+  /**
+   * Historical product information captured when the order
+   * was created.
+   */
+  productName: Record<string, string> | null;
+  productSlug: string | null;
+  productGender: Product['gender'] | null;
+  productImageUrl: string | null;
+
+  sizeMl: number;
+
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
+};
+
+/**
+ * Customer information available to the admin.
+ */
+export type AdminOrderCustomer = {
+  id: string | null;
+
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string | null;
+};
+
+/**
+ * Admin-facing database read model.
+ *
+ * This is the complete order representation used by the
+ * admin order-management area.
+ *
+ * It intentionally does NOT extend:
+ *
+ * - Order
+ * - CustomerOrder
+ *
+ * because it is a different database-backed read model.
+ */
+export type AdminOrder = {
+  id: string;
+  orderNumber: string;
+
+  customer: AdminOrderCustomer;
+
+  deliveryAddress: {
+    address: string;
+    city: string;
+    notes: string;
+  };
+
+  deliveryMethod: 'standard' | 'express';
+
+  paymentMethod: 'pay_on_delivery';
+  paymentStatus: 'pending' | 'paid';
+
+  subtotal: number;
+  deliveryCost: number;
+  total: number;
+
+  status: OrderStatus;
+
+  createdAt: string;
+
+  confirmedAt: string | null;
+  processedAt: string | null;
+  dispatchedAt: string | null;
+  deliveredAt: string | null;
+  rejectedAt: string | null;
+  cancelledAt: string | null;
+
+  rejectionNote: string | null;
+
+  items: AdminOrderItem[];
+};
+
+export type AdminOrderAuditAction = 'status_changed' | 'payment_marked_paid';
+
+export type AdminOrderAuditLog = {
+  id: string;
+  orderId: string;
+  actorUserId: string | null;
+  action: AdminOrderAuditAction;
+  previousStatus: OrderStatus | null;
+  newStatus: OrderStatus | null;
+  previousPaymentStatus: 'pending' | 'paid' | null;
+  newPaymentStatus: 'pending' | 'paid' | null;
+  note: string | null;
+  createdAt: string;
+};

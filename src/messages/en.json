@@ -50,7 +50,15 @@
       "status": "Account status",
       "active": "Active",
       "account": "Account",
-      "customer": "Customer"
+      "customer": "Customer",
+      "role": "Role",
+      "adminAccess": "Administration",
+      "adminDashboard": "Admin Dashboard",
+      "roles": {
+        "owner": "Owner",
+        "manager": "Manager",
+        "admin": "Administrator"
+      }
     },
     "logout": {
       "button": "Sign out",
@@ -306,7 +314,8 @@
     "customers": "Customers",
     "inventory": "Inventory",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "users": "Users"
   },
   "AdminDashboard": {
     "title": "Dashboard",
@@ -338,7 +347,44 @@
     "manageInventory": "Manage Inventory",
     "manageCustomers": "Manage Customers",
     "inventoryUnits": "Inventory units",
-    "outOfStock": "Out of stock"
+    "outOfStock": "Out of stock",
+    "quickActionDescriptions": {
+      "addProduct": "Create a new product listing",
+      "manageOrders": "Review and process orders",
+      "manageInventory": "Monitor stock levels",
+      "manageCustomers": "View customer accounts"
+    },
+    "pendingOrdersDescription": "Orders waiting to be processed",
+    "ordersAwaitingReview": "orders awaiting review",
+    "needsAttention": "Needs attention",
+    "inventoryHealthy": "Your inventory is looking healthy",
+    "admin": "ADMIN",
+    "shortcuts": "SHORTCUTS",
+    "inventory": "INVENTORY",
+    "activity": "ACTIVITY",
+    "critical": "Critical",
+    "low": "Low",
+    "watch": "Watch",
+    "healthy": "Healthy",
+    "salesOverview": {
+      "eyebrow": "Performance",
+      "title": "Sales overview",
+      "description": "Revenue and order activity over the last {days} days",
+      "period": "Sales period",
+      "periods": {
+        "7": "7 days",
+        "30": "30 days",
+        "90": "90 days"
+      },
+      "revenue": "Revenue",
+      "orders": "Orders",
+      "emptyTitle": "No sales activity yet",
+      "emptyDescription": "Sales and order activity will appear here once your store starts receiving orders.",
+      "comparedWithPrevious": "vs. previous period",
+      "ordersInPeriod": "orders in selected period",
+      "averageOrderValue": "Average order value",
+      "averagePerOrder": "average revenue per order"
+    }
   },
   "AdminProducts": {
     "title": "Products",
@@ -540,5 +586,94 @@
       "description": "Explore our collection and discover the fragrances and products we bring to our customers.",
       "cta": "Explore the Collection"
     }
+  },
+  "AdminOrders": {
+    "title": "Orders",
+    "description": "View and manage customer orders.",
+    "order": "Order",
+    "customer": "Customer",
+    "items": "Items",
+    "total": "Total",
+    "status": "Status",
+    "date": "Date",
+    "express": "Express delivery",
+    "standard": "Standard delivery",
+    "itemCount": "{count, plural, =1 {# item} other {# items}}",
+    "searchPlaceholder": "Search orders, customers or products...",
+    "allStatuses": "All statuses",
+    "clearFilters": "Clear filters",
+    "noOrders": "No orders found",
+    "noOrdersDescription": "Try changing your search or status filter.",
+    "showingCount": "Showing {count} orders",
+    "statuses": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "out_for_delivery": "Out for delivery",
+      "delivered": "Delivered",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    },
+    "backToOrders": "Back to orders",
+    "placedOn": "Placed on {date}",
+    "orderItems": "Order items",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "noOrderItems": "No items found for this order",
+    "customerDetails": "Customer details",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "deliveryDetails": "Delivery details",
+    "address": "Address",
+    "deliveryMethod": "Delivery method",
+    "deliveryNotes": "Delivery notes",
+    "orderSummary": "Order summary",
+    "subtotal": "Subtotal",
+    "deliveryCost": "Delivery cost",
+    "paymentDetails": "Payment details",
+    "paymentMethod": "Payment method",
+    "payOnDelivery": "Pay on delivery",
+    "paymentStatus": "Payment status",
+    "rejectionNote": "Rejection note",
+    "orderTimeline": "Order timeline",
+    "paymentStatuses": {
+      "pending": "Pending",
+      "paid": "Paid"
+    },
+    "timeline": {
+      "created": "Order placed",
+      "confirmed": "Order confirmed",
+      "processed": "Order processing",
+      "dispatched": "Out for delivery",
+      "delivered": "Order delivered",
+      "rejected": "Order rejected",
+      "cancelled": "Order cancelled"
+    },
+    "statusManagement": "Status management",
+    "noStatusActions": "This order has reached a final status and cannot be changed.",
+    "statusUpdated": "Order status updated successfully.",
+    "confirmStatusChange": "Change order status to {status}?",
+    "confirmAction": "Confirm change",
+    "cancelAction": "Cancel",
+    "updatingStatus": "Updating...",
+    "rejectionNoteRequired": "A rejection note is required.",
+    "rejectionNotePlaceholder": "Enter the reason for rejecting this order...",
+    "statusActions": {
+      "confirmed": "Confirm order",
+      "processing": "Start processing",
+      "out_for_delivery": "Mark out for delivery",
+      "delivered": "Mark as delivered",
+      "rejected": "Reject order",
+      "cancelled": "Cancel order"
+    },
+    "paymentManagement": "Payment management",
+    "paymentPendingDescription": "This pay-on-delivery order has not been marked as paid.",
+    "paymentMarkedAsPaid": "Payment marked as paid successfully.",
+    "confirmPayment": "Mark this order as paid?",
+    "confirmPaymentDescription": "Only confirm this after the payment has been collected from the customer.",
+    "markAsPaid": "Mark as paid",
+    "markingAsPaid": "Marking as paid...",
+    "confirmPaymentAction": "Confirm payment"
   }
 }

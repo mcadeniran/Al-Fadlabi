@@ -1,6 +1,7 @@
 "use client";
 
 import {FormEvent, useState} from "react";
+import {routing} from "@/i18n/routing";
 import Link from "next/link";
 import {useLocale, useTranslations} from "next-intl";
 
@@ -71,7 +72,11 @@ export function RegisterForm() {
             last_name: trimmedLastName,
             phone: trimmedPhone,
           },
-          emailRedirectTo: `${window.location.origin}/${locale}/account`,
+          emailRedirectTo:
+            `${window.location.origin}` +
+            (locale === routing.defaultLocale
+              ? `/auth/callback?next=/account`
+              : `/${locale}/auth/callback?next=/${locale}/account`),
         },
       });
 
@@ -297,3 +302,4 @@ export function RegisterForm() {
     </section>
   );
 }
+

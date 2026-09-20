@@ -56,7 +56,7 @@ export function HomePageContent({
           />
 
           {/* Left-to-right readability overlay */}
-          {/* <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/55 to-transparent" /> */}
+          <div className="absolute inset-0 bg-linear-to-r from-ink via-ink/55 to-transparent" />
 
           {/* Bottom readability overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-ink/65 via-transparent to-ink/20" />
@@ -66,9 +66,9 @@ export function HomePageContent({
         <div className="relative mx-auto flex min-h-svh w-full max-w-360 items-end px-6 pb-16 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24 xl:px-16">
           <div className="max-w-2xl">
             <p
-              className={`text-[10px] font-semibold uppercase tracking-[0.24em] text-coral ${isAr
-                ? "text-xs tracking-normal"
-                : ""
+              className={` font-semibold uppercase tracking-[0.24em] text-coral ${isAr
+                ? "text-xl tracking-normal"
+                : "text-[10px]"
                 }`}
             >
               {isAr

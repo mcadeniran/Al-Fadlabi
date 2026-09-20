@@ -28,8 +28,8 @@ const navigation = [
     icon: ClipboardList,
   },
   {
-    href: "/admin/customers",
-    key: "customers",
+    href: "/admin/users",
+    key: "users",
     icon: Users,
   },
   {

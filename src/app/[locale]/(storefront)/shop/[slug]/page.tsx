@@ -8,7 +8,7 @@ import {ProductGallery} from "@/components/product/product-gallery";
 import {ProductPurchase} from "@/components/product/product-purchase";
 import {getProductBySlug, getProductSlugs} from "@/lib/products/queries";
 import type {ProductNote} from "@/types/product";
-import {Link} from "@/i18n/navigation";
+import BackButton from "./BackButton";
 
 type ProductPageProps = {
   params: Promise<{
@@ -56,7 +56,6 @@ export default async function ProductPage({params}: ProductPageProps) {
   const {locale, slug} = await params;
   const product = await getProductBySlug(slug);
   const t = await getTranslations("Shop");
-
   const isAr = locale === 'ar';
 
   if (!product) {
@@ -85,12 +84,13 @@ export default async function ProductPage({params}: ProductPageProps) {
         ========================================================= */}
 
           <div className={`mb-8 flex items-center gap-2 ${isAr ? "text-lg" : "text-[12px]"} font-medium uppercase tracking-[0.16em] text-ink/35 lg:mb-10 ${isArabic ? "flex-row-reverse justify-start" : ""}`} >
-            <Link
+            <BackButton />
+            {/* <Link
               href="/shop"
               className="transition-colors hover:text-plum"
             >
               {isArabic ? "المتجر" : "Shop"}
-            </Link>
+            </Link> */}
 
             <span className="text-ink/20">/</span>
 

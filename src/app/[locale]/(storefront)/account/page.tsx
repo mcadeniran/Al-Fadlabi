@@ -8,11 +8,13 @@ import {getCustomerProfile} from "@/lib/customers/customer-profile";
 import {getCustomerOrders} from "@/lib/orders/customer-order-service";
 import {createClient} from "@/lib/supabase/server";
 import {Container} from "@/components/ui/container";
+import {Link} from "@/i18n/navigation";
+
+type AdminRole = "owner" | "manager" | "admin";
 
 export default async function AccountPage() {
   const locale = await getLocale();
   const t = await getTranslations("Auth");
-
   const supabase = await createClient();
 
   const {
@@ -23,11 +25,24 @@ export default async function AccountPage() {
     redirect(`/${locale}/account/login`);
   }
 
+  const {data: adminUser} = await supabase
+    .from("admin_users")
+    .select("role")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const isAdmin = !!adminUser;
+
+  const adminRoleLabel = adminUser ? {owner: t("account.roles.owner"), manager: t("account.roles.manager"), admin: t("account.roles.admin"), }[adminUser.role as AdminRole] : null;
+
   const customer = await getCustomerProfile();
 
   if (!customer) {
     return (
-      <main className="min-h-screen bg-snow text-ink" dir={locale === "ar" ? "rtl" : "ltr"}>
+      <main
+        className="min-h-screen bg-snow text-ink"
+        dir={locale === "ar" ? "rtl" : "ltr"}
+      >
         <section className="px-6 pb-32 pt-36 sm:px-8 lg:px-12 lg:pb-40 lg:pt-44 xl:px-16">
           <Container className="max-w-360 px-0">
             <div className="mx-auto flex min-h-[55vh] max-w-2xl flex-col items-center justify-center text-center">
@@ -52,11 +67,13 @@ export default async function AccountPage() {
   }
 
   const orders = await getCustomerOrders();
-
   const isArabic = locale === "ar";
 
   return (
-    <main className="min-h-screen bg-snow text-ink" dir={isArabic ? "rtl" : "ltr"}>
+    <main
+      className="min-h-screen bg-snow text-ink"
+      dir={isArabic ? "rtl" : "ltr"}
+    >
       <section className="px-6 pb-20 pt-36 sm:px-8 md:pb-24 lg:px-12 lg:pb-28 lg:pt-44 xl:px-16">
         <Container className="max-w-360 px-0">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-24">
@@ -65,7 +82,12 @@ export default async function AccountPage() {
                 {t("account.eyebrow")}
               </p>
 
-              <h1 className={`mt-5 max-w-3xl font-editorial ${isArabic ? "text-lg sm:text-2xl lg:text-4xl" : "text-base sm:text-xl lg:text- 3xl"}  leading-[0.84] tracking-tighter`}>
+              <h1
+                className={`mt - 5 max - w - 3xl font - editorial leading - [0.84] tracking - tighter ${isArabic
+                  ? "text-lg sm:text-2xl lg:text-4xl"
+                  : "text-base sm:text-xl lg:text-3xl"
+                  } `}
+              >
                 {t("account.welcome", {
                   name: customer.firstName,
                 })}
@@ -86,11 +108,13 @@ export default async function AccountPage() {
       <section className="px-6 pb-24 sm:px-8 lg:px-12 lg:pb-32 xl:px-16">
         <Container className="max-w-360 px-0">
           <div className="mb-8 flex items-center gap-5">
-            <span className="font-editorial text-3xl text-plum">01</span>
+            <span className="font-editorial text-3xl text-plum">
+              01
+            </span>
 
             <div className="h-px flex-1 bg-ink/10" />
 
-            <p className={`eyebrow text-ink/35`}>
+            <p className="eyebrow text-ink/35">
               {t("account.account")}
             </p>
           </div>
@@ -123,26 +147,63 @@ export default async function AccountPage() {
                     <div className="mt-3 flex items-center gap-3">
                       <span className="h-1.5 w-1.5 rounded-full bg-plum" />
 
-                      <p className={`${isArabic ? "text-base" : "text-sm"} text-ink/75`}>
+                      <p
+                        className={`${isArabic ? "text-base" : "text-sm"
+                          } text - ink / 75`}
+                      >
                         {t("account.active")}
                       </p>
                     </div>
                   </div>
+
+                  {isAdmin && adminRoleLabel && (
+                    <div className="border-t border-ink/10 pt-6">
+                      <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
+                        {t("account.role")}
+                      </p>
+
+                      <p
+                        className={`mt - 3 ${isArabic ? "text-base" : "text-sm"
+                          } text - ink / 75`}
+                      >
+                        {adminRoleLabel}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
+
+              {isAdmin && (
+                <div className="mt-10 border-t border-ink/10 pt-8">
+                  <p className="mb-5 eyebrow text-plum">
+                    {t("account.adminAccess")}
+                  </p>
+
+                  <Link
+                    href="/admin"
+                    className="button-editorial button-editorial-primary inline-flex w-full items-center justify-center gap-3"
+                  >
+                    <span>{t("account.adminDashboard")}</span>
+
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              )}
 
               <div className="mt-10 border-t border-ink/10 pt-8">
                 <LogoutButton />
               </div>
             </aside>
-          </div>
-        </Container>
-      </section>
+          </div >
+        </Container >
+      </section >
 
       <section className="px-6 pb-32 sm:px-8 lg:px-12 lg:pb-40 xl:px-16">
         <Container className="max-w-360 px-0">
           <div className="mb-8 flex items-center gap-5">
-            <span className="font-editorial text-3xl text-plum">02</span>
+            <span className="font-editorial text-3xl text-plum">
+              02
+            </span>
 
             <div className="h-px flex-1 bg-ink/10" />
 
@@ -151,9 +212,12 @@ export default async function AccountPage() {
             </p>
           </div>
 
-          <CustomerOrders orders={orders} locale={locale} />
+          <CustomerOrders
+            orders={orders}
+            locale={locale}
+          />
         </Container>
       </section>
-    </main>
+    </main >
   );
-}
+};

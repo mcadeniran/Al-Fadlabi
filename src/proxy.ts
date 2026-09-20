@@ -17,26 +17,24 @@ export default async function proxy(request: NextRequest) {
 
   /*
    * Refresh the Supabase session for authenticated
-   * storefront/customer routes.
-   *
-   * We also continue doing this for admin routes.
+   * storefront/customer routes and admin routes.
    */
   if (adminRoute || customerRoute) {
     const { user } = await updateSupabaseSession(request, response);
 
     /*
      * Admin authentication
+     *
+     * Role authorization will be handled separately
+     * in AUTH-4. For now, this only checks whether
+     * a valid authenticated session exists.
      */
     if (adminRoute) {
-      if (adminRoute.isLoginPage) {
-        return response;
-      }
-
       if (!user) {
         const loginPath =
           adminRoute.locale === routing.defaultLocale
-            ? '/admin/login'
-            : `/${adminRoute.locale}/admin/login`;
+            ? '/account/login'
+            : `/${adminRoute.locale}/account/login`;
 
         return NextResponse.redirect(new URL(loginPath, request.url));
       }
@@ -47,9 +45,8 @@ export default async function proxy(request: NextRequest) {
     /*
      * Customer authentication
      *
-     * Only /account itself is protected.
-     *
      * Login and registration remain public.
+     * Only the actual account page requires authentication.
      */
     if (customerRoute) {
       if (customerRoute.isAccountPage && !user) {
@@ -57,6 +54,7 @@ export default async function proxy(request: NextRequest) {
           customerRoute.locale === routing.defaultLocale
             ? '/account/login'
             : `/${customerRoute.locale}/account/login`;
+
         return NextResponse.redirect(new URL(loginPath, request.url));
       }
     }
@@ -69,7 +67,6 @@ function getAdminRoute(pathname: string) {
   if (pathname === '/admin' || pathname.startsWith('/admin/')) {
     return {
       locale: routing.defaultLocale,
-      isLoginPage: pathname === '/admin/login',
     };
   }
 
@@ -83,7 +80,6 @@ function getAdminRoute(pathname: string) {
     if (pathname === adminPath || pathname.startsWith(`${adminPath}/`)) {
       return {
         locale,
-        isLoginPage: pathname === `${adminPath}/login`,
       };
     }
   }

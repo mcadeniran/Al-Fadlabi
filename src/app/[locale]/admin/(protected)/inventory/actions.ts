@@ -3,11 +3,14 @@
 import { revalidatePath } from 'next/cache';
 
 import { createClient } from '@/lib/supabase/server';
+import { requireAdminAction } from '@/lib/admin/auth/require-admin';
 
 export async function updateInventoryStock(
   productSizeId: string,
   stockQuantity: number,
 ) {
+  await requireAdminAction();
+
   if (!Number.isInteger(stockQuantity) || stockQuantity < 0) {
     throw new Error('Invalid stock quantity.');
   }

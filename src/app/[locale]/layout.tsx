@@ -6,6 +6,7 @@ import {routing} from "@/i18n/routing";
 import {notFound} from "next/navigation";
 import {CartProvider} from "@/components/cart/cart-provider";
 import {TooltipProvider} from "@/components/ui/tooltip";
+import {DirectionProvider} from "@/components/ui/direction";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -62,9 +63,11 @@ export default async function RootLayout({
       >
         <CartProvider>
           <NextIntlClientProvider>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
+            <DirectionProvider direction={direction}>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+            </DirectionProvider>
           </NextIntlClientProvider>
         </CartProvider>
       </body>

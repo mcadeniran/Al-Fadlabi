@@ -14,6 +14,7 @@ export async function getDashboardStats() {
     lowStockResult,
     recentOrdersResult,
     inventoryResult,
+    salesOverviewResult,
   ] = await Promise.all([
     supabase.from('products').select('id', { count: 'exact', head: true }),
 
@@ -65,13 +66,18 @@ export async function getDashboardStats() {
           status,
           total,
           customer_name,
-          created_at
+          created_at,
+          order_number
         `,
       )
       .order('created_at', { ascending: false })
       .limit(5),
 
     await supabase.from('product_sizes').select('stock_quantity'),
+
+    supabase.rpc('get_dashboard_sales_overview', {
+      p_days: 30,
+    }),
   ]);
 
   const errors = [
@@ -84,6 +90,7 @@ export async function getDashboardStats() {
     lowStockResult.error,
     recentOrdersResult.error,
     inventoryResult.error,
+    salesOverviewResult.error,
   ].filter(Boolean);
 
   if (errors.length > 0) {
@@ -118,5 +125,6 @@ export async function getDashboardStats() {
     outOfStockVariants,
     lowStock: lowStockResult.data ?? [],
     recentOrders: recentOrdersResult.data ?? [],
+    salesOverview: salesOverviewResult.data ?? [],
   };
 }

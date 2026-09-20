@@ -3,11 +3,14 @@
 import { revalidatePath } from 'next/cache';
 
 import { createClient } from '@/lib/supabase/server';
+import { requireAdminAction } from '@/lib/admin/auth/require-admin';
 
 export async function toggleProductActive(
   productId: string,
   isActive: boolean,
 ) {
+  await requireAdminAction();
+
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -33,6 +36,8 @@ export async function updateProductFlags(
     bestseller?: boolean;
   },
 ) {
+  await requireAdminAction();
+
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -57,6 +62,7 @@ export async function addProductSize(
     stockQuantity: number;
   },
 ) {
+  await requireAdminAction();
   if (!Number.isInteger(size.ml) || size.ml <= 0) {
     throw new Error('Invalid size.');
   }
@@ -104,6 +110,8 @@ export async function updateProductSize(
     stockQuantity: number;
   },
 ) {
+  await requireAdminAction();
+
   if (!Number.isInteger(size.ml) || size.ml <= 0) {
     throw new Error('Invalid size.');
   }
@@ -145,6 +153,8 @@ export async function updateProductSize(
 }
 
 export async function deleteProductSize(sizeId: string, productId: string) {
+  await requireAdminAction();
+
   const supabase = await createClient();
 
   const { error } = await supabase
@@ -172,6 +182,8 @@ export async function createProduct(input: {
   newArrival: boolean;
   bestseller: boolean;
 }) {
+  await requireAdminAction();
+
   const slug = input.slug.trim().toLowerCase();
 
   if (!slug) {
@@ -250,6 +262,8 @@ export async function saveProductTranslations(
     };
   },
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -323,6 +337,8 @@ export async function saveProductSizes(
     stockQuantity: number;
   }>,
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -403,6 +419,8 @@ export async function saveProductNotes(
     }>;
   },
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -486,6 +504,7 @@ export async function uploadProductImage(
   productId: string,
   formData: FormData,
 ) {
+  await requireAdminAction();
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -556,6 +575,8 @@ async function deleteProductStorageImage(
   supabase: Awaited<ReturnType<typeof createClient>>,
   imageUrl: string,
 ) {
+  await requireAdminAction();
+
   const marker = '/storage/v1/object/public/product-images/';
 
   const index = imageUrl.indexOf(marker);
@@ -583,6 +604,8 @@ export async function reconcileProductImages(
     isPrimary: boolean;
   }>,
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -753,6 +776,8 @@ export async function reconcileProductSizes(
     stockQuantity: number;
   }>,
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }
@@ -895,6 +920,8 @@ export async function reconcileProductNotes(
     }>;
   },
 ) {
+  await requireAdminAction();
+
   if (!productId) {
     throw new Error('Product ID is required.');
   }

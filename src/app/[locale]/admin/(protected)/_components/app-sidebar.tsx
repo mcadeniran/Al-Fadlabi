@@ -18,12 +18,14 @@ import {
 import {NavMain} from "./nav-main";
 import {NavSecondary} from "./nav-secondary";
 import {NavUser} from "./nav-user";
-import {useTranslations} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 import {Boxes, ClipboardList, LayoutDashboard, Settings, ShoppingBag, Users} from "lucide-react";
+import {Link} from "@/i18n/navigation";
 
 
 export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
   const t = useTranslations("Admin");
+  const locale = useLocale();
 
   const data = {
     user: {
@@ -48,8 +50,8 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
         icon: ClipboardList,
       },
       {
-        url: "/admin/customers",
-        title: t("customers"),
+        url: "/admin/users",
+        title: t("users"),
         icon: Users,
       },
       {
@@ -69,17 +71,17 @@ export function AppSidebar({...props}: React.ComponentProps<typeof Sidebar>) {
     ],
   };
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas" {...props} side={locale === 'ar' ? "right" : "left"}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
               className="data-[slot=sidebar-menu-button]:p-1.5!"
               render={
-                <a href="#">
+                <Link href={`/admin`}>
                   <IconInnerShadowTop className="size-5!" />
                   <span className="text-base font-semibold">Acme Inc.</span>
-                </a>
+                </Link>
               }
             />
             {/* </SidebarMenuButton> */}

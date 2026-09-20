@@ -9,3 +9,5 @@ export default function LoginPage() {
     </main>
   );
 }
+
+// src/app/[locale]/(storefront)/account/login/page.tsx

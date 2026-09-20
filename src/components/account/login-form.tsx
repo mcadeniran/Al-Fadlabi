@@ -1,19 +1,23 @@
-"use client";
+'use client';
 
-import {FormEvent, useState} from "react";
-import Link from "next/link";
-import {useTranslations} from "next-intl";
+import {FormEvent, useState} from 'react';
 
-import {createClient} from "@/lib/supabase/client";
-import {useRouter} from "@/i18n/navigation";
+import Link from 'next/link';
+
+import {useTranslations} from 'next-intl';
+
+import {createClient} from '@/lib/supabase/client';
+
+import {useRouter} from '@/i18n/navigation';
+
+import {getLoginDestination} from '@/app/[locale]/(storefront)/account/login/actions';
 
 export function LoginForm() {
-  const t = useTranslations("Auth");
+  const t = useTranslations('Auth');
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -21,12 +25,12 @@ export function LoginForm() {
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    setError("");
+    setError('');
 
     const trimmedEmail = email.trim().toLowerCase();
 
     if (!trimmedEmail || !password) {
-      setError(t("login.errors.required"));
+      setError(t('login.errors.required'));
       return;
     }
 
@@ -42,14 +46,21 @@ export function LoginForm() {
         });
 
       if (signInError) {
-        setError(t("login.errors.invalidCredentials"));
+        setError(t('login.errors.invalidCredentials'));
         return;
       }
 
-      router.push(`/account`);
+      const destination = await getLoginDestination();
+
+      if (destination === 'admin') {
+        router.push('/admin');
+      } else {
+        router.push('/shop');
+      }
     } catch (error) {
-      console.error("Login error:", error);
-      setError(t("login.errors.generic"));
+      console.error('Login error:', error);
+
+      setError(t('login.errors.generic'));
     } finally {
       setLoading(false);
     }
@@ -59,15 +70,15 @@ export function LoginForm() {
     <section className="space-y-10">
       <div className="space-y-3 text-center">
         <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-          {t("login.eyebrow")}
+          {t('login.eyebrow')}
         </p>
 
         <h1 className="font-serif text-4xl tracking-tight sm:text-5xl">
-          {t("login.title")}
+          {t('login.title')}
         </h1>
 
         <p className="mx-auto max-w-sm text-sm leading-7 text-muted-foreground">
-          {t("login.description")}
+          {t('login.description')}
         </p>
       </div>
 
@@ -77,7 +88,7 @@ export function LoginForm() {
             htmlFor="email"
             className="text-xs uppercase tracking-[0.15em]"
           >
-            {t("login.email")}
+            {t('login.email')}
           </label>
 
           <input
@@ -97,7 +108,7 @@ export function LoginForm() {
             htmlFor="password"
             className="text-xs uppercase tracking-[0.15em]"
           >
-            {t("login.password")}
+            {t('login.password')}
           </label>
 
           <input
@@ -126,18 +137,21 @@ export function LoginForm() {
           disabled={loading}
           className="flex h-12 w-full items-center justify-center border border-foreground bg-foreground px-6 text-xs uppercase tracking-[0.2em] text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {loading ? t("login.signingIn") : t("login.submit")}
+          {loading
+            ? t('login.signingIn')
+            : t('login.submit')}
         </button>
       </form>
 
       <div className="border-t border-border pt-8 text-center">
         <p className="text-sm text-muted-foreground">
-          {t("login.noAccount")}{" "}
+          {t('login.noAccount')}{' '}
+
           <Link
-            href={`/account/register`}
+            href="/account/register"
             className="text-foreground underline underline-offset-4"
           >
-            {t("login.register")}
+            {t('login.register')}
           </Link>
         </p>
       </div>

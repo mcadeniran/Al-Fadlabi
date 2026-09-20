@@ -1,8 +1,9 @@
 import Link from "next/link";
 import {
+  ArrowUpRight,
+  Boxes,
   ClipboardList,
   PackagePlus,
-  Boxes,
   Users,
 } from "lucide-react";
 import {getTranslations} from "next-intl/server";
@@ -12,6 +13,7 @@ const actions = [
     href: "/admin/products/new",
     key: "addProduct",
     icon: PackagePlus,
+    featured: true,
   },
   {
     href: "/admin/orders",
@@ -24,7 +26,7 @@ const actions = [
     icon: Boxes,
   },
   {
-    href: "/admin/customers",
+    href: "/admin/users",
     key: "manageCustomers",
     icon: Users,
   },
@@ -34,18 +36,24 @@ export async function QuickActions() {
   const t = await getTranslations("AdminDashboard");
 
   return (
-    <section className="rounded-2xl border border-neutral-200 bg-white p-6">
-      <div>
-        <h2 className="text-lg font-semibold text-neutral-950">
-          {t("quickActions")}
-        </h2>
+    <section className="rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm sm:p-7">
+      <div className="flex items-end justify-between gap-4">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
+            Shortcuts
+          </p>
 
-        <p className="mt-1 text-sm text-neutral-500">
-          {t("quickActionsDescription")}
-        </p>
+          <h2 className="mt-2 text-xl font-semibold tracking-tight text-neutral-950">
+            {t("quickActions")}
+          </h2>
+
+          <p className="mt-1 text-sm text-neutral-500">
+            {t("quickActionsDescription")}
+          </p>
+        </div>
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {actions.map((action) => {
           const Icon = action.icon;
 
@@ -53,15 +61,63 @@ export async function QuickActions() {
             <Link
               key={action.href}
               href={action.href}
-              className="group flex items-center gap-3 rounded-xl border border-neutral-200 p-4 transition hover:border-neutral-300 hover:bg-neutral-50"
+              className={[
+                "group relative overflow-hidden rounded-2xl border p-4 transition-all duration-300",
+                "hover:-translate-y-0.5 hover:shadow-md",
+                action.featured
+                  ? "border-neutral-900 bg-plum-deep text-white"
+                  : "border-neutral-200 bg-neutral-50/70 text-neutral-950 hover:border-neutral-300 hover:bg-white",
+              ].join(" ")}
             >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-neutral-100">
-                <Icon className="size-5 text-neutral-700" />
+              <div className="flex items-start justify-between gap-4">
+                <div
+                  className={[
+                    "flex size-10 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:scale-105",
+                    action.featured
+                      ? "border-white/10 bg-white/10 text-white"
+                      : "border-neutral-200 bg-white text-neutral-700",
+                  ].join(" ")}
+                >
+                  <Icon className="size-5" strokeWidth={1.8} />
+                </div>
+
+                <ArrowUpRight
+                  className={[
+                    "size-4 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5",
+                    action.featured
+                      ? "text-white/50 group-hover:text-white"
+                      : "text-neutral-300 group-hover:text-neutral-700",
+                  ].join(" ")}
+                />
               </div>
 
-              <span className="text-sm font-medium text-neutral-800 group-hover:text-neutral-950">
-                {t(action.key)}
-              </span>
+              <div className="mt-8">
+                <p
+                  className={[
+                    "text-sm font-semibold",
+                    action.featured ? "text-white" : "text-neutral-950",
+                  ].join(" ")}
+                >
+                  {t(action.key)}
+                </p>
+
+                <p
+                  className={[
+                    "mt-1 text-xs",
+                    action.featured ? "text-white/50" : "text-neutral-500",
+                  ].join(" ")}
+                >
+                  {t(`quickActionDescriptions.${action.key}`)}
+                </p>
+              </div>
+
+              <div
+                aria-hidden="true"
+                className={[
+                  "pointer-events-none absolute -bottom-10 -right-10 size-24 rounded-full blur-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100",
+                  action.featured ? "bg-white/10" : "bg-neutral-200/70",
+                ].join(" ")}
+              />
             </Link>
           );
         })}
