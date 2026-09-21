@@ -1,9 +1,11 @@
+import type {Metadata} from "next";
 import {getLocale, getTranslations} from "next-intl/server";
 
 import {ProductCard} from "@/components/product";
 import {ShopToolbar} from "@/components/shop/shop-toolbar";
 import {getProducts} from "@/lib/products/queries";
 import type {Product} from "@/types/product";
+
 
 type ShopPageProps = {
   searchParams: Promise<{
@@ -18,6 +20,37 @@ const validSorts = ["featured", "newest", "price-low", "price-high"] as const;
 
 type SortOption = (typeof validSorts)[number];
 type GenderFilter = (typeof validGenders)[number];
+
+export async function generateMetadata({
+  searchParams,
+}: ShopPageProps): Promise<Metadata> {
+  const locale = await getLocale();
+  const params = await searchParams;
+
+  const hasFilters = Boolean(params.gender) || Boolean(params.sort);
+
+  if (locale === "ar") {
+    return {
+      title: "العطور ومستحضرات التجميل",
+      description:
+        "تسوق مجموعة الفاضلابي من العطور ومستحضرات التجميل ومنتجات العناية الشخصية.",
+      robots: {
+        index: !hasFilters,
+        follow: true,
+      },
+    };
+  }
+
+  return {
+    title: "Perfumes & Cosmetics",
+    description:
+      "Shop Al-Fadlabi's collection of perfumes, cosmetics, and personal care products.",
+    robots: {
+      index: !hasFilters,
+      follow: true,
+    },
+  };
+}
 
 export default async function ShopPage({searchParams}: ShopPageProps) {
   const products = await getProducts();

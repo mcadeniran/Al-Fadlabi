@@ -1,9 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import {ArrowUpRight} from "lucide-react";
 import {Locale, useLocale, useTranslations} from "next-intl";
 import type {Product} from "@/types/product";
 import {useMemo} from "react";
+import {Link} from "@/i18n/navigation";
 
 type ProductCardProps = {
   product: Product;

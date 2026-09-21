@@ -7,8 +7,9 @@ import {Container} from "@/components/ui/container";
 import {ProductGallery} from "@/components/product/product-gallery";
 import {ProductPurchase} from "@/components/product/product-purchase";
 import {getProductBySlug, getProductSlugs} from "@/lib/products/queries";
-import type {ProductNote} from "@/types/product";
+import type {Product, ProductNote} from "@/types/product";
 import BackButton from "./BackButton";
+import {BreadcrumbJsonLd} from "@/components/seo/breadcrumb-json-ld";
 
 type ProductPageProps = {
   params: Promise<{
@@ -17,30 +18,88 @@ type ProductPageProps = {
   }>;
 };
 
-export async function generateMetadata({params}: ProductPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ProductPageProps): Promise<Metadata> {
   const {locale, slug} = await params;
+
   const product = await getProductBySlug(slug);
 
   if (!product) {
     return {};
   }
 
-  const translation = product.translations.find((item) => item.locale === locale) ?? product.translations.find((item) => item.locale === "en");
+  const translation =
+    product.translations.find((item) => item.locale === locale) ??
+    product.translations.find((item) => item.locale === "en");
+
   const name = translation?.name ?? "";
-  const description = translation?.description ?? "";
+  const description =
+    translation?.description ||
+    (locale === "ar"
+      ? `اكتشف ${name} من الفاضلابي للعطور ومستحضرات التجميل.`
+      : `Discover ${name} from Al-Fadlabi Perfumes & Cosmetics.`);
+
   const primaryImage = product.images[0];
 
+  const title =
+    locale === "ar"
+      ? `${name} | الفاضلابي للعطور ومستحضرات التجميل`
+      : `${name} | Al-Fadlabi Perfumes & Cosmetics`;
+
   return {
-    title: name,
+    title,
     description,
+
+    alternates: {
+      canonical:
+        locale === "ar"
+          ? `/shop/${product.slug}`
+          : `/en/shop/${product.slug}`,
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+
     openGraph: {
-      title: name,
+      type: "website",
+      locale: locale === "ar" ? "ar_SD" : "en_US",
+      title,
       description,
-      ...(primaryImage ? {images: [{url: primaryImage.imageUrl, alt: name}]} : {}),
+      url:
+        locale === "ar"
+          ? `/shop/${product.slug}`
+          : `/en/shop/${product.slug}`,
+      siteName:
+        locale === "ar"
+          ? "الفاضلابي للعطور ومستحضرات التجميل"
+          : "Al-Fadlabi Perfumes & Cosmetics",
+      ...(primaryImage
+        ? {
+          images: [
+            {
+              url: primaryImage.imageUrl,
+              alt: name,
+            },
+          ],
+        }
+        : {}),
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...(primaryImage
+        ? {
+          images: [primaryImage.imageUrl],
+        }
+        : {}),
     },
   };
 }
-
 export async function generateStaticParams() {
   const products = await getProductSlugs();
 
@@ -76,184 +135,198 @@ export default async function ProductPage({params}: ProductPageProps) {
   const genderLabel = product.gender === "men" ? t("men") : product.gender === "women" ? t("women") : t("unisex");
 
   return (
-    <main className="min-h-screen bg-snow text-ink">
-      <section className="px-6 pb-20 pt-28 sm:px-8 md:pb-24 lg:px-12 lg:pb-28 lg:pt-32 xl:px-16">
-        <Container className="max-w-360 px-0">
-          {/* =========================================================
+    <>
+      <BreadcrumbJsonLd
+        locale={locale === 'ar' ? "ar" : "en"}
+        productName={name}
+        productSlug={product.slug}
+      />
+      <ProductJsonLd
+        product={product}
+        locale={locale}
+        name={name}
+        description={description}
+      />
+
+      <main className="min-h-screen bg-snow text-ink">
+        <section className="px-6 pb-20 pt-28 sm:px-8 md:pb-24 lg:px-12 lg:pb-28 lg:pt-32 xl:px-16">
+          <Container className="max-w-360 px-0">
+            {/* =========================================================
         BREADCRUMB
         ========================================================= */}
 
-          <div className={`mb-8 flex items-center gap-2 ${isAr ? "text-lg" : "text-[12px]"} font-medium uppercase tracking-[0.16em] text-ink/35 lg:mb-10 ${isArabic ? "flex-row-reverse justify-start" : ""}`} >
-            <BackButton />
-            {/* <Link
+            <div className={`mb-8 flex items-center gap-2 ${isAr ? "text-lg" : "text-[12px]"} font-medium uppercase tracking-[0.16em] text-ink/35 lg:mb-10 ${isArabic ? "flex-row-reverse justify-start" : ""}`} >
+              <BackButton />
+              {/* <Link
               href="/shop"
               className="transition-colors hover:text-plum"
             >
               {isArabic ? "المتجر" : "Shop"}
             </Link> */}
 
-            <span className="text-ink/20">/</span>
+              <span className="text-ink/20">/</span>
 
-            <span className="truncate text-ink/45">
-              {name}
-            </span>
-          </div>
+              <span className="truncate text-ink/45">
+                {name}
+              </span>
+            </div>
 
-          {/* =========================================================
+            {/* =========================================================
         PRODUCT HERO
         ========================================================= */}
 
-          <div className={`grid items-start gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 xl:gap-20 ${isArabic ? "lg:[direction:rtl]" : ""}`}>
-            {/* =======================================================
+            <div className={`grid items-start gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14 xl:gap-20 ${isArabic ? "lg:[direction:rtl]" : ""}`}>
+              {/* =======================================================
           GALLERY
           ======================================================= */}
 
-            <ProductGallery product={product} />
+              <ProductGallery product={product} />
 
-            {/* =======================================================
+              {/* =======================================================
           PRODUCT INFORMATION
           ======================================================= */}
 
-            <div className={`min-w-0 lg:sticky lg:top-32 `}>
-              {/* BRAND + GENDER */}
+              <div className={`min-w-0 lg:sticky lg:top-32 `}>
+                {/* BRAND + GENDER */}
 
-              <div className={`flex items-center justify-between gap-5 border-b border-ink/10 pb-4 ${isArabic ? "flex-row-reverse" : ""}`}>
-                <p className={` ${isAr ? "text-xl" : "text-base"} text-plum`}>
-                  {brand}
-                </p>
+                <div className={`flex items-center justify-between gap-5 border-b border-ink/10 pb-4 ${isArabic ? "flex-row-reverse" : ""}`}>
+                  <p className={` ${isAr ? "text-xl" : "text-base"} text-plum`}>
+                    {brand}
+                  </p>
 
-                <span className={`${isAr ? "text-xl text-ink/75" : "text-base text-ink/35"} text-[12px] font-medium uppercase tracking-[0.2em] `}>
-                  {genderLabel}
-                </span>
-              </div>
+                  <span className={`${isAr ? "text-xl text-ink/75" : "text-base text-ink/35"} text-[12px] font-medium uppercase tracking-[0.2em] `}>
+                    {genderLabel}
+                  </span>
+                </div>
 
-              {/* PRODUCT NAME */}
+                {/* PRODUCT NAME */}
 
-              <h1 className="mt-5 max-w-4xl font-editorial text-xl leading-[0.88] tracking-[-0.045em] sm:text-2xl lg:text-3xl xl:text-4xl">
-                {name}
-              </h1>
+                <h1 className="mt-5 max-w-4xl font-editorial text-xl leading-[0.88] tracking-[-0.045em] sm:text-2xl lg:text-3xl xl:text-4xl">
+                  {name}
+                </h1>
 
-              {/* STOCK */}
+                {/* STOCK */}
 
-              <div className={`mt-5 flex items-center gap-2 ${isArabic ? "justify-end" : ""}`}>
-                <span className={`h-2 w-2 rounded-full ${product.sizes.some((size) => size.stockQuantity > 0) ? "bg-emerald-500" : "bg-ink/20"}`} />
+                <div className={`mt-5 flex items-center gap-2 ${isArabic ? "justify-end" : ""}`}>
+                  <span className={`h-2 w-2 rounded-full ${product.sizes.some((size) => size.stockQuantity > 0) ? "bg-emerald-500" : "bg-ink/20"}`} />
 
-                <span className={`font-semibold uppercase tracking-[0.2em] ${isAr ? "text-xl text-ink/80" : "text-sm text-ink/45"} `}>
-                  {product.sizes.some(
-                    (size) => size.stockQuantity > 0
-                  )
-                    ? isArabic
-                      ? "متوفر"
-                      : "In stock"
-                    : isArabic
-                      ? "غير متوفر"
-                      : "Out of stock"}
-                </span>
-              </div>
+                  <span className={`font-semibold uppercase tracking-[0.2em] ${isAr ? "text-xl text-ink/80" : "text-sm text-ink/45"} `}>
+                    {product.sizes.some(
+                      (size) => size.stockQuantity > 0
+                    )
+                      ? isArabic
+                        ? "متوفر"
+                        : "In stock"
+                      : isArabic
+                        ? "غير متوفر"
+                        : "Out of stock"}
+                  </span>
+                </div>
 
-              {/* DESCRIPTION */}
+                {/* DESCRIPTION */}
 
-              {description && (
-                <p className={`mt-6 max-w-2xl ${isAr ? "text-xl" : "text-[0.92rem]"}  leading-7 text-ink/55`}>
-                  {description}
-                </p>
-              )}
+                {description && (
+                  <p className={`mt-6 max-w-2xl ${isAr ? "text-xl" : "text-[0.92rem]"}  leading-7 text-ink/55`}>
+                    {description}
+                  </p>
+                )}
 
-              {/* =====================================================
+                {/* =====================================================
                 KEY DETAILS
                 ===================================================== */}
 
-              <div className="mt-7 grid grid-cols-3 divide-x divide-ink/10 border-y border-ink/10 rtl:divide-x-reverse">
-                <ProductDetailCell
-                  label={isArabic ? "الحجم" : "Size"}
-                  value={translation?.detailsSize ?? "—"}
-                  isArabic={isArabic}
-                />
+                <div className="mt-7 grid grid-cols-3 divide-x divide-ink/10 border-y border-ink/10 rtl:divide-x-reverse">
+                  <ProductDetailCell
+                    label={isArabic ? "الحجم" : "Size"}
+                    value={translation?.detailsSize ?? "—"}
+                    isArabic={isArabic}
+                  />
 
-                <ProductDetailCell
-                  label={isArabic ? "التركيز" : "Concentration"}
-                  value={translation?.concentration ?? "—"}
-                  isArabic={isArabic}
-                />
+                  <ProductDetailCell
+                    label={isArabic ? "التركيز" : "Concentration"}
+                    value={translation?.concentration ?? "—"}
+                    isArabic={isArabic}
+                  />
 
-                <ProductDetailCell
-                  label={isArabic ? "الثبات" : "Longevity"}
-                  value={translation?.longevity ?? "—"}
-                  isArabic={isArabic}
-                />
-              </div>
+                  <ProductDetailCell
+                    label={isArabic ? "الثبات" : "Longevity"}
+                    value={translation?.longevity ?? "—"}
+                    isArabic={isArabic}
+                  />
+                </div>
 
-              {/* =====================================================
+                {/* =====================================================
                   PURCHASE
               ===================================================== */}
 
-              <ProductPurchase product={product} />
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {product.notes.length > 0 && (
-        <section className="bg-plum px-6 py-20 text-white sm:px-8 md:py-24 lg:px-12 lg:py-28 xl:px-16">
-          <Container className="max-w-360 px-0">
-
-            <div className={`mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between ${isArabic ? "lg:[direction:rtl]" : ""}`}>
-              <div className={`max-w-2xl ${isArabic ? "text-right" : "text-left"}`}>
-                <p className="eyebrow text-coral">
-                  {isArabic ? "تركيبة العطر" : "The Composition"}
-                </p>
-
-                <h2 className={`mt-4 font-editorial ${isAr ? "text-2xl sm:text-3xl lg:text-4xl" : "text-xl sm:text-2xl lg:text-4xl"} leading-[0.92] tracking-[-0.035em]`}>
-                  {isArabic ? "مكونات العطر" : "Fragrance Notes"}
-                </h2>
-              </div>
-
-              <p className={`max-w-md ${isAr ? "text-lg" : "text-sm"} leading-7 text-white/85 lg:pb-1 ${isArabic ? "text-right" : "text-left"}`}>
-                {isArabic
-                  ? "تركيبة متوازنة من النفحات المختارة بعناية لتترك أثراً يدوم."
-                  : "A considered composition of carefully selected notes designed to leave a lasting impression."}
-              </p>
-            </div>
-
-            <div className="overflow-hidden rounded-2xl border border-white/15">
-              <div className={`grid md:grid-cols-3 ${isArabic ? "md:[direction:rtl]" : ""}`}>
-                <NoteColumn
-                  number="01"
-                  title={isArabic ? "المقدمة" : "Top Notes"}
-                  notes={topNotes}
-                  locale={locale}
-                />
-
-                <NoteColumn
-                  number="02"
-                  title={isArabic ? "القلب" : "Heart Notes"}
-                  notes={heartNotes}
-                  locale={locale}
-                />
-
-                <NoteColumn
-                  number="03"
-                  title={isArabic ? "القاعدة" : "Base Notes"}
-                  notes={baseNotes}
-                  locale={locale}
-                />
+                <ProductPurchase product={product} />
               </div>
             </div>
           </Container>
         </section>
-      )}
 
-      <section className="bg-ink px-6 py-28 text-snow sm:px-8 lg:px-12 lg:py-36 xl:px-16">
-        <Container className="max-w-360 px-0">
-          <div className={`mx-auto max-w-4xl ${isArabic ? "text-right" : "text-center"}`}>
-            <p className={`eyebrow text-coral ${isArabic ? "" : "text-center"}`}>{isArabic ? "صُمم بعناية" : "Crafted With Intention"}</p>
-            <h2 className={`mt-7 font-editorial text-5xl leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-7xl ${isArabic ? "" : "text-center"}`}>{isArabic ? "العطر ليس مجرد رائحة." : "Fragrance is more than a scent."}</h2>
-            <div className={`mt-10 h-px w-14 bg-coral ${isArabic ? "ms-0" : "mx-auto"}`} />
-            <p className={`mt-9 max-w-xl text-sm leading-8 text-snow/50 lg:text-base ${isArabic ? "" : "mx-auto text-center"}`}>{isArabic ? "إنها ذكرى، إحساس، وحضور يبقى معك." : "It is memory, emotion, and presence — something that stays with you."}</p>
-          </div>
-        </Container>
-      </section>
-    </main>
+        {product.notes.length > 0 && (
+          <section className="bg-plum px-6 py-20 text-white sm:px-8 md:py-24 lg:px-12 lg:py-28 xl:px-16">
+            <Container className="max-w-360 px-0">
+
+              <div className={`mb-12 flex flex-col gap-6 lg:mb-16 lg:flex-row lg:items-end lg:justify-between ${isArabic ? "lg:[direction:rtl]" : ""}`}>
+                <div className={`max-w-2xl ${isArabic ? "text-right" : "text-left"}`}>
+                  <p className="eyebrow text-coral">
+                    {isArabic ? "تركيبة العطر" : "The Composition"}
+                  </p>
+
+                  <h2 className={`mt-4 font-editorial ${isAr ? "text-2xl sm:text-3xl lg:text-4xl" : "text-xl sm:text-2xl lg:text-4xl"} leading-[0.92] tracking-[-0.035em]`}>
+                    {isArabic ? "مكونات العطر" : "Fragrance Notes"}
+                  </h2>
+                </div>
+
+                <p className={`max-w-md ${isAr ? "text-lg" : "text-sm"} leading-7 text-white/85 lg:pb-1 ${isArabic ? "text-right" : "text-left"}`}>
+                  {isArabic
+                    ? "تركيبة متوازنة من النفحات المختارة بعناية لتترك أثراً يدوم."
+                    : "A considered composition of carefully selected notes designed to leave a lasting impression."}
+                </p>
+              </div>
+
+              <div className="overflow-hidden rounded-2xl border border-white/15">
+                <div className={`grid md:grid-cols-3 ${isArabic ? "md:[direction:rtl]" : ""}`}>
+                  <NoteColumn
+                    number="01"
+                    title={isArabic ? "المقدمة" : "Top Notes"}
+                    notes={topNotes}
+                    locale={locale}
+                  />
+
+                  <NoteColumn
+                    number="02"
+                    title={isArabic ? "القلب" : "Heart Notes"}
+                    notes={heartNotes}
+                    locale={locale}
+                  />
+
+                  <NoteColumn
+                    number="03"
+                    title={isArabic ? "القاعدة" : "Base Notes"}
+                    notes={baseNotes}
+                    locale={locale}
+                  />
+                </div>
+              </div>
+            </Container>
+          </section>
+        )}
+
+        <section className="bg-ink px-6 py-28 text-snow sm:px-8 lg:px-12 lg:py-36 xl:px-16">
+          <Container className="max-w-360 px-0">
+            <div className={`mx-auto max-w-4xl ${isArabic ? "text-right" : "text-center"}`}>
+              <p className={`eyebrow text-coral ${isArabic ? "" : "text-center"}`}>{isArabic ? "صُمم بعناية" : "Crafted With Intention"}</p>
+              <h2 className={`mt-7 font-editorial text-5xl leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-7xl ${isArabic ? "" : "text-center"}`}>{isArabic ? "العطر ليس مجرد رائحة." : "Fragrance is more than a scent."}</h2>
+              <div className={`mt-10 h-px w-14 bg-coral ${isArabic ? "ms-0" : "mx-auto"}`} />
+              <p className={`mt-9 max-w-xl text-sm leading-8 text-snow/50 lg:text-base ${isArabic ? "" : "mx-auto text-center"}`}>{isArabic ? "إنها ذكرى، إحساس، وحضور يبقى معك." : "It is memory, emotion, and presence — something that stays with you."}</p>
+            </div>
+          </Container>
+        </section>
+      </main>
+    </>
   );
 }
 
@@ -341,5 +414,123 @@ function ProductDetailCell({
         {value}
       </span>
     </div>
+  );
+}
+
+function ProductJsonLd({
+  product,
+  locale,
+  name,
+  description,
+}: {
+  product: Product;
+  locale: Locale;
+  name: string;
+  description: string;
+}) {
+  const isArabic = locale === "ar";
+
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  const productUrl = isArabic
+    ? `${siteUrl}/shop/${product.slug}`
+    : `${siteUrl}/en/shop/${product.slug}`;
+
+  const translation =
+    product.translations.find((item) => item.locale === locale) ??
+    product.translations.find((item) => item.locale === "en");
+
+  const brand = translation?.brand ?? "";
+
+  const images = product.images.map((image) => image.imageUrl);
+
+  const availableSizes = product.sizes.filter(
+    (size) => size.price > 0,
+  );
+
+  const gender =
+    product.gender === "men"
+      ? "https://schema.org/Male"
+      : product.gender === "women"
+        ? "https://schema.org/Female"
+        : "https://schema.org/Unisex";
+
+  const offers = availableSizes.map((size) => ({
+    "@type": "Offer",
+
+    url: productUrl,
+
+    priceCurrency: "SDG",
+    price: size.price,
+
+    availability:
+      size.stockQuantity > 0
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+
+    itemCondition: "https://schema.org/NewCondition",
+
+    name: `${name} - ${size.ml}ml`,
+
+    seller: {
+      "@type": "Organization",
+      name: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+    },
+  }));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+
+    name,
+    description,
+
+    ...(images.length > 0
+      ? {
+        image: images,
+      }
+      : {}),
+
+    ...(brand
+      ? {
+        brand: {
+          "@type": "Brand",
+          name: brand,
+        },
+      }
+      : {}),
+
+    ...(product.category
+      ? {
+        category: product.category.name,
+      }
+      : {}),
+
+    audience: {
+      "@type": "PeopleAudience",
+      suggestedGender: gender,
+    },
+
+    sku: product.id,
+
+    url: productUrl,
+
+    ...(offers.length > 0
+      ? {
+        offers,
+      }
+      : {}),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+      }}
+    />
   );
 }

@@ -1,12 +1,23 @@
 import type {Metadata} from "next";
-import {Cormorant_Garamond, Manrope, Noto_Naskh_Arabic, Noto_Sans_Arabic, } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Manrope,
+  Noto_Naskh_Arabic,
+  Noto_Sans_Arabic,
+} from "next/font/google";
 import "./globals.css";
-import {hasLocale, NextIntlClientProvider} from "next-intl";
+
+import {
+  hasLocale,
+  NextIntlClientProvider,
+} from "next-intl";
+
 import {routing} from "@/i18n/routing";
 import {notFound} from "next/navigation";
 import {CartProvider} from "@/components/cart/cart-provider";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {DirectionProvider} from "@/components/ui/direction";
+import {getLocale} from "next-intl/server";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -36,10 +47,67 @@ const notoSansArabic = Noto_Sans_Arabic({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Perfume Store",
-  description: "Discover your signature fragrance.",
-};
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+
+  const isArabic = locale === "ar";
+
+  return {
+    title: {
+      default: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+
+      template: isArabic
+        ? "%s | الفاضلابي للعطور ومستحضرات التجميل"
+        : "%s | Al-Fadlabi Perfumes & Cosmetics",
+    },
+
+    description: isArabic
+      ? "اكتشف مجموعتنا المختارة من العطور ومستحضرات التجميل والعناية الشخصية."
+      : "Discover our curated collection of perfumes, cosmetics, and personal care products.",
+
+    applicationName: isArabic
+      ? "الفاضلابي للعطور ومستحضرات التجميل"
+      : "Al-Fadlabi Perfumes & Cosmetics",
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+
+    openGraph: {
+      type: "website",
+      siteName: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+
+      locale: isArabic ? "ar" : "en",
+
+      title: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+
+      description: isArabic
+        ? "اكتشف مجموعتنا المختارة من العطور ومستحضرات التجميل والعناية الشخصية."
+        : "Discover our curated collection of perfumes, cosmetics, and personal care products.",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+
+      title: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+
+      description: isArabic
+        ? "اكتشف مجموعتنا المختارة من العطور ومستحضرات التجميل والعناية الشخصية."
+        : "Discover our curated collection of perfumes, cosmetics, and personal care products.",
+    },
+  };
+}
+
 
 export default async function RootLayout({
   children,
