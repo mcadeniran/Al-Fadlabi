@@ -2,11 +2,10 @@
 
 import {FormEvent, useState} from "react";
 import {routing} from "@/i18n/routing";
-import Link from "next/link";
 import {useLocale, useTranslations} from "next-intl";
 
 import {createClient} from "@/lib/supabase/client";
-import {useRouter} from "@/i18n/navigation";
+import {Link, useRouter} from "@/i18n/navigation";
 
 export function RegisterForm() {
   const t = useTranslations("Auth");
@@ -86,7 +85,7 @@ export function RegisterForm() {
       }
 
       if (data.session) {
-        router.push(`/${locale}/account`);
+        router.push(`/account`);
         return;
       }
 
@@ -118,7 +117,7 @@ export function RegisterForm() {
         </div>
 
         <Link
-          href={`/${locale}/account/login`}
+          href={`/account/login`}
           className="inline-flex h-11 items-center justify-center border border-foreground px-8 text-xs uppercase tracking-[0.2em] transition-colors hover:bg-foreground hover:text-background"
         >
           {t("register.goToLogin")}
@@ -292,7 +291,7 @@ export function RegisterForm() {
         <p className="text-sm text-muted-foreground">
           {t("register.haveAccount")}{" "}
           <Link
-            href={`/${locale}/account/login`}
+            href={`/account/login`}
             className="text-foreground underline underline-offset-4"
           >
             {t("register.login")}

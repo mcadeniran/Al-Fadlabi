@@ -21,6 +21,7 @@ import {useCart} from "@/components/cart/cart-provider";
 
 export function Navbar() {
   const t = useTranslations("Navigation");
+  const m = useTranslations("Footer");
 
   const locale = useLocale();
   const pathname = usePathname();
@@ -267,14 +268,7 @@ export function Navbar() {
                 {t("shop")}
               </Link>
 
-              {/* COLLECTIONS */}
 
-              <Link
-                href="/collections"
-                onClick={closeMenu}
-                className={`block font-heading text-[3rem] leading-none tracking-tight transition-colors sm:text-[3.5rem] ${isActive("/collections") ? "text-coral" : "text-white hover:text-coral"}`}>
-                {t("collections")}
-              </Link>
 
               {/* OUR STORY */}
 
@@ -344,7 +338,7 @@ export function Navbar() {
               ===================================================== */}
 
           <div className="text-[8px] font-medium uppercase tracking-[0.4em] text-white/25">
-            Fragrance House
+            {m('brandName')}
           </div>
         </div>
       </div>
