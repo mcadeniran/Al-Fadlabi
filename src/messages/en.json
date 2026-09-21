@@ -879,5 +879,17 @@
         "paid": "Paid"
       }
     }
+  },
+  "NotFound": {
+    "eyebrow": "Page not found",
+    "heading": "Oops... that scent isn’t here.",
+    "description": "The page you’re looking for may have drifted away. Let’s get you back to something beautiful.",
+    "backToShop": "Back to Shop",
+    "goHome": "Go Home",
+    "littleDetour": "A little detour",
+    "perfume": "Perfume",
+    "signature": "Find your signature",
+    "beauty": "Beauty is just a click away.",
+    "discover": "Discover your next favourite"
   }
 }
