@@ -259,6 +259,15 @@ export function Navbar() {
             aria-label={t("mobileMenu.title")}
             className="flex flex-1 flex-col justify-center">
             <div className="space-y-6">
+              {/* HOME */}
+
+              <Link
+                href="/"
+                onClick={closeMenu}
+                className={`block font-heading text-[3rem] leading-none tracking-tight transition-colors sm:text-[3.5rem] ${isActive("/shop") ? "text-coral" : "text-white hover:text-coral"}`}>
+                {t("home")}
+              </Link>
+
               {/* SHOP */}
 
               <Link
