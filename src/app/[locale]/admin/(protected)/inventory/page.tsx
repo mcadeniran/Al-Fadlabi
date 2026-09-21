@@ -3,6 +3,7 @@ import {getLocale, getTranslations} from "next-intl/server";
 import {getAdminInventory, getInventoryStatus, } from "@/lib/admin/inventory";
 import {InventoryStockEditor} from "@/components/admin/inventory-stock-editor";
 import {InventoryFilters} from "@/components/admin/inventory-filters";
+import {requireAdminRole} from "@/lib/admin/auth/require-admin";
 
 type InventoryPageProps = {
   searchParams: Promise<{
@@ -33,7 +34,11 @@ export default async function InventoryPage({
 }: InventoryPageProps) {
   const params = await searchParams;
 
-  const [inventory, t, locale] =
+  const locale = await getLocale();
+
+  await requireAdminRole(locale, ["owner", "admin"]);
+
+  const [inventory, t] =
     await Promise.all([
       getAdminInventory({
         search: params.search,
@@ -42,7 +47,6 @@ export default async function InventoryPage({
         productStatus: params.productStatus,
       }),
       getTranslations("AdminInventory"),
-      getLocale(),
     ]);
 
   return (

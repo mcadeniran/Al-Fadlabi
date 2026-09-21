@@ -1,190 +1,239 @@
-'use client';
+"use client";
 
-import {useState, useTransition} from 'react';
-
-import {useRouter} from '@/i18n/navigation';
+import {useState, useTransition} from "react";
+import {useTranslations} from "next-intl";
 
 import {
   revokeAdminRoleAction,
   setAdminRoleAction,
-} from '@/app/[locale]/admin/(protected)/users/actions';
+} from "@/app/[locale]/admin/(protected)/users/actions";
+import type {ManagedUser} from "@/lib/admin/users";
+import {useRouter} from "@/i18n/navigation";
+import {RoleConfirmationDialog} from "./role-confirmation-dialog";
 
-import type {ManagedUser} from '@/lib/admin/users';
+type AssignableRole = "admin" | "manager";
 
 type AdminUserRoleControlsProps = {
-  users: ManagedUser[];
+  user: ManagedUser;
 };
 
+type ConfirmationAction = "change" | "revoke" | null;
+
 export function AdminUserRoleControls({
-  users,
+  user,
 }: AdminUserRoleControlsProps) {
+  const t = useTranslations("Admin.Users");
   const router = useRouter();
 
+  const [selectedRole, setSelectedRole] =
+    useState<AssignableRole>(
+      user.role === "manager" ? "manager" : "admin",
+    );
+
+  const [message, setMessage] = useState("");
+
   const [isPending, startTransition] = useTransition();
-  const [messages, setMessages] = useState<Record<string, string>>({});
-  const [roles, setRoles] = useState<Record<string, 'admin' | 'manager'>>({});
 
-  const adminUsers = users.filter((user) => user.role !== null);
+  const [confirmationAction, setConfirmationAction] =
+    useState<ConfirmationAction>(null);
 
-  function handleChangeRole(user: ManagedUser) {
-    if (!user.role || user.role === 'owner') return;
+  if (!user.role || user.role === "owner") {
+    return null;
+  }
 
-    const role = roles[user.userId] ?? user.role;
+  const userName =
+    user.fullName ||
+    t("common.unnamedCustomer");
 
-    if (role === user.role) {
-      setMessages((current) => ({
-        ...current,
-        [user.userId]: 'Choose a different role first.',
-      }));
+  function handleChangeRoleClick() {
+    if (selectedRole === user.role) {
+      setMessage(
+        t("messages.chooseDifferentRole"),
+      );
       return;
     }
 
+    setMessage("");
+    setConfirmationAction("change");
+  }
+
+  function handleConfirmChangeRole() {
+    setMessage("");
+
     startTransition(async () => {
-      const result = await setAdminRoleAction(user.userId, role);
+      const result = await setAdminRoleAction(
+        user.userId,
+        selectedRole,
+      );
 
       if (!result.success) {
-        setMessages((current) => ({
-          ...current,
-          [user.userId]: result.message,
-        }));
+        setMessage(result.message);
+        setConfirmationAction(null);
         return;
       }
 
-      setMessages((current) => ({
-        ...current,
-        [user.userId]: `Role updated to ${role}.`,
-      }));
+      setMessage(
+        t("messages.roleUpdated", {
+          role: t(`roles.${selectedRole}`),
+        }),
+      );
+
+      setConfirmationAction(null);
 
       router.refresh();
     });
   }
 
-  function handleRevoke(user: ManagedUser) {
-    if (!user.role || user.role === 'owner') return;
+  function handleRevokeClick() {
+    setMessage("");
+    setConfirmationAction("revoke");
+  }
 
-    const confirmed = window.confirm(
-      `Revoke ${user.fullName || 'this user'}'s ${user.role} access?`,
-    );
-
-    if (!confirmed) return;
+  function handleConfirmRevoke() {
+    setMessage("");
 
     startTransition(async () => {
-      const result = await revokeAdminRoleAction(user.userId);
+      const result = await revokeAdminRoleAction(
+        user.userId,
+      );
 
       if (!result.success) {
-        setMessages((current) => ({
-          ...current,
-          [user.userId]: result.message,
-        }));
+        setMessage(result.message);
+        setConfirmationAction(null);
         return;
       }
 
-      setMessages((current) => ({
-        ...current,
-        [user.userId]: 'Admin access revoked.',
-      }));
+      setMessage(
+        t("messages.accessRevoked"),
+      );
+
+      setConfirmationAction(null);
 
       router.refresh();
     });
   }
 
-  if (adminUsers.length === 0) {
-    return (
-      <p className="px-6 py-10 text-sm text-muted-foreground">
-        No admin users found.
-      </p>
-    );
-  }
+  const isChangeConfirmation =
+    confirmationAction === "change";
+
+  const isRevokeConfirmation =
+    confirmationAction === "revoke";
 
   return (
-    <div className="divide-y divide-border">
-      {adminUsers.map((user) => {
-        const isOwner = user.role === 'owner';
-        const selectedRole =
-          roles[user.userId] ??
-          (user.role === 'manager' ? 'manager' : 'admin');
+    <>
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <label
+          htmlFor={`admin-role-${user.userId}`}
+          className="sr-only"
+        >
+          {t("controls.changeRoleFor", {
+            name: userName,
+          })}
+        </label>
 
-        return (
-          <div
-            key={user.customerId}
-            className="space-y-4 px-6 py-5"
-          >
-            <div>
-              <p className="font-medium">
-                {user.fullName || 'Unnamed customer'}
-              </p>
+        <select
+          id={`admin-role-${user.userId}`}
+          value={selectedRole}
+          disabled={isPending}
+          onChange={(event) =>
+            setSelectedRole(
+              event.target.value as AssignableRole,
+            )
+          }
+          className="h-10 rounded-xl border border-border bg-background px-3 text-sm outline-none transition-colors focus:border-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <option value="admin">
+            {t("roles.admin")}
+          </option>
 
-              <p className="text-sm text-muted-foreground">
-                {user.email || 'No email'}
-              </p>
+          <option value="manager">
+            {t("roles.manager")}
+          </option>
+        </select>
 
-              <p className="text-xs text-muted-foreground">
-                {user.phone || 'No phone'}
-              </p>
-            </div>
+        <button
+          type="button"
+          disabled={
+            isPending ||
+            selectedRole === user.role
+          }
+          onClick={handleChangeRoleClick}
+          className="h-10 rounded-xl border border-foreground px-4 text-xs uppercase tracking-[0.15em] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {isPending && isChangeConfirmation
+            ? t("confirmations.pleaseWait")
+            : t("controls.changeRole")}
+        </button>
 
-            {isOwner ? (
-              <span className="inline-flex border border-border px-3 py-1 text-xs uppercase tracking-[0.15em]">
-                Owner · Protected
-              </span>
-            ) : (
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <label
-                  htmlFor={`admin-role-${user.userId}`}
-                  className="sr-only"
-                >
-                  Change role for {user.fullName || 'admin user'}
-                </label>
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={handleRevokeClick}
+          className="h-10 rounded-xl border border-destructive px-4 text-xs uppercase tracking-[0.15em] text-destructive transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {isPending && isRevokeConfirmation
+            ? t("confirmations.pleaseWait")
+            : t("controls.revokeAccess")}
+        </button>
+      </div>
 
-                <select
-                  id={`admin-role-${user.userId}`}
-                  value={selectedRole}
-                  disabled={isPending}
-                  onChange={(event) =>
-                    setRoles((current) => ({
-                      ...current,
-                      [user.userId]: event.target.value as
-                        | 'admin'
-                        | 'manager',
-                    }))
-                  }
-                  className="h-11 border border-border bg-background px-3 text-sm"
-                >
-                  <option value="admin">Admin</option>
-                  <option value="manager">Manager</option>
-                </select>
+      {message && (
+        <p
+          role="status"
+          className="text-xs text-muted-foreground"
+        >
+          {message}
+        </p>
+      )}
 
-                <button
-                  type="button"
-                  disabled={isPending || selectedRole === user.role}
-                  onClick={() => handleChangeRole(user)}
-                  className="h-11 border border-foreground px-5 text-xs uppercase tracking-[0.15em] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Change Role
-                </button>
-
-                <button
-                  type="button"
-                  disabled={isPending}
-                  onClick={() => handleRevoke(user)}
-                  className="h-11 border border-destructive px-5 text-xs uppercase tracking-[0.15em] text-destructive transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Revoke Access
-                </button>
-              </div>
-            )}
-
-            {messages[user.userId] && (
-              <p
-                role="status"
-                className="text-sm text-muted-foreground"
-              >
-                {messages[user.userId]}
-              </p>
-            )}
-          </div>
-        );
-      })}
-    </div>
+      <RoleConfirmationDialog
+        open={confirmationAction !== null}
+        onOpenChange={(open) => {
+          if (!isPending && !open) {
+            setConfirmationAction(null);
+          }
+        }}
+        title={
+          isRevokeConfirmation
+            ? t("confirmations.revokeTitle")
+            : t("confirmations.changeTitle")
+        }
+        description={
+          isRevokeConfirmation
+            ? t(
+              "confirmations.revokeDescription",
+              {
+                name: userName,
+              },
+            )
+            : t(
+              "confirmations.changeDescription",
+              {
+                name: userName,
+                currentRole: t(
+                  `roles.${user.role}`,
+                ),
+                newRole: t(
+                  `roles.${selectedRole}`,
+                ),
+              },
+            )
+        }
+        cancelLabel={t("confirmations.cancel")}
+        confirmLabel={
+          isRevokeConfirmation
+            ? t("confirmations.revoke")
+            : t("confirmations.confirm")
+        }
+        pendingLabel={t("confirmations.pleaseWait")}
+        isPending={isPending}
+        destructive={isRevokeConfirmation}
+        onConfirm={
+          isRevokeConfirmation
+            ? handleConfirmRevoke
+            : handleConfirmChangeRole
+        }
+      />
+    </>
   );
 }

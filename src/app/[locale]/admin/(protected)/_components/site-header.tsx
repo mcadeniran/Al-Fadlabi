@@ -9,7 +9,24 @@ export function SiteHeader() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const t = useTranslations("Navigation");
+  const t = useTranslations("Admin");
+  const c = useTranslations("Navigation");
+
+  const pageTitles: Record<string, string> = {
+    "/admin": t("dashboard"),
+    "/admin/products": t("products"),
+    "/admin/orders": t("orders"),
+    "/admin/users": t("users"),
+    "/admin/inventory": t("inventory"),
+    "/admin/account": t("account"),
+  };
+
+  const currentTitle =
+    pageTitles[pathname] ??
+    Object.entries(pageTitles)
+      .filter(([path]) => path !== "/admin" && pathname.startsWith(`${path}/`))
+      .sort(([a], [b]) => b.length - a.length)[0]?.[1] ??
+    t("dashboard");
 
   const nextLocale = locale === "en" ? "ar" : "en";
 
@@ -27,12 +44,14 @@ export function SiteHeader() {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4 mt-2"
         />
-        <h1 className="text-base font-medium">Documents</h1>
+        <h1 className="truncate text-base font-semibold tracking-tight">
+          {currentTitle}
+        </h1>
         <div className={`${locale === 'ar' ? "mr-auto" : "ml-auto"}  flex items-center gap-2`}>
           <button
             type="button"
             onClick={handleLocaleChange}
-            aria-label={t("language")}
+            aria-label={c("language")}
             className={`hidden border-s ps-5 ${locale === 'en' ? "text-lg" : "text-sm"} font-medium uppercase tracking-[0.2em] transition-colors hover:text-plum sm:block "border-ink/10"`}>
             {nextLocale === "ar"
               ? "العربية"

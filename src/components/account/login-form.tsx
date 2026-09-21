@@ -12,7 +12,11 @@ import {useRouter} from '@/i18n/navigation';
 
 import {getLoginDestination} from '@/app/[locale]/(storefront)/account/login/actions';
 
-export function LoginForm() {
+type LoginFormProps = {
+  redirectTo?: string;
+};
+
+export function LoginForm({redirectTo}: LoginFormProps) {
   const t = useTranslations('Auth');
 
   const [email, setEmail] = useState('');
@@ -47,6 +51,11 @@ export function LoginForm() {
 
       if (signInError) {
         setError(t('login.errors.invalidCredentials'));
+        return;
+      }
+
+      if (redirectTo) {
+        router.push(redirectTo);
         return;
       }
 
@@ -121,6 +130,15 @@ export function LoginForm() {
             disabled={loading}
             className="h-12 w-full border border-border bg-transparent px-4 text-sm outline-none transition-colors focus:border-foreground disabled:cursor-not-allowed disabled:opacity-60"
           />
+        </div>
+
+        <div className="flex justify-end">
+          <Link
+            href="/account/forgot-password"
+            className="text-xs text-muted-foreground underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            {t("login.forgotPassword")}
+          </Link>
         </div>
 
         {error && (

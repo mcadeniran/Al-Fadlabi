@@ -40,7 +40,8 @@
         "required": "Please enter your email and password.",
         "invalidCredentials": "The email or password you entered is incorrect.",
         "generic": "Something went wrong. Please try again."
-      }
+      },
+      "forgotPassword": "Forgot password?"
     },
     "account": {
       "eyebrow": "Your Account",
@@ -163,7 +164,70 @@
         "timelineEyebrow": "ORDER HISTORY",
         "timelineTitle": "Your order journey"
       }
-    }
+    },
+    "forgotPassword": {
+      "eyebrow": "Account Recovery",
+      "title": "Forgot Password",
+      "description": "Enter the email address associated with your account. If an account exists, we will send you a link to reset your password.",
+      "emailPlaceholder": "Enter your email address",
+      "submit": "Send Reset Link",
+      "sending": "Sending...",
+      "success": "If an account exists with that email address, you will receive a password reset link shortly.",
+      "successHint": "Please check your inbox and spam folder. You can safely close this page.",
+      "backToLogin": "Back to Login",
+      "errors": {
+        "invalidEmail": "Please enter a valid email address.",
+        "generic": "We couldn't process your request. Please try again later."
+      }
+    },
+    "resetPassword": {
+      "eyebrow": "Account Security",
+      "title": "Reset Password",
+      "description": "Choose a new password for your account.",
+      "verifying": "Verifying your link",
+      "pleaseWait": "Please wait while we securely verify your recovery session.",
+      "invalidTitle": "Link expired or invalid",
+      "invalidDescription": "This password reset link is invalid, expired, or has already been used. Request a new reset link to continue.",
+      "requestNewLink": "Request a New Link",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "submit": "Update Password",
+      "updating": "Updating Password...",
+      "successTitle": "Password Updated",
+      "successDescription": "Your password has been changed successfully. You can now log in using your new password.",
+      "backToLogin": "Continue to Login",
+      "errors": {
+        "tooShort": "Your password must contain at least 8 characters.",
+        "mismatch": "Your passwords do not match.",
+        "updateFailed": "We couldn't update your password. Please try again.",
+        "generic": "Something went wrong. Please try again."
+      }
+    },
+    "changePassword": {
+      "eyebrow": "Account Security",
+      "title": "Change Password",
+      "description": "Update your password to keep your account secure. You will need to enter your current password first.",
+      "currentPassword": "Current Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm New Password",
+      "passwordHint": "Your password must contain at least 8 characters.",
+      "save": "Change Password",
+      "saving": "Changing Password...",
+      "saved": "Your password has been changed successfully.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "errors": {
+        "required": "Please complete all password fields.",
+        "tooShort": "Your new password must contain at least 8 characters.",
+        "mismatch": "Your new passwords do not match.",
+        "samePassword": "Your new password must be different from your current password.",
+        "incorrectCurrent": "Your current password is incorrect.",
+        "weakPassword": "Your new password does not meet the required password strength.",
+        "updateFailed": "We couldn't change your password. Please try again.",
+        "generic": "Something went wrong while changing your password. Please try again."
+      }
+    },
+    "storefront": "STOREFRONT"
   },
   "Navbar": {
     "home": "Home",
@@ -315,7 +379,109 @@
     "inventory": "Inventory",
     "settings": "Settings",
     "logout": "Logout",
-    "users": "Users"
+    "users": "Users",
+    "Users": {
+      "eyebrow": "USER MANAGEMENT",
+      "title": "Users",
+      "description": "Manage customer accounts and administration roles.",
+
+      "accessLevels": {
+        "eyebrow": "ACCESS LEVELS",
+        "title": "Understand each role",
+        "description": "Administration access is divided into three levels.",
+
+        "owner": {
+          "title": "Owner",
+          "badge": "Full Access",
+          "description": "Full access to the administration area, including products, orders, customers, and role management."
+        },
+
+        "admin": {
+          "title": "Admin",
+          "badge": "Products + Orders",
+          "description": "Can add and edit products and manage customer orders."
+        },
+
+        "manager": {
+          "title": "Manager",
+          "badge": "Orders Only",
+          "description": "Can manage customer orders but cannot add or edit products or manage administration roles."
+        },
+
+        "roleManagementLabel": "Role management:",
+        "roleManagementDescription": "Only Owners can assign, change, or revoke Admin and Manager access."
+      },
+
+      "search": {
+        "eyebrow": "FIND A USER",
+        "title": "Search users",
+        "description": "Search by name, email, or phone number.",
+        "label": "Search users",
+        "placeholder": "Search by name, email, or phone...",
+        "showing": "Showing {count} {count, plural, one {user} other {users}} matching “{query}”"
+      },
+
+      "administration": {
+        "title": "Administration",
+        "description": "Users who currently have access to the admin area.",
+        "empty": "No administration users found.",
+        "noMatches": "No administration users match your search."
+      },
+
+      "customers": {
+        "title": "Customers",
+        "description": "Customers who do not currently have an administration role.",
+        "empty": "There are no customers available for role assignment.",
+        "noMatches": "No customers match your search."
+      },
+
+      "roles": {
+        "owner": "Owner",
+        "admin": "Admin",
+        "manager": "Manager",
+        "customer": "Customer",
+        "protected": "Protected",
+        "productsOrders": "Products + Orders",
+        "ordersOnly": "Orders Only",
+        "noAdminAccess": "No admin access"
+      },
+
+      "common": {
+        "unnamedCustomer": "Unnamed customer",
+        "noEmail": "No email"
+      },
+      "confirmations": {
+        "assignTitle": "Assign {role} access?",
+        "assignDescription": "This will give {name} {role} access to the administration area.",
+        "changeTitle": "Change role?",
+        "changeDescription": "This will change {name}'s role from {currentRole} to {newRole}.",
+        "revokeTitle": "Revoke administration access?",
+        "revokeDescription": "This will remove {name}'s administration access. They will remain a customer account.",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "revoke": "Revoke Access",
+        "pleaseWait": "Please wait..."
+      },
+      "assignment": {
+        "selectRole": "Select role for {name}",
+        "assignRole": "Assign Role"
+      },
+      "messages": {
+        "roleAssigned": "Role assigned: {role}.",
+        "chooseDifferentRole": "Choose a different role first.",
+        "roleUpdated": "Role updated to {role}.",
+        "accessRevoked": "Administration access revoked."
+      },
+      "controls": {
+        "changeRoleFor": "Change role for {name}",
+        "changeRole": "Change Role",
+        "revokeAccess": "Revoke Access",
+        "assignRoleFor": "Assign role for {name}",
+        "assignRole": "Assign Role"
+      }
+    },
+    "account": "Account",
+    "brandName": "Al-Fadlabi Perfumes & Cosmetics"
   },
   "AdminDashboard": {
     "title": "Dashboard",
@@ -383,7 +549,13 @@
       "comparedWithPrevious": "vs. previous period",
       "ordersInPeriod": "orders in selected period",
       "averageOrderValue": "Average order value",
-      "averagePerOrder": "average revenue per order"
+      "averagePerOrder": "average revenue per order",
+      "loading": "Loading sales data...",
+      "summaryUnavailable": "Sales summary is currently unavailable.",
+      "loadErrorTitle": "Couldn't update sales data",
+      "loadErrorDescription": "Your previous data is still shown. Please try again.",
+      "retry": "Try again",
+      "retrying": "Retrying..."
     }
   },
   "AdminProducts": {
@@ -674,6 +846,38 @@
     "confirmPaymentDescription": "Only confirm this after the payment has been collected from the customer.",
     "markAsPaid": "Mark as paid",
     "markingAsPaid": "Marking as paid...",
-    "confirmPaymentAction": "Confirm payment"
+    "confirmPaymentAction": "Confirm payment",
+    "orderValueSummary": {
+      "itemsMore": "{firstName} · {sizeMl} ml + {count} more"
+    },
+    "orderAudit": {
+      "title": "Order activity",
+      "description": "A record of status and payment changes for this order.",
+      "empty": "No activity has been recorded yet.",
+      "note": "Note",
+      "admin": "Admin",
+      "actions": {
+        "statusChanged": "Status changed",
+        "paymentMarkedPaid": "Payment marked as paid"
+      },
+      "descriptions": {
+        "statusChanged": "Order status changed from <strong>{previousStatus}</strong> to <strong>{newStatus}</strong>.",
+        "paymentMarkedPaid": "Payment status changed from <strong>{previousStatus}</strong> to <strong>{newStatus}</strong>."
+      },
+      "fallback": "Order activity recorded.",
+      "statuses": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "processing": "Processing",
+        "outForDelivery": "Out for delivery",
+        "delivered": "Delivered",
+        "rejected": "Rejected",
+        "cancelled": "Cancelled"
+      },
+      "paymentStatuses": {
+        "pending": "Pending",
+        "paid": "Paid"
+      }
+    }
   }
 }

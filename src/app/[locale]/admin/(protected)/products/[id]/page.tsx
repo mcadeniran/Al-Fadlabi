@@ -1,8 +1,9 @@
 import {notFound} from "next/navigation";
-import {getTranslations} from "next-intl/server";
+import {getLocale, getTranslations} from "next-intl/server";
 
 import {getAdminProduct} from "@/lib/admin/products";
 import {ProductForm} from "@/components/admin/product-form";
+import {requireAdminRole} from "@/lib/admin/auth/require-admin";
 
 type EditProductPageProps = {
   params: Promise<{
@@ -13,6 +14,10 @@ type EditProductPageProps = {
 export default async function EditProductPage({
   params,
 }: EditProductPageProps) {
+  const locale = await getLocale();
+
+  await requireAdminRole(locale, ["owner", "admin"]);
+
   const {id} = await params;
 
   const [product, t] = await Promise.all([

@@ -72,11 +72,11 @@ export default async function AccountPage() {
 
   return (
     <main
-      className="min-h-screen bg-snow text-ink"
+      className="min-h-screen bg-snow text-ink w-full"
       dir={isArabic ? "rtl" : "ltr"}
     >
-      <section className="px-6 pb-20 pt-36 sm:px-8 md:pb-24 lg:px-12 lg:pb-28 lg:pt-44 xl:px-16">
-        <Container className="max-w-360 px-0">
+      <section className="px-6 sm:px-8 md:pb-24 lg:px-12">
+        <Container className="px-0">
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-end lg:gap-24">
             <div>
               <p className="eyebrow text-plum">
@@ -188,10 +188,10 @@ export default async function AccountPage() {
                   </p>
 
                   <Link
-                    href="/admin"
+                    href="/"
                     className="button-editorial button-editorial-primary inline-flex w-full items-center justify-center gap-3"
                   >
-                    <span>{t("account.adminDashboard")}</span>
+                    <span>{t('storefront')}</span>
 
                     <span aria-hidden="true">↗</span>
                   </Link>

@@ -6,41 +6,60 @@ import {
   PackagePlus,
   Users,
 } from "lucide-react";
+import type {AdminRole} from "@/lib/auth/admin";
 import {getTranslations} from "next-intl/server";
 
-const actions = [
-  {
-    href: "/admin/products/new",
-    key: "addProduct",
-    icon: PackagePlus,
-    featured: true,
-  },
-  {
-    href: "/admin/orders",
-    key: "manageOrders",
-    icon: ClipboardList,
-  },
-  {
-    href: "/admin/inventory",
-    key: "manageInventory",
-    icon: Boxes,
-  },
-  {
-    href: "/admin/users",
-    key: "manageCustomers",
-    icon: Users,
-  },
-];
+const actions: {
+  href: string;
+  key: string;
+  icon: typeof PackagePlus;
+  featured?: boolean;
+  roles: AdminRole[];
+}[] = [
+    {
+      href: "/admin/products/new",
+      key: "addProduct",
+      icon: PackagePlus,
+      featured: true,
+      roles: ["owner", "admin"],
+    },
+    {
+      href: "/admin/orders",
+      key: "manageOrders",
+      icon: ClipboardList,
+      roles: ["owner", "admin", "manager"],
+    },
+    {
+      href: "/admin/inventory",
+      key: "manageInventory",
+      icon: Boxes,
+      roles: ["owner", "admin"],
+    },
+    {
+      href: "/admin/users",
+      key: "manageCustomers",
+      icon: Users,
+      roles: ["owner"],
+    },
+  ];
 
-export async function QuickActions() {
+export async function QuickActions({
+  role,
+}: {
+  role: AdminRole;
+}) {
   const t = await getTranslations("AdminDashboard");
+
+  const visibleActions = actions.filter((action) =>
+    action.roles.includes(role),
+  );
 
   return (
     <section className="rounded-3xl border border-neutral-200/80 bg-white p-6 shadow-sm sm:p-7">
       <div className="flex items-end justify-between gap-4">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-            Shortcuts
+            {t('shortcuts')}
           </p>
 
           <h2 className="mt-2 text-xl font-semibold tracking-tight text-neutral-950">
@@ -54,7 +73,7 @@ export async function QuickActions() {
       </div>
 
       <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        {actions.map((action) => {
+        {visibleActions.map((action) => {
           const Icon = action.icon;
 
           return (

@@ -2,60 +2,63 @@ import type {
   AdminOrderAuditLog,
   OrderStatus,
 } from '@/types/order';
-
+import {useLocale, useTranslations} from "next-intl";
 type OrderAuditHistoryProps = {
   auditLogs: AdminOrderAuditLog[];
 };
 
-const statusLabels: Record<OrderStatus, string> = {
-  pending: 'Pending',
-  confirmed: 'Confirmed',
-  processing: 'Processing',
-  out_for_delivery: 'Out for delivery',
-  delivered: 'Delivered',
-  rejected: 'Rejected',
-  cancelled: 'Cancelled',
-};
-
-const paymentLabels = {
-  pending: 'Pending',
-  paid: 'Paid',
-} as const;
-
-function formatStatus(status: OrderStatus | null) {
+function formatStatus(
+  status: OrderStatus | null,
+  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
+) {
   if (!status) {
-    return '—';
+    return "—";
   }
 
-  return statusLabels[status] ?? status;
+  const keyMap: Record<OrderStatus, string> = {
+    pending: "statuses.pending",
+    confirmed: "statuses.confirmed",
+    processing: "statuses.processing",
+    out_for_delivery: "statuses.outForDelivery",
+    delivered: "statuses.delivered",
+    rejected: "statuses.rejected",
+    cancelled: "statuses.cancelled",
+  };
+
+  return t(keyMap[status]);
 }
 
 function formatPaymentStatus(
-  status: 'pending' | 'paid' | null,
+  status: "pending" | "paid" | null,
+  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
 ) {
   if (!status) {
-    return '—';
+    return "—";
   }
 
-  return paymentLabels[status] ?? status;
+  return t(`paymentStatuses.${status}`);
 }
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
+function formatDateTime(
+  value: string,
+  locale: string,
+) {
+  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : "en", {
+    dateStyle: "medium",
+    timeStyle: "short",
   }).format(new Date(value));
 }
 
 function getActionLabel(
-  action: AdminOrderAuditLog['action'],
+  action: AdminOrderAuditLog["action"],
+  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
 ) {
   switch (action) {
-    case 'status_changed':
-      return 'Status changed';
+    case "status_changed":
+      return t("actions.statusChanged");
 
-    case 'payment_marked_paid':
-      return 'Payment marked as paid';
+    case "payment_marked_paid":
+      return t("actions.paymentMarkedPaid");
 
     default:
       return action;
@@ -64,62 +67,55 @@ function getActionLabel(
 
 function getActionDescription(
   log: AdminOrderAuditLog,
+  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
 ) {
   switch (log.action) {
-    case 'status_changed':
-      return (
-        <>
-          Order status changed from{' '}
-          <strong>
-            {formatStatus(log.previousStatus)}
-          </strong>{' '}
-          to{' '}
-          <strong>
-            {formatStatus(log.newStatus)}
-          </strong>
-        </>
-      );
+    case "status_changed":
+      return t.rich("descriptions.statusChanged", {
+        previousStatus: formatStatus(log.previousStatus, t),
+        newStatus: formatStatus(log.newStatus, t),
+        strong: (chunks) => <strong>{chunks}</strong>,
+      });
 
-    case 'payment_marked_paid':
-      return (
-        <>
-          Payment status changed from{' '}
-          <strong>
-            {formatPaymentStatus(
-              log.previousPaymentStatus,
-            )}
-          </strong>{' '}
-          to{' '}
-          <strong>
-            {formatPaymentStatus(log.newPaymentStatus)}
-          </strong>
-        </>
-      );
+    case "payment_marked_paid":
+      return t.rich("descriptions.paymentMarkedPaid", {
+        previousStatus: formatPaymentStatus(
+          log.previousPaymentStatus,
+          t,
+        ),
+        newStatus: formatPaymentStatus(
+          log.newPaymentStatus,
+          t,
+        ),
+        strong: (chunks) => <strong>{chunks}</strong>,
+      });
 
     default:
-      return 'Order activity recorded.';
+      return t("fallback");
   }
 }
 
 export default function OrderAuditHistory({
   auditLogs,
 }: OrderAuditHistoryProps) {
+  const t = useTranslations("AdminOrders.orderAudit");
+  const locale = useLocale();
+
   return (
     <section className="rounded-2xl border border-neutral-200 bg-white shadow-sm">
       <div className="border-b border-neutral-200 px-6 py-5">
         <h2 className="text-lg font-semibold text-neutral-900">
-          Order activity
+          {t("title")}
         </h2>
 
         <p className="mt-1 text-sm text-neutral-500">
-          A record of status and payment changes for this
-          order.
+          {t("description")}
         </p>
       </div>
 
       {auditLogs.length === 0 ? (
         <div className="px-6 py-8 text-sm text-neutral-500">
-          No activity has been recorded yet.
+          {t("empty")}
         </div>
       ) : (
         <div className="px-6 py-6">
@@ -138,11 +134,11 @@ export default function OrderAuditHistory({
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                       <div>
                         <h3 className="text-sm font-semibold text-neutral-900">
-                          {getActionLabel(log.action)}
+                          {getActionLabel(log.action, t)}
                         </h3>
 
                         <p className="mt-1 text-sm leading-6 text-neutral-600">
-                          {getActionDescription(log)}
+                          {getActionDescription(log, t)}
                         </p>
                       </div>
 
@@ -150,14 +146,14 @@ export default function OrderAuditHistory({
                         dateTime={log.createdAt}
                         className="shrink-0 text-xs text-neutral-400"
                       >
-                        {formatDateTime(log.createdAt)}
+                        {formatDateTime(log.createdAt, locale)}
                       </time>
                     </div>
 
                     {log.note ? (
                       <div className="mt-3 rounded-xl bg-neutral-50 px-4 py-3">
                         <p className="text-xs font-medium uppercase tracking-wide text-neutral-400">
-                          Note
+                          {t("note")}
                         </p>
 
                         <p className="mt-1 text-sm leading-6 text-neutral-600">
@@ -168,7 +164,7 @@ export default function OrderAuditHistory({
 
                     {log.actorUserId ? (
                       <p className="mt-3 break-all text-xs text-neutral-400">
-                        Admin: {log.actorUserId}
+                        {t("admin")}: {log.actorUserId}
                       </p>
                     ) : null}
                   </div>

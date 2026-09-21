@@ -3,7 +3,7 @@
 import {Area, AreaChart, CartesianGrid, XAxis, YAxis, } from "recharts";
 import {ArrowUpRight, BarChart3} from "lucide-react";
 import {useLocale, useTranslations} from "next-intl";
-import {useEffect, useState, useTransition} from "react";
+import {useEffect, useRef, useState} from "react";
 
 import {ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig, } from "@/components/ui/chart";
 import {DashboardSalesSummary, getDashboardSalesOverview, getDashboardSalesSummary} from "@/lib/admin/dashboard-sales-overview";
@@ -28,28 +28,67 @@ export function SalesOverview({data}: SalesOverviewProps) {
   const [period, setPeriod] = useState<SalesPeriod>(30);
   const [salesData, setSalesData] = useState<SalesOverviewItem[]>(data);
 
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+  const requestId = useRef(0);
 
-  const [summary, setSummary] = useState<DashboardSalesSummary>({
-    current_revenue: 0,
-    current_orders: 0,
-    previous_revenue: 0,
-    previous_orders: 0,
-  });
+  const [loadedPeriod, setLoadedPeriod] = useState<SalesPeriod>(30);
+  // const [isPending, startTransition] = useTransition();
+
+  const [summary, setSummary] = useState<DashboardSalesSummary | null>(null);
+  // const [summary, setSummary] = useState<DashboardSalesSummary>({
+  //   current_revenue: 0,
+  //   current_orders: 0,
+  //   previous_revenue: 0,
+  //   previous_orders: 0,
+  // });
 
   useEffect(() => {
-    startTransition(async () => {
-      const [overview, summaryResult] = await Promise.all([
-        period === 30
-          ? Promise.resolve(data)
-          : getDashboardSalesOverview(period),
-        getDashboardSalesSummary(period),
-      ]);
+    const currentRequestId = ++requestId.current;
+    let cancelled = false;
 
-      setSalesData(overview);
-      setSummary(summaryResult);
-    });
-  }, [period, data]);
+    async function loadSalesData() {
+      setIsLoading(true);
+      setLoadError(false);
+
+      try {
+        const [overview, summaryResult] = await Promise.all([
+          period === 30
+            ? Promise.resolve(data)
+            : getDashboardSalesOverview(period),
+
+          getDashboardSalesSummary(period),
+        ]);
+
+        // Ignore stale or cancelled requests.
+        if (cancelled || currentRequestId !== requestId.current) {
+          return;
+        }
+
+        // Update both datasets together.
+        setSalesData(overview);
+        setSummary(summaryResult);
+        setLoadedPeriod(period);
+      } catch (error) {
+        console.error("Failed to load dashboard sales data:", error);
+
+        if (!cancelled && currentRequestId === requestId.current) {
+          setLoadError(true);
+        }
+      } finally {
+        if (!cancelled && currentRequestId === requestId.current) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadSalesData();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [period, data, retryKey]);
 
 
 
@@ -97,22 +136,9 @@ export function SalesOverview({data}: SalesOverviewProps) {
     orders: Number(item.orders ?? 0),
   }));
 
-  const totalRevenue = chartData.reduce(
-    (sum, item) => sum + item.revenue,
-    0,
-  );
-
-  const totalOrders = chartData.reduce(
-    (sum, item) => sum + item.orders,
-    0,
-  );
-
-  const hasSalesActivity = totalOrders > 0;
-
-  const currentRevenue = Number(summary.current_revenue ?? 0);
-  const currentOrders = Number(summary.current_orders ?? 0);
-  const previousRevenue = Number(summary.previous_revenue ?? 0);
-  const previousOrders = Number(summary.previous_orders ?? 0);
+  const currentRevenue = Number(summary?.current_revenue ?? 0);
+  const currentOrders = Number(summary?.current_orders ?? 0);
+  const previousRevenue = Number(summary?.previous_revenue ?? 0);
 
   const averageOrderValue =
     currentOrders > 0 ? currentRevenue / currentOrders : 0;
@@ -147,7 +173,7 @@ export function SalesOverview({data}: SalesOverviewProps) {
 
           <p className="mt-1 text-sm text-neutral-500">
             {t("salesOverview.description", {
-              days: period,
+              days: loadedPeriod,
             })}
           </p>
         </div>
@@ -166,14 +192,14 @@ export function SalesOverview({data}: SalesOverviewProps) {
                   key={value}
                   type="button"
                   onClick={() => setPeriod(value)}
-                  disabled={isPending}
+                  disabled={isLoading}
                   className={[
                     "rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200",
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950/20",
                     active
                       ? "bg-white text-neutral-950 shadow-sm"
                       : "text-neutral-500 hover:text-neutral-900",
-                    isPending ? "cursor-wait opacity-60" : "",
+                    isLoading ? "cursor-wait opacity-60" : "",
                   ].join(" ")}
                 >
                   {t(`salesOverview.periods.${value}`)}
@@ -186,73 +212,111 @@ export function SalesOverview({data}: SalesOverviewProps) {
         </div>
       </div>
 
-      <div className="grid gap-4 border-b border-neutral-100 p-5 sm:grid-cols-2 lg:grid-cols-3 sm:p-6">
-        <div>
-          <p className="text-xs font-medium text-neutral-400">
-            {t("salesOverview.revenue")}
-          </p>
-
-          <div className="mt-1 flex flex-wrap items-baseline gap-2">
-            <p className="text-2xl font-semibold tracking-tight text-neutral-950">
-              {currencyFormatter.format(currentRevenue)}
+      {loadError && (
+        <div
+          role="alert"
+          className="flex flex-col gap-3 border-b border-red-100 bg-red-50/70 p-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"
+        >
+          <div>
+            <p className="text-sm font-medium text-red-800">
+              {t("salesOverview.loadErrorTitle")}
             </p>
 
-            {revenueChange !== null && (
-              <span
-                className={[
-                  "text-xs font-medium",
-                  revenueChange > 0
-                    ? "text-emerald-600"
-                    : revenueChange < 0
-                      ? "text-red-600"
-                      : "text-neutral-400",
-                ].join(" ")}
-              >
-                {revenueChange > 0 ? "+" : ""}
-                {numberFormatter.format(revenueChange)}%
-              </span>
-            )}
+            <p className="mt-1 text-xs text-red-700">
+              {t("salesOverview.loadErrorDescription")}
+            </p>
           </div>
 
-          <p className="mt-1 text-xs text-neutral-400">
-            {t("salesOverview.comparedWithPrevious")}
-          </p>
+          <button
+            type="button"
+            onClick={() => setRetryKey((key) => key + 1)}
+            disabled={isLoading}
+            className="w-fit rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-medium text-red-800 transition hover:bg-red-50 disabled:cursor-wait disabled:opacity-60"
+          >
+            {isLoading
+              ? t("salesOverview.retrying")
+              : t("salesOverview.retry")}
+          </button>
         </div>
+      )}
 
-        <div>
-          <p className="text-xs font-medium text-neutral-400">
-            {t("salesOverview.orders")}
-          </p>
+      {summary ? (
+        <div className="grid gap-4 border-b border-neutral-100 p-5 sm:grid-cols-2 lg:grid-cols-3 sm:p-6">
+          <div>
+            <p className="text-xs font-medium text-neutral-400">
+              {t("salesOverview.revenue")}
+            </p>
 
-          <p className="mt-1 text-2xl font-semibold tracking-tight text-neutral-950">
-            {numberFormatter.format(currentOrders)}
-          </p>
+            <div className="mt-1 flex flex-wrap items-baseline gap-2">
+              <p className="text-2xl font-semibold tracking-tight text-neutral-950">
+                {currencyFormatter.format(currentRevenue)}
+              </p>
 
-          <p className="mt-1 text-xs text-neutral-400">
-            {t("salesOverview.ordersInPeriod")}
-          </p>
+              {revenueChange !== null && (
+                <span
+                  className={[
+                    "text-xs font-medium",
+                    revenueChange > 0
+                      ? "text-emerald-600"
+                      : revenueChange < 0
+                        ? "text-red-600"
+                        : "text-neutral-400",
+                  ].join(" ")}
+                >
+                  {revenueChange > 0 ? "+" : ""}
+                  {numberFormatter.format(revenueChange)}%
+                </span>
+              )}
+            </div>
+
+            <p className="mt-1 text-xs text-neutral-400">
+              {t("salesOverview.comparedWithPrevious")}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium text-neutral-400">
+              {t("salesOverview.orders")}
+            </p>
+
+            <p className="mt-1 text-2xl font-semibold tracking-tight text-neutral-950">
+              {numberFormatter.format(currentOrders)}
+            </p>
+
+            <p className="mt-1 text-xs text-neutral-400">
+              {t("salesOverview.ordersInPeriod")}
+            </p>
+          </div>
+
+          <div>
+            <p className="text-xs font-medium text-neutral-400">
+              {t("salesOverview.averageOrderValue")}
+            </p>
+
+            <p className="mt-1 text-2xl font-semibold tracking-tight text-neutral-950">
+              {currencyFormatter.format(averageOrderValue)}
+            </p>
+
+            <p className="mt-1 text-xs text-neutral-400">
+              {t("salesOverview.averagePerOrder")}
+            </p>
+          </div>
         </div>
-
-        <div>
-          <p className="text-xs font-medium text-neutral-400">
-            {t("salesOverview.averageOrderValue")}
-          </p>
-
-          <p className="mt-1 text-2xl font-semibold tracking-tight text-neutral-950">
-            {currencyFormatter.format(averageOrderValue)}
-          </p>
-
-          <p className="mt-1 text-xs text-neutral-400">
-            {t("salesOverview.averagePerOrder")}
-          </p>
+      ) : (
+        <div className="border-b border-neutral-100 p-5 text-sm text-neutral-400 sm:p-6" aria-live="polite">
+          {isLoading
+            ? t("salesOverview.loading")
+            : t("salesOverview.summaryUnavailable")}
         </div>
-      </div>
+      )
+      }
 
       {chartData.length > 0 ? (
         <div
+          aria-busy={isLoading}
           className={[
             "p-3 transition-opacity duration-200 sm:p-5",
-            isPending ? "opacity-50" : "opacity-100",
+            isLoading ? "opacity-50" : "opacity-100",
           ].join(" ")}
         >
           <ChartContainer

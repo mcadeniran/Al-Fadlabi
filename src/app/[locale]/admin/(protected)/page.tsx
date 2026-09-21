@@ -8,11 +8,20 @@ import {LowStockItems} from "@/components/admin/low-stock-items";
 import {getLocale, getTranslations} from "next-intl/server";
 import {PendingOrders} from "@/components/admin/pending-order";
 import {SalesOverview} from "@/components/admin/sales-overview";
+import {hasAdminPermission} from "@/lib/admin/admin-permissions";
+import {requireAdmin} from "@/lib/admin/auth/require-admin";
 
 export default async function AdminDashboardPage() {
-  const stats = await getDashboardStats();
-  const t = await getTranslations('AdminDashboard');
   const locale = await getLocale();
+  const admin = await requireAdmin(locale);
+
+  const role = admin.role;
+
+  const canViewProducts = hasAdminPermission(role, "products");
+  const canViewInventory = role === "owner" || role === "admin";
+
+  const stats = await getDashboardStats();
+  const t = await getTranslations("AdminDashboard");
 
   const currencyFormatter = new Intl.NumberFormat(locale === 'ar' ? 'ar' : 'en', {
     minimumFractionDigits: 0,
@@ -49,7 +58,7 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      {/* <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         <DashboardStatCard
           title={t("totalProducts")}
           value={stats.products}
@@ -88,18 +97,67 @@ export default async function AdminDashboardPage() {
           value={stats.outOfStockVariants}
           icon={PackageX}
         />
+      </div> */}
+
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {canViewProducts && (
+          <DashboardStatCard
+            title={t("totalProducts")}
+            value={stats.products}
+            icon={Package}
+            description={`${stats.activeProducts} ${t("activeProducts").toLowerCase()}`}
+          />
+        )}
+
+        <DashboardStatCard
+          title={t("totalOrders")}
+          value={stats.orders}
+          icon={ClipboardList}
+          description={`${stats.pendingOrders} ${t("pendingOrders").toLowerCase()}`}
+        />
+
+        <DashboardStatCard
+          title={t("customers")}
+          value={stats.customers}
+          icon={Users}
+        />
+
+        <DashboardStatCard
+          title={t("revenue")}
+          value={currencyFormatter.format(stats.revenue)}
+          icon={Banknote}
+          featured
+        />
+
+        {canViewInventory && (
+          <>
+            <DashboardStatCard
+              title={t("inventoryUnits")}
+              value={stats.totalInventoryUnits}
+              icon={Boxes}
+            />
+
+            <DashboardStatCard
+              title={t("outOfStock")}
+              value={stats.outOfStockVariants}
+              icon={PackageX}
+            />
+          </>
+        )}
       </div>
 
       <SalesOverview data={stats.salesOverview} />
 
 
-      <QuickActions />
+      <QuickActions role={role} />
 
       <PendingOrders count={stats.pendingOrders} />
 
       <div className="grid gap-6 xl:grid-cols-2">
         <RecentOrders orders={stats.recentOrders} />
-        <LowStockItems items={stats.lowStock} />
+        {canViewInventory && (
+          <LowStockItems items={stats.lowStock} />
+        )}
       </div>
     </div>
   );

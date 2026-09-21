@@ -1,133 +1,146 @@
-'use client';
+"use client";
 
-import {useState, useTransition} from 'react';
+import {useState, useTransition} from "react";
+import {useTranslations} from "next-intl";
 
-import {setAdminRoleAction} from '@/app/[locale]/admin/(protected)/users/actions';
+import {setAdminRoleAction} from "@/app/[locale]/admin/(protected)/users/actions";
+import type {ManagedUser} from "@/lib/admin/users";
+import {useRouter} from "@/i18n/navigation";
+import {RoleConfirmationDialog} from "./role-confirmation-dialog";
 
-import type {ManagedUser} from '@/lib/admin/users';
-import {useRouter} from '@/i18n/navigation';
-
-type AssignableRole = 'admin' | 'manager';
+type AssignableRole = "admin" | "manager";
 
 type UserRoleAssignmentProps = {
-  users: ManagedUser[];
+  user: ManagedUser;
 };
 
 export function UserRoleAssignment({
-  users,
+  user,
 }: UserRoleAssignmentProps) {
-  const [roles, setRoles] = useState<Record<string, AssignableRole>>({});
-  const [messages, setMessages] = useState<Record<string, string>>({});
-  const [isPending, startTransition] = useTransition();
-
+  const t = useTranslations("Admin.Users");
   const router = useRouter();
 
-  function handleAssign(user: ManagedUser) {
-    const role = roles[user.userId] ?? 'admin';
+  const [selectedRole, setSelectedRole] =
+    useState<AssignableRole>("admin");
 
-    setMessages((current) => ({
-      ...current,
-      [user.userId]: '',
-    }));
+  const [message, setMessage] = useState("");
+
+  const [isPending, startTransition] = useTransition();
+
+  const [isConfirmationOpen, setIsConfirmationOpen] =
+    useState(false);
+
+  if (user.role !== null) {
+    return null;
+  }
+
+  const userName =
+    user.fullName ||
+    t("common.unnamedCustomer");
+
+  function handleAssignClick() {
+    setMessage("");
+    setIsConfirmationOpen(true);
+  }
+
+  function handleConfirmAssign() {
+    setMessage("");
 
     startTransition(async () => {
-      const result = await setAdminRoleAction(user.userId, role);
+      const result = await setAdminRoleAction(
+        user.userId,
+        selectedRole,
+      );
 
       if (!result.success) {
-        setMessages((current) => ({
-          ...current,
-          [user.userId]: result.message,
-        }));
-
-        router.refresh();
-
+        setMessage(result.message);
+        setIsConfirmationOpen(false);
         return;
       }
 
-      setMessages((current) => ({
-        ...current,
-        [user.userId]: `Role assigned: ${role}.`,
-      }));
+      setMessage(
+        t("messages.roleAssigned", {
+          role: t(`roles.${selectedRole}`),
+        }),
+      );
+
+      setIsConfirmationOpen(false);
+
+      router.refresh();
     });
   }
 
-  if (users.length === 0) {
-    return (
-      <p className="px-6 py-10 text-sm text-muted-foreground">
-        There are no customers available for role assignment.
-      </p>
-    );
-  }
-
   return (
-    <div className="divide-y divide-border">
-      {users.map((user) => {
-        const selectedRole = roles[user.userId] ?? 'admin';
+    <>
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <label
+          htmlFor={`assign-role-${user.userId}`}
+          className="sr-only"
+        >
+          {t("controls.assignRoleFor", {
+            name: userName,
+          })}
+        </label>
 
-        return (
-          <div
-            key={user.customerId}
-            className="space-y-4 px-6 py-5"
-          >
-            <div>
-              <p className="font-medium">
-                {user.fullName || 'Unnamed customer'}
-              </p>
+        <select
+          id={`assign-role-${user.userId}`}
+          value={selectedRole}
+          disabled={isPending}
+          onChange={(event) =>
+            setSelectedRole(
+              event.target.value as AssignableRole,
+            )
+          }
+          className="h-10 rounded-xl border border-border bg-background px-3 text-sm outline-none transition-colors focus:border-foreground disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <option value="admin">
+            {t("roles.admin")}
+          </option>
 
-              <p className="text-sm text-muted-foreground">
-                {user.email || 'No email'}
-              </p>
+          <option value="manager">
+            {t("roles.manager")}
+          </option>
+        </select>
 
-              <p className="text-xs text-muted-foreground">
-                {user.phone || 'No phone'}
-              </p>
-            </div>
+        <button
+          type="button"
+          disabled={isPending}
+          onClick={handleAssignClick}
+          className="h-10 rounded-xl border border-foreground px-4 text-xs uppercase tracking-[0.15em] transition-opacity hover:opacity-70 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {isPending
+            ? t("confirmations.pleaseWait")
+            : t("controls.assignRole")}
+        </button>
+      </div>
 
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <label
-                htmlFor={`role-${user.userId}`}
-                className="sr-only"
-              >
-                Select role for {user.fullName || 'customer'}
-              </label>
+      {message && (
+        <p
+          role="status"
+          className="text-xs text-muted-foreground"
+        >
+          {message}
+        </p>
+      )}
 
-              <select
-                id={`role-${user.userId}`}
-                value={selectedRole}
-                disabled={isPending}
-                onChange={(event) =>
-                  setRoles((current) => ({
-                    ...current,
-                    [user.userId]: event.target.value as AssignableRole,
-                  }))
-                }
-                className="h-11 border border-border bg-background px-3 text-sm"
-              >
-                <option value="admin">Admin</option>
-                <option value="manager">Manager</option>
-              </select>
-
-              <button
-                type="button"
-                disabled={isPending}
-                onClick={() => handleAssign(user)}
-                className="h-11 border border-foreground bg-foreground px-5 text-xs uppercase tracking-[0.15em] text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {isPending ? 'Assigning...' : 'Assign Role'}
-              </button>
-            </div>
-
-            {messages[user.userId] && (
-              <p
-                role="status"
-                className="text-sm text-muted-foreground"
-              >
-                {messages[user.userId]}
-              </p>
-            )}
-          </div>
-        );
-      })}
-    </div>
+      <RoleConfirmationDialog
+        open={isConfirmationOpen}
+        onOpenChange={(open) => {
+          if (!isPending) {
+            setIsConfirmationOpen(open);
+          }
+        }}
+        title={t("confirmations.assignTitle", {role: ''})}
+        description={t("confirmations.assignDescription", {
+          name: userName,
+          role: t(`roles.${selectedRole}`),
+        })}
+        cancelLabel={t("confirmations.cancel")}
+        confirmLabel={t("confirmations.confirm")}
+        pendingLabel={t("confirmations.pleaseWait")}
+        isPending={isPending}
+        onConfirm={handleConfirmAssign}
+      />
+    </>
   );
 }

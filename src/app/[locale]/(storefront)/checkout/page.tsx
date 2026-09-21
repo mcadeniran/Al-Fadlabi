@@ -1,15 +1,15 @@
 "use client";
 
+import {createClient} from "@/lib/supabase/client";
 import {ArrowLeft, ArrowRight, Check} from "lucide-react";
 import {useLocale} from "next-intl";
-import {useRouter} from "next/navigation";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 import type {DeliveryMethod} from "@/types/order";
 import {Container} from "@/components/ui/container";
 import {useCart} from "@/components/cart/cart-provider";
 import {placeOrder} from "@/lib/orders/order-service";
-import {Link} from "@/i18n/navigation";
+import {Link, useRouter} from "@/i18n/navigation";
 
 type CheckoutForm = {
   firstName: string;
@@ -27,9 +27,42 @@ export default function CheckoutPage() {
   const locale = useLocale();
   const router = useRouter();
 
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const {items, subtotal, isHydrated, clearCart} = useCart();
 
   const isArabic = locale === "ar";
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const checkAuth = async () => {
+      const supabase = createClient();
+
+      const {
+        data: {user},
+      } = await supabase.auth.getUser();
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!user) {
+        router.replace("/account/login?redirect=/checkout");
+        return;
+      }
+
+      setIsAuthenticated(true);
+      setIsCheckingAuth(false);
+    };
+
+    checkAuth();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [router]);
 
   const currencyFormatter = useMemo(
     () =>
@@ -197,7 +230,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!isHydrated) {
+  if (isCheckingAuth || !isHydrated || !isAuthenticated) {
     return (
       <main
         className="min-h-screen bg-snow text-ink"

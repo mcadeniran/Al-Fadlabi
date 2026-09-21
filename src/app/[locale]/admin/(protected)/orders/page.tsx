@@ -83,10 +83,12 @@ function matchesSearch(
   );
 }
 
-function formatCurrency(value: number) {
-  return new Intl.NumberFormat('en-US', {
+function formatCurrency(value: number, locale: string) {
+  return new Intl.NumberFormat(locale === 'ar' ? 'ar' : "en", {
     minimumFractionDigits: 0,
     maximumFractionDigits: 2,
+    currency: "SDG",
+    style: "currency"
   }).format(value);
 }
 
@@ -133,6 +135,7 @@ function getStatusClassName(
 function getItemSummary(
   order: AdminOrder,
   locale: string,
+  t: (key: string, values?: Record<string, string | number>) => string,
 ) {
   if (order.items.length === 0) {
     return '—';
@@ -149,8 +152,14 @@ function getItemSummary(
     return `${firstName} · ${firstItem.sizeMl} ml`;
   }
 
-  return `${firstName} · ${firstItem.sizeMl} ml + ${order.items.length - 1
-    } more`;
+  return t("orderValueSummary.itemsMore", {
+    firstName,
+    sizeMl: firstItem.sizeMl,
+    count: order.items.length - 1,
+  });
+
+  // return `${firstName} · ${firstItem.sizeMl} ml + ${order.items.length - 1
+  //   } more`;
 }
 
 export default async function AdminOrdersPage({
@@ -279,6 +288,7 @@ export default async function AdminOrdersPage({
                       {getItemSummary(
                         order,
                         locale,
+                        t,
                       )}
                     </p>
 
@@ -294,7 +304,7 @@ export default async function AdminOrdersPage({
                   </td>
 
                   <td className="px-4 py-4 font-medium text-neutral-900">
-                    {formatCurrency(order.total)}
+                    {formatCurrency(order.total, locale)}
                   </td>
 
                   <td className="px-4 py-4">

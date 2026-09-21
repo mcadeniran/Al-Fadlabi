@@ -27,6 +27,7 @@ type RecentOrdersProps = {
 
 // type OrderStatus = "pending" | "processing" | "delivered" | "cancelled" | "confirmed" | "out_for_delivery" | "rejected";
 
+
 function getOrderStatusStyle(status: string) {
   switch (status.toLowerCase()) {
     case "pending":
@@ -80,11 +81,14 @@ export async function RecentOrders({
 }: RecentOrdersProps) {
   const locale = await getLocale();
   const t = await getTranslations("AdminDashboard");
+  const m = await getTranslations("AdminOrders");
+
 
   const dateFormatter = new Intl.DateTimeFormat(
     locale === "ar" ? "ar" : "en",
     {
-      dateStyle: "medium",
+      month: "short",
+      day: "numeric",
     },
   );
 
@@ -104,7 +108,7 @@ export async function RecentOrders({
       <div className="flex flex-col gap-4 border-b border-neutral-200/80 p-6 sm:flex-row sm:items-center sm:justify-between sm:p-7">
         <div>
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-neutral-400">
-            Activity
+            {t('activity')}
           </p>
 
           <h2 className="mt-2 text-xl font-semibold tracking-tight text-neutral-950">
@@ -176,6 +180,7 @@ export async function RecentOrders({
                         <span aria-hidden="true">·</span>
 
                         <span>
+                          da
                           {dateFormatter.format(
                             new Date(order.created_at),
                           )}
@@ -201,8 +206,8 @@ export async function RecentOrders({
                         ].join(" ")}
                         strokeWidth={1.8}
                       />
-
-                      {order.status.replaceAll("_", " ")}
+                      {m(`statuses.${order.status}`)}
+                      {/* {orderw.status.replaceAll("_", " ")} */}
                     </span>
 
                     <span className="whitespace-nowrap text-sm font-semibold text-neutral-950">

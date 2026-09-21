@@ -51,25 +51,26 @@ function formatDate(value: string | null, locale: string) {
 function getStatusClassName(status: OrderStatus) {
   switch (status) {
     case 'pending':
-      return 'bg-neutral-100 text-neutral-700';
+      return 'border-amber-200 bg-amber-50 text-amber-800';
 
     case 'confirmed':
-      return 'bg-neutral-200 text-neutral-800';
+      return 'border-blue-200 bg-blue-50 text-blue-800';
 
     case 'processing':
-      return 'bg-neutral-200 text-neutral-800';
+      return 'border-blue-200 bg-blue-50 text-blue-800';
 
     case 'out_for_delivery':
-      return 'bg-neutral-900 text-white';
+      return "border-indigo-200 bg-indigo-50 text-indigo-800";
 
     case 'delivered':
-      return 'bg-neutral-950 text-white';
+      return 'border-emerald-200 bg-emerald-50 text-emerald-800';
 
     case 'rejected':
-      return 'bg-neutral-100 text-neutral-500';
+      return "border-red-200 bg-red-50 text-red-800";
 
     case 'cancelled':
-      return 'bg-neutral-100 text-neutral-500';
+      return "border-red-200 bg-red-50 text-red-800";
+
 
     default:
       return 'bg-neutral-100 text-neutral-700';

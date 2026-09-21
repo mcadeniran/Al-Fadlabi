@@ -14,10 +14,10 @@ export async function PendingOrders({
   return (
     <section className="relative overflow-hidden rounded-3xl border border-amber-200/70 bg-white p-6 shadow-sm sm:p-7">
       {/* Decorative background */}
-      <div
+      {/* <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-amber-100/60 blur-3xl"
-      />
+      /> */}
 
       <div className="relative">
         <div className="flex items-start justify-between gap-4">

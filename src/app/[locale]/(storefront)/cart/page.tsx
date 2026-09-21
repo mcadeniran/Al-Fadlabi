@@ -1,18 +1,34 @@
 "use client";
 
 import {ArrowLeft, ArrowRight} from "lucide-react";
-import {Link} from "@/i18n/navigation";
+import {Link, useRouter} from "@/i18n/navigation";
 import {useLocale} from "next-intl";
 
 import {Container} from "@/components/ui/container";
 import {useCart} from "@/components/cart/cart-provider";
 import {CartItem} from "@/components/cart/cart-item";
 import {useMemo} from "react";
+import {createClient} from "@/lib/supabase/client";
 
 export default function CartPage() {
   const locale = useLocale();
   const {items, itemCount, subtotal, clearCart, isHydrated} = useCart();
   const isArabic = locale === "ar";
+  const router = useRouter();
+  const supabase = createClient();
+
+  const handleCheckout = async () => {
+    const {
+      data: {user},
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      router.push("/account/login?redirect=/checkout");
+      return;
+    }
+
+    router.push("/checkout");
+  };
 
   const currencyFormatter = useMemo(
     () =>
@@ -137,10 +153,24 @@ export default function CartPage() {
                   )}
 
                   {items.length > 0 && !hasUnavailableItems && (
-                    <Link href="/checkout" className={`mt-9 flex h-14 w-full items-center justify-center gap-4 bg-ink px-7 ${isArabic ? "text-sm" : "text-xs"}  font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum`}>
-                      <span className={`${isArabic ? "text-sm" : "text-xs"} `}>{isArabic ? "إتمام الطلب" : "Proceed to Checkout"}</span>
-                      {isArabic ? <ArrowLeft size={16} strokeWidth={1.25} /> : <ArrowRight size={16} strokeWidth={1.25} />}
-                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleCheckout}
+                      className={`mt-9 flex h-14 w-full rounded-2xl items-center justify-center gap-4 bg-ink px-7 ${isArabic ? "text-sm" : "text-xs"
+                        } font-semibold uppercase tracking-[0.28em] text-snow transition-colors duration-300 hover:bg-plum`}
+                    >
+                      <span
+                        className={`${isArabic ? "text-sm" : "text-xs"}`}
+                      >
+                        {isArabic ? "إتمام الطلب" : "Proceed to Checkout"}
+                      </span>
+
+                      {isArabic ? (
+                        <ArrowLeft size={16} strokeWidth={1.25} />
+                      ) : (
+                        <ArrowRight size={16} strokeWidth={1.25} />
+                      )}
+                    </button>
                   )}
 
                   <p className={`mt-5 text-center ${isArabic ? "text-sm" : "text-xs"}  leading-5 text-ink/30`}>{isArabic ? "الدفع متاح عند إتمام الطلب." : "Payment details are confirmed at checkout."}</p>

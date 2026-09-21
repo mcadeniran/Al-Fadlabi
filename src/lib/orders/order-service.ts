@@ -41,6 +41,14 @@ export async function placeOrder({
 
   const supabase = createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error('You must be logged in to place an order.');
+  }
+
   /*
    * =========================================================
    * CREATE ORDER ITEM SNAPSHOTS

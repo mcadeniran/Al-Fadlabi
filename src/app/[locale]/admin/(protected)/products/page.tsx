@@ -1,10 +1,11 @@
 import {Plus} from "lucide-react";
-import {getTranslations} from "next-intl/server";
+import {getLocale, getTranslations} from "next-intl/server";
 
 import {getAdminProducts} from "@/lib/admin/products";
 import {ProductFilters} from "@/components/admin/product-filters";
 import {ProductsTable} from "@/components/admin/products-table";
 import {Link} from "@/i18n/navigation";
+import {requireAdminRole} from "@/lib/admin/auth/require-admin";
 
 type ProductsPageProps = {
   searchParams: Promise<{
@@ -19,6 +20,10 @@ export default async function AdminProductsPage({
   searchParams,
 }: ProductsPageProps) {
   const params = await searchParams;
+
+  const locale = await getLocale();
+
+  await requireAdminRole(locale, ["owner", "admin"]);
 
   const products = await getAdminProducts({
     search: params.search,
