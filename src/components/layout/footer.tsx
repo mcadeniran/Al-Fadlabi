@@ -66,11 +66,11 @@ export function Footer() {
                 {t("explore.shop")}
               </Link>
 
-              <Link
+              {/* <Link
                 href="/collections"
                 className="transition-colors hover:text-plum">
                 {t("explore.collections")}
-              </Link>
+              </Link> */}
 
               <Link
                 href="/our-story"
@@ -102,17 +102,17 @@ export function Footer() {
                 {t("client.orders")}
               </Link>
 
-              <Link
+              {/* <Link
                 href="/contact"
                 className="transition-colors hover:text-plum">
                 {t("client.contact")}
-              </Link>
+              </Link> */}
 
-              <Link
+              {/* <Link
                 href="/faq"
                 className="transition-colors hover:text-plum">
                 {t("client.faq")}
-              </Link>
+              </Link> */}
             </nav>
           </div>
 
