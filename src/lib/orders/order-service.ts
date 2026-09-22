@@ -13,8 +13,8 @@ type PlaceOrderInput = {
   customer: OrderCustomer;
   deliveryAddress: OrderAddress;
   items: CartItem[];
-  deliveryMethod: DeliveryMethod;
-  deliveryCost: number;
+  // deliveryMethod: DeliveryMethod;
+  // deliveryCost: number;
 };
 
 type CreateCustomerOrderResponse = {
@@ -32,8 +32,8 @@ export async function placeOrder({
   customer,
   deliveryAddress,
   items,
-  deliveryMethod,
-  deliveryCost,
+  // deliveryMethod,
+  // deliveryCost,
 }: PlaceOrderInput): Promise<PlacedOrder> {
   if (items.length === 0) {
     throw new Error('Cannot place an empty order.');
@@ -78,6 +78,9 @@ export async function placeOrder({
     };
   });
 
+  const finalDeliveryMethod: DeliveryMethod = 'express';
+  const pendingDeliveryCost = 0;
+
   /*
    * =========================================================
    * CREATE ORDER IN SUPABASE
@@ -92,8 +95,8 @@ export async function placeOrder({
     p_delivery_address: deliveryAddress.address.trim(),
     p_city: deliveryAddress.city.trim(),
     p_notes: deliveryAddress.notes.trim(),
-    p_delivery_method: deliveryMethod,
-    p_delivery_fee: deliveryCost,
+    p_delivery_method: finalDeliveryMethod,
+    p_delivery_fee: pendingDeliveryCost,
     p_items: orderItems,
   });
 
@@ -156,8 +159,8 @@ export async function placeOrder({
       notes: deliveryAddress.notes.trim(),
     },
 
-    deliveryMethod,
-    deliveryCost,
+    deliveryMethod: finalDeliveryMethod,
+    deliveryCost: pendingDeliveryCost,
 
     paymentMethod: 'pay_on_delivery',
     paymentStatus: 'pending',
@@ -171,7 +174,7 @@ export async function placeOrder({
     })),
 
     subtotal,
-    total: subtotal + deliveryCost,
+    total: subtotal + pendingDeliveryCost,
 
     status: 'pending',
 

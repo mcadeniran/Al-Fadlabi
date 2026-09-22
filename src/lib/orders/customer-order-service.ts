@@ -33,6 +33,7 @@ type CustomerOrderRow = {
 
   subtotal: number | string;
   delivery_fee: number | string;
+  delivery_fee_confirmed: boolean;
   total: number | string;
 
   status: string;
@@ -107,6 +108,7 @@ const orderSelect = `
 
   subtotal,
   delivery_fee,
+  delivery_fee_confirmed,
   total,
 
   
@@ -212,6 +214,7 @@ function mapCustomerOrder(row: CustomerOrderRow): CustomerOrder {
 
     subtotal: toNumber(row.subtotal),
     deliveryCost: toNumber(row.delivery_fee),
+    deliveryFeeConfirmed: row.delivery_fee_confirmed,
     total: toNumber(row.total),
 
     status: row.status as OrderStatus,

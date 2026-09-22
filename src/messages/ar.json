@@ -142,7 +142,10 @@
         "payOnDelivery": "الدفع عند الاستلام",
         "paymentStatus": "حالة الدفع",
         "paid": "تم الدفع",
-        "paymentPending": "قيد الانتظار"
+        "paymentPending": "قيد الانتظار",
+        "deliveryFeePending": "سيتم تأكيد رسوم التوصيل",
+        "itemsTotal": "إجمالي المنتجات",
+        "totalPendingDeliveryFee": "سيتم تحديث الإجمالي النهائي بعد تأكيد رسوم التوصيل."
       },
       "progress": {
         "eyebrow": "تقدم الطلب",
@@ -163,7 +166,9 @@
         },
         "timelineEyebrow": "سجل الطلب",
         "timelineTitle": "رحلة طلبك"
-      }
+      },
+      "itemsTotal": "Items total",
+      "deliveryFeePending": "Delivery fee pending"
     },
     "forgotPassword": {
       "eyebrow": "استعادة الحساب",
@@ -857,11 +862,13 @@
       "admin": "المشرف",
       "actions": {
         "statusChanged": "تم تغيير الحالة",
-        "paymentMarkedPaid": "تم تسجيل الدفع كمكتمل"
+        "paymentMarkedPaid": "تم تسجيل الدفع كمكتمل",
+        "deliveryFeeConfirmed": "تم تأكيد رسوم التوصيل"
       },
       "descriptions": {
         "statusChanged": "تم تغيير حالة الطلب من <strong>{previousStatus}</strong> إلى <strong>{newStatus}</strong>.",
-        "paymentMarkedPaid": "تم تغيير حالة الدفع من <strong>{previousStatus}</strong> إلى <strong>{newStatus}</strong>."
+        "paymentMarkedPaid": "تم تغيير حالة الدفع من <strong>{previousStatus}</strong> إلى <strong>{newStatus}</strong>.",
+        "deliveryFeeConfirmed": "تم تأكيد رسوم التوصيل السريع بمبلغ <strong>{deliveryFee}</strong>."
       },
       "fallback": "تم تسجيل نشاط الطلب.",
       "statuses": {
@@ -877,7 +884,16 @@
         "pending": "قيد الانتظار",
         "paid": "مدفوع"
       }
-    }
+    },
+    "deliveryFee": "رسوم التوصيل السريع",
+    "deliveryFeePlaceholder": "مثال: 8000",
+    "deliveryFeeDescription": "أدخل رسوم التوصيل الفعلية لتأكيد هذا الطلب. ستتم إضافة الرسوم إلى إجمالي الطلب.",
+    "deliveryFeeRequired": "يرجى إدخال رسوم التوصيل.",
+    "deliveryFeeInvalid": "يرجى إدخال رسوم توصيل صحيحة.",
+    "confirmingOrder": "جارٍ تأكيد الطلب...",
+    "deliveryFeePending": "سيتم تأكيد رسوم التوصيل",
+    "itemsTotal": "إجمالي المنتجات",
+    "totalPendingDeliveryFee": "سيتم تحديث الإجمالي النهائي بعد تأكيد رسوم التوصيل."
   },
   "NotFound": {
     "eyebrow": "الصفحة غير موجودة",

@@ -75,6 +75,14 @@ function OrderRow({
     locale,
   );
 
+  const totalLabel = order.deliveryFeeConfirmed
+    ? t("orders.total")
+    : t("orders.itemsTotal");
+
+  const totalValue = order.deliveryFeeConfirmed
+    ? formattedTotal
+    : `${formattedTotal} · ${t("orders.deliveryFeePending")}`;
+
   return (
     <article className="group border-b border-ink/10 py-8 px-2 transition-colors hover:bg-white sm:py-10 lg:py-12">
       <div className="grid gap-8 lg:grid-cols-[80px_minmax(0,1fr)_auto] lg:items-center lg:gap-10">
@@ -124,8 +132,8 @@ function OrderRow({
             />
 
             <OrderMeta
-              label={t("orders.total")}
-              value={formattedTotal}
+              label={totalLabel}
+              value={totalValue}
               isAr
             />
           </div>

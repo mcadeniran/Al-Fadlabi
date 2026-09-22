@@ -1,4 +1,3 @@
-
 import {Link} from "@/i18n/navigation";
 import {getLocale, getTranslations} from "next-intl/server";
 
@@ -102,6 +101,7 @@ export default async function NotFound() {
           </div>
         </div>
       </div>
+
     </main>
   );
 }

@@ -142,7 +142,10 @@
         "payOnDelivery": "Pay on delivery",
         "paymentStatus": "Payment status",
         "paid": "Paid",
-        "paymentPending": "Pending"
+        "paymentPending": "Pending",
+        "deliveryFeePending": "Fee to be confirmed",
+        "itemsTotal": "Items total",
+        "totalPendingDeliveryFee": "Your final total will be updated once the delivery fee is confirmed."
       },
       "progress": {
         "eyebrow": "Order progress",
@@ -163,7 +166,9 @@
         },
         "timelineEyebrow": "ORDER HISTORY",
         "timelineTitle": "Your order journey"
-      }
+      },
+      "itemsTotal": "Items total",
+      "deliveryFeePending": "Delivery fee pending"
     },
     "forgotPassword": {
       "eyebrow": "Account Recovery",
@@ -858,11 +863,13 @@
       "admin": "Admin",
       "actions": {
         "statusChanged": "Status changed",
-        "paymentMarkedPaid": "Payment marked as paid"
+        "paymentMarkedPaid": "Payment marked as paid",
+        "deliveryFeeConfirmed": "Delivery fee confirmed"
       },
       "descriptions": {
         "statusChanged": "Order status changed from <strong>{previousStatus}</strong> to <strong>{newStatus}</strong>.",
-        "paymentMarkedPaid": "Payment status changed from <strong>{previousStatus}</strong> to <strong>{newStatus}</strong>."
+        "paymentMarkedPaid": "Payment status changed from <strong>{previousStatus}</strong> to <strong>{newStatus}</strong>.",
+        "deliveryFeeConfirmed": "Express delivery fee was confirmed at <strong>{deliveryFee}</strong>."
       },
       "fallback": "Order activity recorded.",
       "statuses": {
@@ -878,7 +885,16 @@
         "pending": "Pending",
         "paid": "Paid"
       }
-    }
+    },
+    "deliveryFee": "Express delivery fee",
+    "deliveryFeePlaceholder": "e.g. 8000",
+    "deliveryFeeDescription": "Enter the exact delivery fee to confirm this order. The fee will be added to the order total.",
+    "deliveryFeeRequired": "Please enter the delivery fee.",
+    "deliveryFeeInvalid": "Please enter a valid delivery fee.",
+    "confirmingOrder": "Confirming order...",
+    "deliveryFeePending": "Fee to be confirmed",
+    "itemsTotal": "Items total",
+    "totalPendingDeliveryFee": "Final total will be updated once the delivery fee is confirmed."
   },
   "NotFound": {
     "eyebrow": "Page not found",

@@ -1,11 +1,12 @@
 "use client";
 
+import {getCheckoutCustomerProfile} from './actions';
 import {createClient} from "@/lib/supabase/client";
 import {ArrowLeft, ArrowRight, Check} from "lucide-react";
 import {useLocale} from "next-intl";
 import {useEffect, useMemo, useState} from "react";
 
-import type {DeliveryMethod} from "@/types/order";
+// import type {DeliveryMethod} from "@/types/order";
 import {Container} from "@/components/ui/container";
 import {useCart} from "@/components/cart/cart-provider";
 import {placeOrder} from "@/lib/orders/order-service";
@@ -64,16 +65,6 @@ export default function CheckoutPage() {
     };
   }, [router]);
 
-  const currencyFormatter = useMemo(
-    () =>
-      new Intl.NumberFormat(isArabic ? "ar" : "en", {
-        style: "currency",
-        currency: "SDG",
-        maximumFractionDigits: 0,
-      }),
-    [isArabic],
-  );
-
   const [form, setForm] = useState<CheckoutForm>({
     firstName: "",
     lastName: "",
@@ -84,13 +75,69 @@ export default function CheckoutPage() {
     notes: "",
   });
 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const loadCustomerProfile = async () => {
+      try {
+        const profile = await getCheckoutCustomerProfile();
+
+        if (!isMounted || !profile) {
+          return;
+        }
+
+        setForm((current) => ({
+          ...current,
+          firstName: profile.firstName || current.firstName,
+          lastName: profile.lastName || current.lastName,
+          phone: profile.phone || current.phone,
+          email: profile.email || current.email,
+        }));
+      } catch (error) {
+        console.error(
+          'Failed to load checkout customer profile:',
+          error,
+        );
+      } finally {
+        if (isMounted) {
+          setIsLoadingProfile(false);
+        }
+      }
+    };
+
+    loadCustomerProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isAuthenticated]);
+
+  const currencyFormatter = useMemo(
+    () =>
+      new Intl.NumberFormat(isArabic ? "ar" : "en", {
+        style: "currency",
+        currency: "SDG",
+        maximumFractionDigits: 0,
+      }),
+    [isArabic],
+  );
+
+
+
   const [errors, setErrors] = useState<FormErrors>({});
-  const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
+  // const [deliveryMethod, setDeliveryMethod] = useState<DeliveryMethod>("standard");
+  // const deliveryMethod: DeliveryMethod = "express";
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const deliveryCost = deliveryMethod === "standard" ? 5000 : 10000;
-  const total = subtotal + deliveryCost;
+  // const deliveryCost = deliveryMethod === "standard" ? 5000 : 10000;
+  // const deliveryCost = 0;
+  // const total = subtotal + deliveryCost;
 
   const formatPrice = (value: number) => currencyFormatter.format(value);
 
@@ -197,8 +244,8 @@ export default function CheckoutPage() {
           notes: form.notes.trim(),
         },
         items,
-        deliveryMethod,
-        deliveryCost,
+        // deliveryMethod,
+        // deliveryCost: 0,
       });
 
       clearCart();
@@ -206,13 +253,6 @@ export default function CheckoutPage() {
       const confirmationParams = new URLSearchParams({
         order: order.orderNumber,
       });
-
-      // if (order.guestAccessToken) {
-      //   confirmationParams.set(
-      //     "token",
-      //     order.guestAccessToken,
-      //   );
-      // }
 
       router.push(
         `/order-confirmation?${confirmationParams.toString()}`,
@@ -230,7 +270,7 @@ export default function CheckoutPage() {
     }
   };
 
-  if (isCheckingAuth || !isHydrated || !isAuthenticated) {
+  if (isCheckingAuth || !isHydrated || !isAuthenticated || isLoadingProfile) {
     return (
       <main
         className="min-h-screen bg-snow text-ink"
@@ -700,7 +740,64 @@ export default function CheckoutPage() {
                 </div>
               </section>
 
+
               <section className="mt-20">
+                <div className="border-b border-ink/10 pb-5">
+                  <p className="eyebrow text-plum">
+                    03
+                  </p>
+
+                  <h2
+                    className={`mt-3 font-editorial ${isArabic
+                      ? "text-xl sm:text-3xl"
+                      : "text-xl sm:text-2xl"
+                      } leading-none tracking-[-0.03em]`}
+                  >
+                    {isArabic
+                      ? "طريقة التوصيل"
+                      : "Delivery Method"}
+                  </h2>
+                </div>
+
+                <div className="mt-8">
+                  <div className="rounded-2xl border border-ink bg-ink p-5 text-snow sm:p-6">
+                    <div className="flex items-start gap-4">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center border border-coral">
+                        <span className="h-2 w-2 bg-coral" />
+                      </span>
+
+                      <div className="min-w-0">
+                        <p
+                          className={`${isArabic ? "text-lg" : "text-sm"
+                            } font-semibold uppercase tracking-[0.2em]`}
+                        >
+                          {isArabic
+                            ? "التوصيل السريع"
+                            : "Express Delivery"}
+                        </p>
+
+                        <p className="mt-2 text-sm leading-6 text-snow/50">
+                          {isArabic
+                            ? "توصيل سريع خلال 1–2 يوم عمل."
+                            : "Fast delivery within 1–2 business days."}
+                        </p>
+
+                        <p
+                          className={`mt-4 ${isArabic ? "text-base" : "text-sm"
+                            } leading-6 text-coral`}
+                        >
+                          {isArabic
+                            ? "تبدأ رسوم التوصيل من 8,000 جنيه سوداني. سيتم تأكيد الرسوم النهائية قبل تجهيز طلبك."
+                            : "Delivery fees start from SDG 8,000. The exact fee will be confirmed before your order is processed."}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+
+              {/* <section className="mt-20">
                 <div className="border-b border-ink/10 pb-5">
                   <p className="eyebrow text-plum">
                     03
@@ -820,7 +917,7 @@ export default function CheckoutPage() {
                     </span>
                   </button>
                 </div>
-              </section>
+              </section> */}
 
               <section className="mt-20">
                 <div className="border-b border-ink/10 pb-5">
@@ -945,7 +1042,7 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
+                {/* <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
                   <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
                     {isArabic
                       ? "التوصيل"
@@ -968,20 +1065,75 @@ export default function CheckoutPage() {
                       {formatPrice(deliveryCost)}
                     </p>
                   </div>
+                </div> */}
+
+
+                <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
+                  <span
+                    className={`${isArabic ? "text-base" : "text-xs"
+                      } font-semibold uppercase tracking-[0.25em] text-ink/40`}
+                  >
+                    {isArabic
+                      ? "التوصيل"
+                      : "Delivery"}
+                  </span>
+
+                  <div className="text-end">
+                    <p
+                      className={`${isArabic ? "text-base" : "text-xs"
+                        } font-semibold uppercase tracking-[0.18em] text-ink/55`}
+                    >
+                      {isArabic
+                        ? "التوصيل السريع"
+                        : "Express Delivery"}
+                    </p>
+
+                    <p
+                      className={`mt-1 ${isArabic ? "text-sm" : "text-xs"
+                        } leading-5 text-ink/45`}
+                    >
+                      {isArabic
+                        ? "تبدأ من 8,000 جنيه سوداني"
+                        : "Starting from SDG 8,000"}
+                    </p>
+
+                    <p
+                      className={`mt-1 ${isArabic ? "text-sm" : "text-xs"
+                        } text-ink/40`}
+                    >
+                      {isArabic
+                        ? "سيتم تأكيد الرسوم"
+                        : "Fee to be confirmed"}
+                    </p>
+                  </div>
                 </div>
+
 
                 <div className="mt-6 flex items-baseline justify-between gap-6 border-t border-ink pt-6">
                   <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/50`}>
-                    {isArabic
-                      ? "الإجمالي"
-                      : "Total"}
+                    {isArabic ? "إجمالي المنتجات" : "Items Total"}
                   </span>
 
                   <div className="text-end">
                     <span className="font-editorial text-3xl leading-none">
+                      {formatPrice(subtotal)}
+                    </span>
+
+                    <p
+                      className={`mt-2 ${isArabic ? "text-sm" : "text-xs"
+                        } leading-5 text-ink/40`}
+                    >
+                      {isArabic
+                        ? "بالإضافة إلى رسوم التوصيل التي سيتم تأكيدها"
+                        : "Plus delivery fee to be confirmed"}
+                    </p>
+                  </div>
+
+                  {/* <div className="text-end">
+                    <span className="font-editorial text-3xl leading-none">
                       {formatPrice(total)}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
 
                 {submitError && (

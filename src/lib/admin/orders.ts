@@ -63,6 +63,7 @@ type AdminOrderRow = {
 
   subtotal: number | string;
   delivery_fee: number | string;
+  delivery_fee_confirmed: boolean;
   total: number | string;
 
   status: string;
@@ -136,6 +137,7 @@ const adminOrderSelect = `
 
   subtotal,
   delivery_fee,
+  delivery_fee_confirmed,
   total,
 
   status,
@@ -267,6 +269,7 @@ function mapAdminOrder(row: AdminOrderRow): AdminOrder {
     paymentStatus: row.payment_status,
 
     subtotal: toNumber(row.subtotal),
+    deliveryFeeConfirmed: row.delivery_fee_confirmed,
     deliveryCost: toNumber(row.delivery_fee),
     total: toNumber(row.total),
 
@@ -421,6 +424,61 @@ export async function markAdminOrderAsPaid(orderId: string): Promise<{
   };
 }
 
+// export async function getAdminOrderAuditLog(
+//   orderId: string,
+// ): Promise<AdminOrderAuditLog[]> {
+//   const supabase = await createClient();
+
+//   const { data, error } = await supabase
+//     .from('order_audit_log')
+//     .select(
+//       `
+//         id,
+//         order_id,
+//         actor_user_id,
+//         action,
+//         previous_status,
+//         new_status,
+//         previous_payment_status,
+//         new_payment_status,
+//         previous_delivery_fee,
+//         new_delivery_fee,
+//         note,
+//         created_at
+//       `,
+//     )
+//     .eq('order_id', orderId)
+//     .order('created_at', {
+//       ascending: false,
+//     });
+
+//   if (error) {
+//     console.error('Failed to fetch admin order audit log:', error);
+
+//     throw new Error(error.message || 'Failed to fetch order audit history.');
+//   }
+
+//   return (data ?? []).map((row) => ({
+//     id: row.id,
+//     orderId: row.order_id,
+//     actorUserId: row.actor_user_id,
+//     action: row.action as AdminOrderAuditLog['action'],
+//     previousStatus: row.previous_status as OrderStatus | null,
+//     newStatus: row.new_status as OrderStatus | null,
+//     previousPaymentStatus: row.previous_payment_status as
+//       | 'pending'
+//       | 'paid'
+//       | null,
+//     newPaymentStatus: row.new_payment_status as 'pending' | 'paid' | null,
+
+//     previousDeliveryFee: row.previous_delivery_fee,
+//     newDeliveryFee: row.new_delivery_fee,
+
+//     note: row.note,
+//     createdAt: row.created_at,
+//   }));
+// }
+
 export async function getAdminOrderAuditLog(
   orderId: string,
 ): Promise<AdminOrderAuditLog[]> {
@@ -430,17 +488,19 @@ export async function getAdminOrderAuditLog(
     .from('order_audit_log')
     .select(
       `
-        id,
-        order_id,
-        actor_user_id,
-        action,
-        previous_status,
-        new_status,
-        previous_payment_status,
-        new_payment_status,
-        note,
-        created_at
-      `,
+      id,
+      order_id,
+      actor_user_id,
+      action,
+      previous_status,
+      new_status,
+      previous_payment_status,
+      new_payment_status,
+      previous_delivery_fee,
+      new_delivery_fee,
+      note,
+      created_at
+    `,
     )
     .eq('order_id', orderId)
     .order('created_at', {
@@ -449,14 +509,55 @@ export async function getAdminOrderAuditLog(
 
   if (error) {
     console.error('Failed to fetch admin order audit log:', error);
-
     throw new Error(error.message || 'Failed to fetch order audit history.');
   }
 
-  return (data ?? []).map((row) => ({
+  const rows = data ?? [];
+
+  // Collect unique actor user IDs from the audit log.
+  const actorUserIds = [
+    ...new Set(
+      rows
+        .map((row) => row.actor_user_id)
+        .filter((id): id is string => Boolean(id)),
+    ),
+  ];
+
+  // Map user IDs to customer names.
+  const actorNameMap = new Map<string, string>();
+
+  if (actorUserIds.length > 0) {
+    const { data: customers, error: customersError } = await supabase
+      .from('customers')
+      .select('user_id, first_name, last_name')
+      .in('user_id', actorUserIds);
+
+    if (customersError) {
+      // Keep the audit log usable even if name lookup fails.
+      console.error('Failed to fetch audit actor names:', customersError);
+    } else {
+      for (const customer of customers ?? []) {
+        if (!customer.user_id) continue;
+
+        const fullName = [customer.first_name, customer.last_name]
+          .filter(Boolean)
+          .join(' ')
+          .trim();
+
+        if (fullName) {
+          actorNameMap.set(customer.user_id, fullName);
+        }
+      }
+    }
+  }
+
+  return rows.map((row) => ({
     id: row.id,
     orderId: row.order_id,
     actorUserId: row.actor_user_id,
+    actorName: row.actor_user_id
+      ? (actorNameMap.get(row.actor_user_id) ?? null)
+      : null,
     action: row.action as AdminOrderAuditLog['action'],
     previousStatus: row.previous_status as OrderStatus | null,
     newStatus: row.new_status as OrderStatus | null,
@@ -465,7 +566,56 @@ export async function getAdminOrderAuditLog(
       | 'paid'
       | null,
     newPaymentStatus: row.new_payment_status as 'pending' | 'paid' | null,
+    previousDeliveryFee: row.previous_delivery_fee,
+    newDeliveryFee: row.new_delivery_fee,
     note: row.note,
     createdAt: row.created_at,
   }));
+}
+
+export type ConfirmDeliveryFeeResult = {
+  id: string;
+  order_number: string;
+  status: string;
+  delivery_fee: number;
+  delivery_fee_confirmed: boolean;
+  total: number;
+  confirmed_at: string;
+};
+
+export async function confirmAdminOrderDeliveryFee(
+  orderId: string,
+  deliveryFee: number,
+): Promise<ConfirmDeliveryFeeResult> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc(
+    'confirm_admin_order_delivery_fee',
+    {
+      p_order_id: orderId,
+      p_delivery_fee: deliveryFee,
+    },
+  );
+
+  if (error) {
+    console.error('Failed to confirm admin order delivery fee:', error);
+
+    throw new Error(error.message || 'Failed to confirm delivery fee.');
+  }
+
+  const result = Array.isArray(data) ? data[0] : data;
+
+  if (!result) {
+    throw new Error('Failed to confirm delivery fee.');
+  }
+
+  return {
+    id: result.id,
+    order_number: result.order_number,
+    status: result.status,
+    delivery_fee: Number(result.delivery_fee),
+    delivery_fee_confirmed: Boolean(result.delivery_fee_confirmed),
+    total: Number(result.total),
+    confirmed_at: result.confirmed_at,
+  };
 }

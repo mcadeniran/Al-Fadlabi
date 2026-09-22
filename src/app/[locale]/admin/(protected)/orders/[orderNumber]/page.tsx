@@ -167,6 +167,8 @@ export default async function AdminOrderDetailsPage({
         orderId={order.id}
         orderNumber={order.orderNumber}
         status={order.status}
+        deliveryMethod={order.deliveryMethod}
+        deliveryFeeConfirmed={order.deliveryFeeConfirmed}
       />
 
       {/* Payment management */}
@@ -368,13 +370,13 @@ export default async function AdminOrderDetailsPage({
           {/* Summary */}
           <section className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm">
             <h2 className="text-sm font-semibold text-neutral-950">
-              {t('orderSummary')}
+              {t("orderSummary")}
             </h2>
 
             <div className="mt-5 space-y-3 text-sm">
               <div className="flex items-center justify-between gap-4">
                 <span className="text-neutral-500">
-                  {t('subtotal')}
+                  {t("subtotal")}
                 </span>
 
                 <span className="font-medium text-neutral-900">
@@ -384,24 +386,38 @@ export default async function AdminOrderDetailsPage({
 
               <div className="flex items-center justify-between gap-4">
                 <span className="text-neutral-500">
-                  {t('deliveryCost')}
+                  {t("deliveryCost")}
                 </span>
 
-                <span className="font-medium text-neutral-900">
-                  {formatCurrency(order.deliveryCost, locale)}
-                </span>
+                {order.deliveryFeeConfirmed ? (
+                  <span className="font-medium text-neutral-900">
+                    {formatCurrency(order.deliveryCost, locale)}
+                  </span>
+                ) : (
+                  <span className="font-medium text-amber-700">
+                    {t("deliveryFeePending")}
+                  </span>
+                )}
               </div>
 
               <div className="border-t border-neutral-200 pt-3">
                 <div className="flex items-center justify-between gap-4">
                   <span className="font-medium text-neutral-950">
-                    {t('total')}
+                    {order.deliveryFeeConfirmed
+                      ? t("total")
+                      : t("itemsTotal")}
                   </span>
 
                   <span className="text-lg font-semibold text-neutral-950">
                     {formatCurrency(order.total, locale)}
                   </span>
                 </div>
+
+                {!order.deliveryFeeConfirmed && (
+                  <p className="mt-2 text-xs leading-5 text-amber-700">
+                    {t("totalPendingDeliveryFee")}
+                  </p>
+                )}
               </div>
             </div>
           </section>

@@ -170,6 +170,8 @@ export type CustomerOrder = {
   rejectedAt: string | null;
   cancelledAt: string | null;
 
+  deliveryFeeConfirmed: boolean;
+
   rejectionNote: string | null;
 
   items: CustomerOrderItem[];
@@ -257,6 +259,7 @@ export type AdminOrder = {
 
   subtotal: number;
   deliveryCost: number;
+  deliveryFeeConfirmed: boolean;
   total: number;
 
   status: OrderStatus;
@@ -275,7 +278,10 @@ export type AdminOrder = {
   items: AdminOrderItem[];
 };
 
-export type AdminOrderAuditAction = 'status_changed' | 'payment_marked_paid';
+export type AdminOrderAuditAction =
+  | 'status_changed'
+  | 'payment_marked_paid'
+  | 'delivery_fee_confirmed';
 
 export type AdminOrderAuditLog = {
   id: string;
@@ -286,6 +292,9 @@ export type AdminOrderAuditLog = {
   newStatus: OrderStatus | null;
   previousPaymentStatus: 'pending' | 'paid' | null;
   newPaymentStatus: 'pending' | 'paid' | null;
+  previousDeliveryFee: number | null;
+  newDeliveryFee: number | null;
   note: string | null;
   createdAt: string;
+  actorName: string | null;
 };

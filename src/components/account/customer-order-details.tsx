@@ -95,6 +95,8 @@ export async function CustomerOrderDetails({order, locale}: CustomerOrderDetails
   const deliveryKey = getDeliveryKey(order.deliveryMethod);
   const isAr = locale === "ar";
 
+  const isDeliveryFeeConfirmed = order.deliveryFeeConfirmed;
+
   const itemCount = order.items.reduce((total, item) => total + item.quantity, 0);
 
   const customerName = [order.customer.firstName, order.customer.lastName].filter(Boolean).join(" ");
@@ -312,20 +314,46 @@ export async function CustomerOrderDetails({order, locale}: CustomerOrderDetails
             </h2>
 
             <div className="mt-8 space-y-4">
-              <SummaryRow label={t("orders.details.items")} value={String(itemCount)} isAr={isAr} />
+              <SummaryRow
+                label={t("orders.details.items")}
+                value={String(itemCount)}
+                isAr={isAr}
+              />
 
-              <SummaryRow label={t("orders.details.subtotal")} value={formatPrice(order.subtotal, locale)} isAr={isAr} />
+              <SummaryRow
+                label={t("orders.details.subtotal")}
+                value={formatPrice(order.subtotal, locale)}
+                isAr={isAr}
+              />
 
-              <SummaryRow label={t("orders.details.delivery")} value={formatPrice(order.deliveryCost, locale)} isAr={isAr} />
+              <SummaryRow
+                label={t("orders.details.delivery")}
+                value={
+                  isDeliveryFeeConfirmed
+                    ? formatPrice(order.deliveryCost, locale)
+                    : t("orders.details.deliveryFeePending")
+                }
+                isAr={isAr}
+              />
 
               <div className="border-t border-ink/10 pt-5">
                 <div className="flex items-end justify-between gap-5">
-                  <span className={`text-ink/40 ${tinyLabelClass}`}>{t("orders.details.total")}</span>
+                  <span className={`text-ink/40 ${tinyLabelClass}`}>
+                    {isDeliveryFeeConfirmed
+                      ? t("orders.details.total")
+                      : t("orders.details.itemsTotal")}
+                  </span>
 
                   <span className={`text-ink ${isAr ? "text-lg font-semibold" : "font-editorial text-2xl"}`}>
                     {formatPrice(order.total, locale)}
                   </span>
                 </div>
+
+                {!isDeliveryFeeConfirmed && (
+                  <p className={`mt-3 text-ink/45 ${isAr ? "text-xs leading-6" : "text-xs leading-5"}`}>
+                    {t("orders.details.totalPendingDeliveryFee")}
+                  </p>
+                )}
               </div>
             </div>
 

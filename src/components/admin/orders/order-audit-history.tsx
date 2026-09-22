@@ -49,9 +49,21 @@ function formatDateTime(
   }).format(new Date(value));
 }
 
+function formatCurrency(value: number | null, locale: string) {
+  if (value === null) {
+    return "—";
+  }
+
+  return new Intl.NumberFormat(locale === "ar" ? "ar" : "en", {
+    style: "currency",
+    currency: "SDG",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 function getActionLabel(
   action: AdminOrderAuditLog["action"],
-  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
+  t: ReturnType<typeof useTranslations<"AdminOrders.orderAudit">>,
 ) {
   switch (action) {
     case "status_changed":
@@ -60,14 +72,19 @@ function getActionLabel(
     case "payment_marked_paid":
       return t("actions.paymentMarkedPaid");
 
+    case "delivery_fee_confirmed":
+      return t("actions.deliveryFeeConfirmed");
+
     default:
       return action;
   }
 }
 
+
 function getActionDescription(
   log: AdminOrderAuditLog,
-  t: ReturnType<typeof useTranslations<"admin.orders.orderAudit">>,
+  t: ReturnType<typeof useTranslations<"AdminOrders.orderAudit">>,
+  locale: string,
 ) {
   switch (log.action) {
     case "status_changed":
@@ -87,6 +104,14 @@ function getActionDescription(
           log.newPaymentStatus,
           t,
         ),
+        strong: (chunks) => <strong>{chunks}</strong>,
+      });
+
+    case "delivery_fee_confirmed":
+      return t.rich("descriptions.deliveryFeeConfirmed", {
+        deliveryFee: log.newDeliveryFee
+          ? formatCurrency(log.newDeliveryFee, locale)
+          : "—",
         strong: (chunks) => <strong>{chunks}</strong>,
       });
 
@@ -138,7 +163,7 @@ export default function OrderAuditHistory({
                         </h3>
 
                         <p className="mt-1 text-sm leading-6 text-neutral-600">
-                          {getActionDescription(log, t)}
+                          {getActionDescription(log, t, locale)}
                         </p>
                       </div>
 
@@ -163,8 +188,8 @@ export default function OrderAuditHistory({
                     ) : null}
 
                     {log.actorUserId ? (
-                      <p className="mt-3 break-all text-xs text-neutral-400">
-                        {t("admin")}: {log.actorUserId}
+                      <p className="mt-3 text-xs text-neutral-400">
+                        {t("admin")}: {log.actorName ?? log.actorUserId}
                       </p>
                     ) : null}
                   </div>

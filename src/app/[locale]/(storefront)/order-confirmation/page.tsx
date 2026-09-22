@@ -31,6 +31,7 @@ type SupabaseOrder = {
   delivery_method: "standard" | "express";
   subtotal: number;
   delivery_fee: number;
+  delivery_fee_confirmed: boolean;
   total: number;
   customer_name: string;
   customer_phone: string;
@@ -104,6 +105,7 @@ export default function OrderConfirmationPage() {
               delivery_method,
               subtotal,
               delivery_fee,
+              delivery_fee_confirmed,
               total,
               customer_name,
               customer_phone,
@@ -144,6 +146,7 @@ export default function OrderConfirmationPage() {
           delivery_method: data.delivery_method,
           subtotal: data.subtotal,
           delivery_fee: data.delivery_fee,
+          delivery_fee_confirmed: data.delivery_fee_confirmed,
           total: data.total,
           customer_name: data.customer_name,
           customer_phone: data.customer_phone,
@@ -237,7 +240,7 @@ export default function OrderConfirmationPage() {
                 </div>
 
                 <p className={`mt-8 ${isArabic ? "text-lg" : "text-base"} font-semibold uppercase tracking-[0.32em] text-coral`}>
-                  {isArabic ? "تم تأكيد الطلب" : "Order Confirmed"}
+                  {isArabic ? "تم استلام الطلب" : "Order Received"}
                 </p>
 
                 <h1 className={`mt-5 max-w-xl font-editorial ${isArabic ? "text-lg sm:text-2xl lg:text-4xl" : "text-base sm:text-xl lg:text-2xl"} leading-[0.86] tracking-[-0.04em]`}>
@@ -386,17 +389,42 @@ export default function OrderConfirmationPage() {
 
                   <SummaryRow
                     label={isArabic ? "التوصيل" : "Delivery"}
-                    value={currencyFormatter.format(order.delivery_fee)}
+                    value={
+                      order.delivery_fee_confirmed
+                        ? currencyFormatter.format(order.delivery_fee)
+                        : isArabic
+                          ? "سيتم تأكيد الرسوم"
+                          : "Fee to be confirmed"
+                    }
                     isArabic
                   />
 
                   <div className="border-t border-ink/10 pt-6">
                     <SummaryRow
-                      label={isArabic ? "الإجمالي" : "Total"}
+                      label={
+                        order.delivery_fee_confirmed
+                          ? isArabic
+                            ? "الإجمالي"
+                            : "Total"
+                          : isArabic
+                            ? "إجمالي المنتجات"
+                            : "Items Total"
+                      }
                       value={currencyFormatter.format(order.total)}
                       emphasized
                       isArabic
                     />
+
+                    {!order.delivery_fee_confirmed && (
+                      <p
+                        className={`mt-4 text-ink/45 ${isArabic ? "text-sm leading-7" : "text-xs leading-6"
+                          }`}
+                      >
+                        {isArabic
+                          ? "سيتم تحديث الإجمالي النهائي بعد تأكيد رسوم التوصيل."
+                          : "Your final total will be updated once the delivery fee is confirmed."}
+                      </p>
+                    )}
                   </div>
                 </div>
 
