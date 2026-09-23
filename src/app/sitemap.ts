@@ -2,7 +2,14 @@ import type { MetadataRoute } from 'next';
 
 import { getProductSlugs } from '@/lib/products/queries';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const configuredSiteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+
+const siteUrl = new URL(
+  configuredSiteUrl.startsWith('http')
+    ? configuredSiteUrl
+    : `https://${configuredSiteUrl}`,
+).origin;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProductSlugs();
