@@ -4,6 +4,7 @@ import {getLocale} from "next-intl/server";
 import {HomePageContent} from "@/components/home/home-page-content";
 import {getProducts} from "@/lib/products/queries";
 import {OrganizationJsonLd} from "@/components/seo/organization-json-ld";
+// import {PremiumLoader} from "@/components/ui/premium-loader";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
@@ -28,6 +29,7 @@ export default async function Home() {
   const locale = await getLocale();
 
   return (
+    // <PremiumLoader />
     <>
       <OrganizationJsonLd locale={locale === 'ar' ? 'ar' : 'en'} />
 

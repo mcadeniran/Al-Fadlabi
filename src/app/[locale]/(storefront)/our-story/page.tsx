@@ -1,6 +1,55 @@
-import {getTranslations} from "next-intl/server";
+import type {Metadata} from "next";
+import {getLocale, getTranslations} from "next-intl/server";
 import Link from "next/link";
 import {ArrowRight, Check} from "lucide-react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations("OurStory");
+
+  const isArabic = locale === "ar";
+
+  const title = isArabic
+    ? "قصتنا"
+    : "Our Story";
+
+  const description = t("hero.description");
+
+  return {
+    title,
+    description,
+
+    alternates: {
+      canonical: isArabic
+        ? "/our-story"
+        : "/en/our-story",
+    },
+
+    robots: {
+      index: true,
+      follow: true,
+    },
+
+    openGraph: {
+      type: "website",
+      title,
+      description,
+      url: isArabic
+        ? "/our-story"
+        : "/en/our-story",
+      siteName: isArabic
+        ? "الفاضلابي للعطور ومستحضرات التجميل"
+        : "Al-Fadlabi Perfumes & Cosmetics",
+      locale: isArabic ? "ar" : "en",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+  };
+}
 
 type OurStoryPageProps = {
   params: Promise<{

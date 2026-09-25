@@ -394,6 +394,29 @@ function NoteColumn({number, title, notes, locale, }: NoteColumnProps) {
   );
 }
 
+// function ProductDetailCell({
+//   label,
+//   value,
+//   isArabic,
+// }: {
+//   label: string;
+//   value: string;
+//   isArabic: boolean;
+// }) {
+//   return (
+//     <div
+//       className={`py-4 px-4 ${isArabic ? "text-right" : "text-left"}`}>
+//       <span className={`block ${isArabic ? "text-xl" : "text-sm"} font-semibold uppercase tracking-[0.2em] text-ink/35`}>
+//         {label}
+//       </span>
+
+//       <span className={`mt-1.5 block ${isArabic ? "text-lg" : "text-xs"} text-ink/70`}>
+//         {value}
+//       </span>
+//     </div>
+//   );
+// }
+
 function ProductDetailCell({
   label,
   value,
@@ -405,12 +428,22 @@ function ProductDetailCell({
 }) {
   return (
     <div
-      className={`py-4 px-4 ${isArabic ? "text-right" : "text-left"}`}>
-      <span className={`block ${isArabic ? "text-xl" : "text-sm"} font-semibold uppercase tracking-[0.2em] text-ink/35`}>
+      className={`min-w-0 px-2 py-4 sm:px-4 ${isArabic ? "text-right" : "text-left"
+        }`}
+    >
+      <span
+        className={`block leading-tight ${isArabic
+          ? "text-lg font-semibold"
+          : "text-[10px] font-semibold tracking-[0.12em] sm:text-sm sm:tracking-[0.2em]"
+          } uppercase text-ink/35`}
+      >
         {label}
       </span>
 
-      <span className={`mt-1.5 block ${isArabic ? "text-lg" : "text-xs"} text-ink/70`}>
+      <span
+        className={`mt-1.5 block wrap-break-word ${isArabic ? "text-lg" : "text-xs"
+          } text-ink/70`}
+      >
         {value}
       </span>
     </div>

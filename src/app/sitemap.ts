@@ -65,5 +65,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     });
   }
 
+  entries.push({
+    url: `${siteUrl}/our-story`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  });
+
+  entries.push({
+    url: `${siteUrl}/en/our-story`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  });
+
   return entries;
 }
