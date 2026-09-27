@@ -153,7 +153,7 @@ export function ProfileForm({customer}: ProfileFormProps) {
           />
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor="profile-email" className={`block ${isAr ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
             {t("profile.email")}
           </label>
@@ -169,6 +169,27 @@ export function ProfileForm({customer}: ProfileFormProps) {
 
           <p className="mt-3 max-w-lg text-xs leading-6 text-ink/35">
             {t("profile.emailHint")}
+          </p>
+        </div> */}
+
+        <div>
+          <p
+            className={`block ${isAr ? "text-sm" : "text-xs"
+              } font-semibold uppercase tracking-[0.25em] text-ink/40`}
+          >
+            {customer.email
+              ? t("profile.email")
+              : t("profile.username")}
+          </p>
+
+          <p className="mt-3 min-h-12 border-b border-ink/10 px-0 py-3 text-base text-ink/50">
+            {customer.email ?? customer.username}
+          </p>
+
+          <p className="mt-3 max-w-lg text-xs leading-6 text-ink/35">
+            {customer.email
+              ? t("profile.emailHint")
+              : t("profile.usernameHint")}
           </p>
         </div>
 

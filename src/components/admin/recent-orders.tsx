@@ -180,7 +180,6 @@ export async function RecentOrders({
                         <span aria-hidden="true">·</span>
 
                         <span>
-                          da
                           {dateFormatter.format(
                             new Date(order.created_at),
                           )}

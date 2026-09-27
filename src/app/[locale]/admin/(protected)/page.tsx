@@ -58,47 +58,6 @@ export default async function AdminDashboardPage() {
         />
       </div>
 
-      {/* <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        <DashboardStatCard
-          title={t("totalProducts")}
-          value={stats.products}
-          icon={Package}
-          description={`${stats.activeProducts} ${t("activeProducts").toLowerCase()}`}
-        />
-
-        <DashboardStatCard
-          title={t("totalOrders")}
-          value={stats.orders}
-          icon={ClipboardList}
-          description={`${stats.pendingOrders} ${t("pendingOrders").toLowerCase()}`}
-        />
-
-        <DashboardStatCard
-          title={t("customers")}
-          value={stats.customers}
-          icon={Users}
-        />
-
-        <DashboardStatCard
-          title={t("revenue")}
-          value={currencyFormatter.format(stats.revenue)}
-          icon={Banknote}
-          featured
-        />
-
-        <DashboardStatCard
-          title={t("inventoryUnits")}
-          value={stats.totalInventoryUnits}
-          icon={Boxes}
-        />
-
-        <DashboardStatCard
-          title={t("outOfStock")}
-          value={stats.outOfStockVariants}
-          icon={PackageX}
-        />
-      </div> */}
-
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {canViewProducts && (
           <DashboardStatCard

@@ -139,11 +139,13 @@ export default async function AccountPage() {
                 <div className="mt-8 space-y-7">
                   <div>
                     <p className="text-[12px] font-semibold uppercase tracking-[0.25em] text-ink/30">
-                      {t("account.email")}
+                      {customer.email
+                        ? t("account.email")
+                        : t("account.username")}
                     </p>
 
                     <p className="mt-3 break-all text-sm leading-6 text-ink/75">
-                      {customer.email}
+                      {customer.email ?? customer.username}
                     </p>
                   </div>
 

@@ -19,7 +19,7 @@ export type OrderCustomer = {
   firstName: string;
   lastName: string;
   phone: string;
-  email: string;
+  email: string | null;
 };
 
 export type OrderAddress = {

@@ -179,11 +179,20 @@ export default function CheckoutPage() {
         : "Phone number is required";
     }
 
-    if (!form.email.trim()) {
-      nextErrors.email = isArabic
-        ? "البريد الإلكتروني مطلوب"
-        : "Email address is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+    // if (!form.email.trim()) {
+    //   nextErrors.email = isArabic
+    //     ? "البريد الإلكتروني مطلوب"
+    //     : "Email address is required";
+    // } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+    //   nextErrors.email = isArabic
+    //     ? "أدخل بريدًا إلكترونيًا صحيحًا"
+    //     : "Enter a valid email address";
+    // }
+
+    if (
+      form.email.trim() &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())
+    ) {
       nextErrors.email = isArabic
         ? "أدخل بريدًا إلكترونيًا صحيحًا"
         : "Enter a valid email address";
@@ -236,7 +245,7 @@ export default function CheckoutPage() {
           firstName: form.firstName.trim(),
           lastName: form.lastName.trim(),
           phone: form.phone.trim(),
-          email: form.email.trim(),
+          email: form.email.trim() || null,
         },
         deliveryAddress: {
           address: form.address.trim(),
@@ -566,13 +575,20 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="sm:col-span-2">
-                    <label
+                    {/* <label
                       htmlFor="email"
                       className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
                     >
                       {isArabic
                         ? "البريد الإلكتروني"
                         : "Email Address"}
+                    </label> */}
+
+                    <label
+                      htmlFor="email"
+                      className={`mb-2 block ${isArabic ? "text-sm" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/45`}
+                    >
+                      {isArabic ? "البريد الإلكتروني (اختياري)" : "Email address (Optional)"}
                     </label>
 
                     <input
@@ -796,129 +812,6 @@ export default function CheckoutPage() {
                 </div>
               </section>
 
-
-              {/* <section className="mt-20">
-                <div className="border-b border-ink/10 pb-5">
-                  <p className="eyebrow text-plum">
-                    03
-                  </p>
-
-                  <h2 className={`mt-3 font-editorial ${isArabic ? "text-xl sm:text-3xl" : "text-xl sm:text-2xl"} leading-none tracking-[-0.03em]`}>
-                    {isArabic
-                      ? "طريقة التوصيل"
-                      : "Delivery Method"}
-                  </h2>
-                </div>
-
-                <div className="mt-8 grid gap-3">
-                  <button
-                    type="button"
-                    disabled={isSubmitting}
-                    onClick={() =>
-                      setDeliveryMethod("standard")
-                    }
-                    aria-pressed={
-                      deliveryMethod === "standard"
-                    }
-                    className={`group flex rounded-2xl w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "standard"
-                      ? "border-ink bg-ink text-snow"
-                      : "border-ink/15 bg-transparent text-ink hover:border-plum"
-                      }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center border ${deliveryMethod === "standard"
-                          ? "border-coral"
-                          : "border-ink/20"
-                          }`}
-                      >
-                        {deliveryMethod ===
-                          "standard" && (
-                            <span className="h-2 w-2 bg-coral" />
-                          )}
-                      </span>
-
-                      <div>
-                        <p className={`${isArabic ? "text-lg" : "text-sm"} font-semibold uppercase tracking-[0.2em]`}>
-                          {isArabic
-                            ? "التوصيل العادي"
-                            : "Standard Delivery"}
-                        </p>
-
-                        <p
-                          className={`mt-2 ${isArabic ? "text-sm" : "text-sm"} ${deliveryMethod ===
-                            "standard"
-                            ? "text-snow/50"
-                            : "text-ink/45"
-                            }`}
-                        >
-                          {isArabic
-                            ? "خلال 3–5 أيام عمل"
-                            : "3–5 business days"}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className="font-editorial text-xl">
-                      {formatPrice(5000)}
-                    </span>
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={isSubmitting}
-                    onClick={() =>
-                      setDeliveryMethod("express")
-                    }
-                    aria-pressed={
-                      deliveryMethod === "express"
-                    }
-                    className={`group flex rounded-2xl w-full items-center justify-between border p-5 text-start transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-60 sm:p-6 ${deliveryMethod === "express"
-                      ? "border-ink bg-ink text-snow"
-                      : "border-ink/15 bg-transparent text-ink hover:border-plum"
-                      }`}
-                  >
-                    <div className="flex items-center gap-4">
-                      <span
-                        className={`flex h-5 w-5 shrink-0 items-center justify-center border ${deliveryMethod === "express"
-                          ? "border-coral"
-                          : "border-ink/20"
-                          }`}
-                      >
-                        {deliveryMethod ===
-                          "express" && (
-                            <span className="h-2 w-2 bg-coral" />
-                          )}
-                      </span>
-
-                      <div>
-                        <p className={`${isArabic ? "text-lg" : "text-sm"} font-semibold uppercase tracking-[0.2em]`}>
-                          {isArabic
-                            ? "التوصيل السريع"
-                            : "Express Delivery"}
-                        </p>
-
-                        <p
-                          className={`mt-2 ${isArabic ? "text-sm" : "text-sm"} ${deliveryMethod ===
-                            "express"
-                            ? "text-snow/50"
-                            : "text-ink/45"
-                            }`}
-                        >
-                          {isArabic
-                            ? "خلال 1–2 يوم عمل"
-                            : "1–2 business days"}
-                        </p>
-                      </div>
-                    </div>
-
-                    <span className="font-editorial text-xl">
-                      {formatPrice(10000)}
-                    </span>
-                  </button>
-                </div>
-              </section> */}
-
               <section className="mt-20">
                 <div className="border-b border-ink/10 pb-5">
                   <p className="eyebrow text-plum">
@@ -1042,32 +935,6 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
-                {/* <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
-                  <span className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.25em] text-ink/40`}>
-                    {isArabic
-                      ? "التوصيل"
-                      : "Delivery"}
-                  </span>
-
-                  <div className="text-end">
-                    <p className={`${isArabic ? "text-base" : "text-xs"} font-semibold uppercase tracking-[0.18em] text-ink/55`}>
-                      {deliveryMethod ===
-                        "standard"
-                        ? isArabic
-                          ? "عادي"
-                          : "Standard"
-                        : isArabic
-                          ? "سريع"
-                          : "Express"}
-                    </p>
-
-                    <p className={`${isArabic ? "text-lg" : "text-base"} mt-1 text-ink/65`}>
-                      {formatPrice(deliveryCost)}
-                    </p>
-                  </div>
-                </div> */}
-
-
                 <div className="mt-6 flex items-start justify-between gap-6 border-t border-ink/10 pt-5">
                   <span
                     className={`${isArabic ? "text-base" : "text-xs"
@@ -1129,11 +996,6 @@ export default function CheckoutPage() {
                     </p>
                   </div>
 
-                  {/* <div className="text-end">
-                    <span className="font-editorial text-3xl leading-none">
-                      {formatPrice(total)}
-                    </span>
-                  </div> */}
                 </div>
 
                 {submitError && (

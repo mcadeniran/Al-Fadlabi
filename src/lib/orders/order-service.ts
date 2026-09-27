@@ -91,7 +91,9 @@ export async function placeOrder({
     p_customer_first_name: customer.firstName.trim(),
     p_customer_last_name: customer.lastName.trim(),
     p_customer_phone: customer.phone.trim(),
-    p_customer_email: customer.email.trim().toLowerCase(),
+    p_customer_email: customer.email
+      ? customer.email.trim().toLowerCase()
+      : null,
     p_delivery_address: deliveryAddress.address.trim(),
     p_city: deliveryAddress.city.trim(),
     p_notes: deliveryAddress.notes.trim(),
@@ -150,7 +152,7 @@ export async function placeOrder({
       firstName: customer.firstName.trim(),
       lastName: customer.lastName.trim(),
       phone: customer.phone.trim(),
-      email: customer.email.trim().toLowerCase(),
+      email: customer.email ? customer.email.trim().toLowerCase() : null,
     },
 
     deliveryAddress: {

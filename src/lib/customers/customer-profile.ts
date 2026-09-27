@@ -7,6 +7,7 @@ export type CustomerProfile = {
   lastName: string;
   fullName: string;
   phone: string;
+  username: string | null;
   email: string | null;
   createdAt: string;
   updatedAt: string;
@@ -35,7 +36,8 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
         phone,
         email,
         created_at,
-        updated_at
+        updated_at,
+        username
       `,
     )
     .eq('user_id', user.id)
@@ -60,5 +62,6 @@ export async function getCustomerProfile(): Promise<CustomerProfile | null> {
     email: customer.email,
     createdAt: customer.created_at,
     updatedAt: customer.updated_at,
+    username: customer.username,
   };
 }

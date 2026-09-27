@@ -23,8 +23,17 @@
         "required": "Please complete all fields.",
         "passwordLength": "Your password must be at least 8 characters.",
         "passwordMatch": "Your passwords do not match.",
-        "generic": "Something went wrong. Please try again."
-      }
+        "generic": "Something went wrong. Please try again.",
+        "usernameFormat": "Your username must start with a letter or number and contain 3–30 lowercase letters, numbers, dots, underscores, or hyphens."
+      },
+      "loginMethod": "Choose how you want to sign in",
+      "emailMethod": "Email",
+      "usernameMethod": "Username",
+      "username": "Username",
+      "usernameHint": "Use 3–30 lowercase letters, numbers, dots, underscores, or hyphens.",
+      "usernameSuccessEyebrow": "Account Created",
+      "usernameSuccessTitle": "Your Account Is Ready",
+      "usernameSuccessDescription": "Your account has been created successfully. You can now sign in using your username and password."
     },
     "login": {
       "eyebrow": "Welcome Back",
@@ -39,9 +48,15 @@
       "errors": {
         "required": "Please enter your email and password.",
         "invalidCredentials": "The email or password you entered is incorrect.",
-        "generic": "Something went wrong. Please try again."
+        "generic": "Something went wrong. Please try again.",
+        "usernameFormat": "Your username must start with a letter or number and contain 3–30 lowercase letters, numbers, dots, underscores, or hyphens."
       },
-      "forgotPassword": "Forgot password?"
+      "forgotPassword": "Forgot password?",
+      "loginMethod": "Choose how you want to sign in",
+      "emailMethod": "Email",
+      "usernameMethod": "Username",
+      "username": "Username",
+      "usernameHint": "Use the username you chose when creating your account."
     },
     "account": {
       "eyebrow": "Your Account",
@@ -59,7 +74,8 @@
         "owner": "Owner",
         "manager": "Manager",
         "admin": "Administrator"
-      }
+      },
+      "username": "Username"
     },
     "logout": {
       "button": "Sign out",
@@ -84,7 +100,9 @@
         "required": "Please complete all required fields.",
         "unauthenticated": "Your session has expired. Please sign in again.",
         "updateFailed": "We couldn't update your profile. Please try again."
-      }
+      },
+      "username": "Username",
+      "usernameHint": "You signed in using a username. Your username is used to access your account."
     },
     "orders": {
       "eyebrow": "Order history",
@@ -183,7 +201,8 @@
       "errors": {
         "invalidEmail": "Please enter a valid email address.",
         "generic": "We couldn't process your request. Please try again later."
-      }
+      },
+      "emailHint": "Password recovery by email is available for accounts registered with an email address. If you created your account with a username, please contact us for assistance."
     },
     "resetPassword": {
       "eyebrow": "Account Security",

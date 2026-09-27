@@ -15,7 +15,7 @@ export default async function LoginPage({
     redirect === "/checkout" ? redirect : undefined;
 
   return (
-    <main className="flex min-h-[calc(100svh-0rem)] items-center justify-center px-4 py-12 sm:px-6">
+    <main className="flex min-h-[calc(100svh+6rem)] items-center justify-center px-4 py-12 sm:px-6">
       <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-sm sm:p-10">
         <LoginForm redirectTo={redirectTo} />
       </div>
