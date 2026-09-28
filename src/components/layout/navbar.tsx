@@ -1,23 +1,12 @@
 "use client";
 
 import {useState} from "react";
-import {
-  Menu,
-  ShoppingBag,
-  UserRound,
-  X,
-} from "lucide-react";
-
+import {Menu, ShoppingBag, UserRound, X, } from "lucide-react";
 import {useLocale, useTranslations} from "next-intl";
 import Image from "next/image";
-
-import {
-  Link,
-  usePathname,
-  useRouter,
-} from "@/i18n/navigation";
-
+import {Link, usePathname, useRouter, } from "@/i18n/navigation";
 import {useCart} from "@/components/cart/cart-provider";
+import {NotificationBell} from "../notifications/notification-bell";
 
 export function Navbar() {
   const t = useTranslations("Navigation");
@@ -180,6 +169,13 @@ export function Navbar() {
                 strokeWidth={1.25}
               />
             </Link>
+
+            {/* NOTIFICATIONS */}
+
+            <div className={navMutedText}>
+              <NotificationBell audience="customer" />
+            </div>
+
 
             {/* CART */}
 

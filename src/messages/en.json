@@ -926,5 +926,39 @@
     "signature": "Find your signature",
     "beauty": "Beauty is just a click away.",
     "discover": "Discover your next favourite"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "open": "Open notifications",
+    "unread": "Unread notification",
+    "unreadCount": "{count} unread notifications",
+    "unreadSummary": "{count} unread",
+    "markAllAsRead": "Mark all as read",
+    "loading": "Loading notifications",
+    "empty": {
+      "title": "You're all caught up",
+      "description": "There are no notifications to show."
+    },
+    "new_order": {
+      "title": "New order",
+      "message": "Order {orderNumber} has been placed."
+    },
+    "order_status_changed": {
+      "title": "Order status updated",
+      "message": "Order {orderNumber} is now {status}."
+    },
+    "delivery_fee_confirmed": {
+      "title": "Delivery fee confirmed",
+      "message": "The delivery fee for order {orderNumber} has been confirmed."
+    },
+    "statuses": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "processing": "Processing",
+      "out_for_delivery": "Out for delivery",
+      "delivered": "Delivered",
+      "rejected": "Rejected",
+      "cancelled": "Cancelled"
+    }
   }
 }

@@ -18,6 +18,7 @@ import {CartProvider} from "@/components/cart/cart-provider";
 import {TooltipProvider} from "@/components/ui/tooltip";
 import {DirectionProvider} from "@/components/ui/direction";
 import {getLocale} from "next-intl/server";
+import {NotificationProvider} from "@/components/notifications/notification-provider";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
@@ -132,14 +133,15 @@ export default async function RootLayout({
         <CartProvider>
           <NextIntlClientProvider>
             <DirectionProvider direction={direction}>
-              <TooltipProvider>
-                {children}
-              </TooltipProvider>
+              <NotificationProvider>
+                <TooltipProvider>
+                  {children}
+                </TooltipProvider>
+              </NotificationProvider>
             </DirectionProvider>
           </NextIntlClientProvider>
         </CartProvider>
       </body>
-
     </html>
   );
 }

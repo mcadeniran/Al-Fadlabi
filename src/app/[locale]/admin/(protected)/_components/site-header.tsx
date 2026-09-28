@@ -1,5 +1,6 @@
 'use client';
 
+import {NotificationBell} from "@/components/notifications/notification-bell";
 import {Separator} from "@/components/ui/separator";
 import {SidebarTrigger} from "@/components/ui/sidebar";
 import {usePathname, useRouter} from "@/i18n/navigation";
@@ -47,15 +48,20 @@ export function SiteHeader() {
         <h1 className="truncate text-base font-semibold tracking-tight">
           {currentTitle}
         </h1>
-        <div className={`${locale === 'ar' ? "mr-auto" : "ml-auto"}  flex items-center gap-2`}>
+        <div
+          className={`${locale === "ar" ? "mr-auto" : "ml-auto"
+            } flex items-center gap-2`}
+        >
+          <NotificationBell audience="admin" />
+
           <button
             type="button"
             onClick={handleLocaleChange}
             aria-label={c("language")}
-            className={`hidden border-s ps-5 ${locale === 'en' ? "text-lg" : "text-sm"} font-medium uppercase tracking-[0.2em] transition-colors hover:text-plum sm:block "border-ink/10"`}>
-            {nextLocale === "ar"
-              ? "العربية"
-              : "English"}
+            className={` border-s ps-5 ${locale === "en" ? "text-lg" : "text-sm"
+              } font-medium uppercase tracking-[0.2em] transition-colors hover:text-plum sm:block border-ink/10`}
+          >
+            {nextLocale === "ar" ? "العربية" : "English"}
           </button>
         </div>
       </div>
